@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,8 +25,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    MainOpenGLWidget.cpp \
-    MainWindow.cpp
+    MainWindow.cpp \
+    mainopenglwidget.cpp
 
 HEADERS += \
     MainOpenGLWidget.h \
@@ -34,3 +34,6 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui
+
+INCLUDEPATH  += $$PWD/3rdparty/assimp/include
+LIBS += -L$$PWD/3rdparty/assimp/lib/ -lassimp
