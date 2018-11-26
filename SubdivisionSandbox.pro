@@ -42,12 +42,17 @@ FORMS += \
 #INCLUDEPATH  += $$PWD/3rdparty/assimp/include
 #LIBS += -L$$PWD/3rdparty/assimp/lib/ -lassimp
 
+#Assimp
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/3rdparty/assimp/lib/ -lassimp
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/3rdparty/assimp/lib/ -lassimpd
 else:unix: LIBS += -L$$PWD/3rdparty/assimp/lib/ -lassimp
 
 INCLUDEPATH += $$PWD/3rdparty/assimp/include
 DEPENDPATH += $$PWD/3rdparty/assimp/include
+
+# JSON include
+INCLUDEPATH += $$PWD/3rdparty/json/include
+DEPENDPATH += $$PWD/3rdparty/json/include
 
 RESOURCES += \
     resources.qrc

@@ -2,6 +2,7 @@
 #define CUSTOMSCHEME_H
 
 #include <vector>
+#include <json.hpp>
 
 class CustomScheme
 {
