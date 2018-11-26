@@ -1,9 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "MainOpenGLWidget.h"
-
 #include <QMainWindow>
+
+#include "MainOpenGLWidget.h"
+#include "customschemehandler.h"
 
 class QAction;
 class QActionGroup;

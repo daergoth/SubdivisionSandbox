@@ -41,7 +41,7 @@ void MainWindow::onTriggered_KobbeltSubdiv()
 
 void MainWindow::onTriggered_CreateCustomScheme()
 {
-
+    CustomSchemeHandler::getInstance().debug();
 }
 
 void MainWindow::onTriggered_CubeObject()
