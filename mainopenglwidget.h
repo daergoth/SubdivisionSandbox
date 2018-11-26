@@ -8,6 +8,7 @@
 #include "QOpenGLFunctions_3_2_Core"
 #include <QMatrix4x4>
 #include <QDebug>
+#include <QFileInfo>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

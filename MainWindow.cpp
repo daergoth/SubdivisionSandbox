@@ -21,7 +21,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::onTriggered_LoopSubdiv()
 {
-
+ //Assimp::Importer importer;
 }
 
 void MainWindow::onTriggered_ButterflySubdiv()
