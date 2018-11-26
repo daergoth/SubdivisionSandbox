@@ -24,16 +24,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        main.cpp \
+    main.cpp \
     MainWindow.cpp \
-    mainopenglwidget.cpp
+    mainopenglwidget.cpp \
+    mesh.cpp
 
 HEADERS += \
     MainOpenGLWidget.h \
-    MainWindow.h
+    MainWindow.h \
+    mesh.h
 
 FORMS += \
-        mainwindow.ui
+    mainwindow.ui
 
 #INCLUDEPATH  += $$PWD/3rdparty/assimp/include
 #LIBS += -L$$PWD/3rdparty/assimp/lib/ -lassimp
@@ -45,5 +47,18 @@ else:unix: LIBS += -L$$PWD/3rdparty/assimp/lib/ -lassimp
 INCLUDEPATH += $$PWD/3rdparty/assimp/include
 DEPENDPATH += $$PWD/3rdparty/assimp/include
 
+INCLUDEPATH  += $$PWD/3rdparty/boost/include
+
+INCLUDEPATH  += $$PWD/3rdparty/gmp/include/
+LIBS += -L$$PWD/3rdparty/gmp/lib/ -llibgmp-10
+
+INCLUDEPATH  += $$PWD/3rdparty/mpfr/include/
+LIBS += -L$$PWD/3rdparty/mpfr/lib/ -llibmpfr-4
+
+INCLUDEPATH  += $$PWD/3rdparty/CGAL/include
+CONFIG(debug, debug|release): LIBS += -L$$PWD/3rdparty/CGAL/lib/ -lCGAL_Core-vc140-mt-gd-4.10 -lCGAL-vc140-mt-gd-4.10
+CONFIG(release, debug|release): LIBS += -L$$PWD/3rdparty/CGAL/lib/ -lCGAL_Core-vc140-mt-4.10 -lCGAL-vc140-mt-4.10
+
 RESOURCES += \
     resources.qrc
+

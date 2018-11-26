@@ -1,8 +1,8 @@
 #version 330
-in vec4 col;
+in vec3 col;
 out vec4 fragcol;
 
 void main(void)
 {
-   fragcol = col;
+   fragcol = vec4(col,1);
 }

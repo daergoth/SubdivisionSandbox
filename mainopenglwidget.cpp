@@ -1,10 +1,25 @@
 #include "MainOpenGLWidget.h"
 #include "QOpenGLFunctions_3_2_Core"
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+
 
 MainOpenGLWidget::MainOpenGLWidget(QWidget *parent) : QOpenGLWidget(parent)
 {
     setFormat(QSurfaceFormat::defaultFormat());
+
+    m_mesh = Mesh::makeTriangle();
+}
+
+Mesh const& MainOpenGLWidget::getMesh() const
+{
+    return m_mesh;
+}
+
+void MainOpenGLWidget::setMesh(Mesh const& p_mesh)
+{
+    m_mesh = p_mesh;
 }
 
 void MainOpenGLWidget::initializeGL()
@@ -15,11 +30,12 @@ void MainOpenGLWidget::initializeGL()
 
     // Create shader
     m_program = new QOpenGLShaderProgram(this);
-    m_program -> addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/vertex");
-    m_program -> addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/fragment");
+    m_program -> addShaderFromSourceFile(QOpenGLShader::Vertex, "D:\\Egyetem\\MSc\\Geometriai modellezes\\Project\\SubdivisionSandbox\\shaders\\vertexshader.vert");
+    m_program -> addShaderFromSourceFile(QOpenGLShader::Fragment, "D:\\Egyetem\\MSc\\Geometriai modellezes\\Project\\SubdivisionSandbox\\shaders\\fragmentshader.frag");
     m_program -> link();
     m_posAttr = m_program -> attributeLocation("posAttr");
     m_colAttr = m_program -> attributeLocation("colAttr");
+    m_normalAttr = m_program -> attributeLocation("normalAttr");
     m_matrixUniform = m_program -> uniformLocation("matrix");
 
     m_program -> release();
@@ -59,17 +75,20 @@ void MainOpenGLWidget::paintGL()
     m_program -> bind();
     m_program -> setUniformValue(m_matrixUniform, m_projection);
 
-    glVertexAttribPointer(m_posAttr, 4, GL_FLOAT, GL_FALSE, 0, vertices);
-    glVertexAttribPointer(m_colAttr, 3, GL_FLOAT, GL_FALSE, 0, colors);
+    glVertexAttribPointer(m_posAttr, 3, GL_FLOAT, GL_FALSE, 9*sizeof(float), (float*)(m_mesh.m_vertices.data()));
+    glVertexAttribPointer(m_normalAttr, 3, GL_FLOAT, GL_FALSE, 9*sizeof(float), (float*)(m_mesh.m_vertices.data())+3);
+    glVertexAttribPointer(m_colAttr, 3, GL_FLOAT, GL_FALSE, 9*sizeof(float), (float*)(m_mesh.m_vertices.data())+6);
+
 
     glEnableVertexAttribArray(m_posAttr);
     glEnableVertexAttribArray(m_colAttr);
 
     glDisable(GL_DEPTH_TEST);
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawElements(GL_TRIANGLES, m_mesh.m_indices.size(), GL_UNSIGNED_INT, m_mesh.m_indices.data());
 
     glDisableVertexAttribArray(m_posAttr);
+    glDisableVertexAttribArray(m_normalAttr);
     glDisableVertexAttribArray(m_colAttr);
 
     m_program -> release();
