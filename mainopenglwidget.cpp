@@ -7,27 +7,6 @@ MainOpenGLWidget::MainOpenGLWidget(QWidget *parent) : QOpenGLWidget(parent)
     setFormat(QSurfaceFormat::defaultFormat());
 }
 
-static const char *vertexShaderSource =
-        "#version 330\n"
-        "in vec4 posAttr;\n"
-        "in vec4 colAttr;\n"
-        "out vec4 col;\n"
-        "uniform mat4 matrix;\n"
-        "void main()\n"
-        "{\n"
-        "   col = vec4(1,0,0,1);\n"
-        "   gl_Position = matrix*posAttr;\n"
-        "}\n";
-
-static const char *fragmentShaderSource =
-        "#version 330\n"
-        "in vec4 col;\n"
-        "out vec4 fragcol;\n"
-        "void main()\n"
-        "{\n"
-        "   fragcol = col;\n"
-        "}\n";
-
 void MainOpenGLWidget::initializeGL()
 {
     makeCurrent();
@@ -36,8 +15,8 @@ void MainOpenGLWidget::initializeGL()
 
     // Create shader
     m_program = new QOpenGLShaderProgram(this);
-    m_program -> addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource);
-    m_program -> addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource);
+    m_program -> addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/vertex");
+    m_program -> addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/fragment");
     m_program -> link();
     m_posAttr = m_program -> attributeLocation("posAttr");
     m_colAttr = m_program -> attributeLocation("colAttr");
