@@ -9,9 +9,6 @@
 #include <QMatrix4x4>
 #include <QDebug>
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-
 
 class MainOpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -19,6 +16,8 @@ class MainOpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 public:
     QMatrix4x4 m_projection;
     MainOpenGLWidget(QWidget *parent);
+
+    void drawCubeObject();
 
 protected:
     void initializeGL() override;

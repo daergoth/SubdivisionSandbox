@@ -35,5 +35,14 @@ HEADERS += \
 FORMS += \
         mainwindow.ui
 
-INCLUDEPATH  += $$PWD/3rdparty/assimp/include
-LIBS += -L$$PWD/3rdparty/assimp/lib/ -lassimp
+INCLUDEPATH  += $$PWD/3rdparty/assimp/include \
+                C:/local/boost_1_66_0 \
+                C:/local/CGAL-4.11/include \
+                C:/local/CGAL-4.11/build/include \
+                C:/local/CGAL-4.11/auxiliary/gmp/include
+
+LIBS += -L$$PWD/3rdparty/assimp/lib/ -lassimp \
+        -L"C:/local/boost_1_66_0/lib64-msvc-14.1" \
+        -L"C:/local/CGAL-4.11/build/lib" \
+        -L"C:/local/boost_1_66_0/libs" \
+        -L"C:/local/CGAL-4.11/auxiliary/gmp/lib"
