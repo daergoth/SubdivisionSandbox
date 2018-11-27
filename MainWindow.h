@@ -12,9 +12,6 @@
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
-#include <CGAL/Polygon_2.h>
-#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
-
 
 class QAction;
 class QActionGroup;
@@ -47,6 +44,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
+    void setLabelSubdivision();
 
     void createActions();
     void createMenus();

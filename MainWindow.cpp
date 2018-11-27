@@ -28,12 +28,6 @@ MainWindow::MainWindow(QWidget *parent) :
     openglWidget->setFixedHeight(this->height());
 
     widget->setLayout(layout);
-
-
-    typedef CGAL::Exact_predicates_exact_constructions_kernel kernel;
-
-    CGAL::Polygon_2<kernel> current_polygon;
-
 }
 
 MainWindow::~MainWindow()
@@ -41,37 +35,29 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::setLabelSubdivision(){
+    label->setText("Loop Subdivision\nUse \"+\" key to perform subdivision\n and \"-\" key to revert it!");
+    label->setFont(QFont("Purisa", 10));
+}
+
 void MainWindow::onTriggered_LoopSubdiv()
 {
-    //Show label for help
-    int level = 0;
-    label->setText("Loop Subdivision\nUse \"+\" key to perform subdivision\n and \"-\" key to reverte it!");
-
-    //label->setFont(QFont("Purisa", 10));
-
-    // LoopSubdiv initialized with the current mesh
-    // LoopSubdiv loopSubdiv = new LoopSubdiv(currentMesh);
-
-    // Keep the old Mesh in an array to be able to go back
-    // Mesh[] meshLevels = new Arraylist();
-    // meshLevels[0] = currentMesh;
-
-    //meshLevels[] loopSubdiv.nextLevel()
+    setLabelSubdivision();
 }
 
 void MainWindow::onTriggered_ButterflySubdiv()
 {
-
+    setLabelSubdivision();
 }
 
 void MainWindow::onTriggered_CatmullClarkSubdiv()
 {
-
+    setLabelSubdivision();
 }
 
 void MainWindow::onTriggered_KobbeltSubdiv()
 {
-
+    setLabelSubdivision();
 }
 
 void MainWindow::onTriggered_CreateCustomScheme()
