@@ -1,10 +1,7 @@
 #ifndef SUBDIVISIONSTRATEGY_H
 #define SUBDIVISIONSTRATEGY_H
 
-#include <vector>
-
-// TODO: temporary until CGAL is included
-typedef std::vector<double> Mesh;
+#include "Mesh.h"
 
 class SubdivisionStrategy {
 public:

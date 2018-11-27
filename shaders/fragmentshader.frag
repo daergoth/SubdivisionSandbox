@@ -1,8 +1,9 @@
 #version 330
-in vec4 col;
+in vec3 col;
 out vec4 fragcol;
+uniform vec4 tint;
 
 void main(void)
 {
-   fragcol = col;
+   fragcol = vec4(col,1)*tint;
 }

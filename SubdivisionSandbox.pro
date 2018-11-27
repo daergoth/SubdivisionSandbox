@@ -25,8 +25,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        main.cpp \
+    main.cpp \
     MainWindow.cpp \
+    Mesh.cpp \
     MainOpenGLWidget.cpp \
     SubdivisionController.cpp \
     LoopSubdivisionStrategy.cpp \
@@ -42,6 +43,7 @@ HEADERS += \
     CustomSchemeHandler.h \
     MainOpenGLWidget.h \
     MainWindow.h \
+    Mesh.h \
     SubdivisionController.h \
     SubdivisionStrategy.h \
     LoopSubdivisionStrategy.h \
@@ -64,9 +66,26 @@ else:unix: LIBS += -L$$PWD/3rdparty/assimp/lib/ -lassimp
 INCLUDEPATH += $$PWD/3rdparty/assimp/include
 DEPENDPATH += $$PWD/3rdparty/assimp/include
 
+# Boost
+INCLUDEPATH  += $$PWD/3rdparty/boost/include
+
+# GMP
+INCLUDEPATH  += $$PWD/3rdparty/gmp/include/
+LIBS += -L$$PWD/3rdparty/gmp/lib/ -llibgmp-10
+
+# MPFR
+INCLUDEPATH  += $$PWD/3rdparty/mpfr/include/
+LIBS += -L$$PWD/3rdparty/mpfr/lib/ -llibmpfr-4
+
+# CGAL
+INCLUDEPATH  += $$PWD/3rdparty/CGAL/include
+CONFIG(debug, debug|release): LIBS += -L$$PWD/3rdparty/CGAL/lib/ -lCGAL_Core-vc140-mt-gd-4.10 -lCGAL-vc140-mt-gd-4.10
+CONFIG(release, debug|release): LIBS += -L$$PWD/3rdparty/CGAL/lib/ -lCGAL_Core-vc140-mt-4.10 -lCGAL-vc140-mt-4.10
+
 # nlohmann/json
 INCLUDEPATH += $$PWD/3rdparty/json/include
 DEPENDPATH += $$PWD/3rdparty/json/include
 
 RESOURCES += \
     resources.qrc
+
