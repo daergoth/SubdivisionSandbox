@@ -1,5 +1,4 @@
 #include "MainOpenGLWidget.h"
-#include "QOpenGLFunctions_3_2_Core"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -51,8 +50,8 @@ void MainOpenGLWidget::initializeGL()
 
     // Create shader
     m_program = new QOpenGLShaderProgram(this);
-    m_program -> addShaderFromSourceFile(QOpenGLShader::Vertex, "D:\\Egyetem\\MSc\\Geometriai modellezes\\Project\\SubdivisionSandbox\\shaders\\vertexshader.vert");
-    m_program -> addShaderFromSourceFile(QOpenGLShader::Fragment, "D:\\Egyetem\\MSc\\Geometriai modellezes\\Project\\SubdivisionSandbox\\shaders\\fragmentshader.frag");
+    m_program -> addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/vertex");
+    m_program -> addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/fragment");
     m_program -> link();
     m_posAttr = m_program -> attributeLocation("posAttr");
     m_colAttr = m_program -> attributeLocation("colAttr");
