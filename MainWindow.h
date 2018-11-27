@@ -1,9 +1,16 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "MainOpenGLWidget.h"
+#include <memory>
 
 #include <QMainWindow>
+#include <QFileDialog>
+#include <QMessageBox>
+
+#include "ui_mainwindow.h"
+
+#include "MainOpenGLWidget.h"
+#include "CustomSchemeHandler.h"
 
 class QAction;
 class QActionGroup;
@@ -33,6 +40,10 @@ private slots:
     void onTriggered_OpenObjFile();
 
     void on_actionOpen_scheme_triggered();
+
+    void on_actionSave_scheme_triggered();
+
+    void on_actionAbout_triggered();
 
 private:
     Ui::MainWindow *ui;

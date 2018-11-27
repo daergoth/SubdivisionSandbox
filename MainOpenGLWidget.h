@@ -5,7 +5,7 @@
 #include <QOpenGLFunctions>
 #include <QSurfaceFormat>
 #include <QOpenGLShaderProgram>
-#include "QOpenGLFunctions_3_2_Core"
+#include <QOpenGLFunctions_3_2_Core>
 #include <QMatrix4x4>
 #include <QDebug>
 #include <QFileInfo>
