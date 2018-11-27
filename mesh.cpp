@@ -50,7 +50,72 @@ Mesh Mesh::makeTriangle()
 Mesh Mesh::makeCube()
 {
     // TODO: implement
-    return Mesh();
+
+    Mesh result;
+
+    result.m_vertices.push_back(
+    {
+        {-0.5,-0.5, 0.5},
+        {0.0f, 0.0f, 0.0f},
+        {1.0f, 0.0f, 0.0f}
+    });
+    result.m_vertices.push_back(
+    {
+        { 0.5,-0.5, 0.5},
+        {0.0f, 0.0f, 0.0f},
+        {0.0f, 1.0f, 0.0f}
+    });
+    result.m_vertices.push_back(
+    {
+        { 0.5, 0.5, 0.5},
+        {0.0f, 0.0f, 0.0f},
+        {0.0f, 0.0f, 1.0f}
+    });
+    result.m_vertices.push_back(
+    {
+        {-0.5, 0.5, 0.5},
+        {0.0f, 0.0f, 0.0f},
+        {0.0f, 0.0f, 1.0f}
+    });
+    result.m_vertices.push_back(
+    {
+        {-0.5,-0.5,-0.5},
+        {0.0f, 0.0f, 0.0f},
+        {0.0f, 0.0f, 1.0f}
+    });
+    result.m_vertices.push_back(
+    {
+        { 0.5,-0.5,-0.5},
+        {0.0f, 0.0f, 0.0f},
+        {0.0f, 0.0f, 1.0f}
+    });
+    result.m_vertices.push_back(
+    {
+        { 0.5, 0.5,-0.5},
+        {0.0f, 0.0f, 0.0f},
+        {0.0f, 0.0f, 1.0f}
+    });
+    result.m_vertices.push_back(
+    {
+        {-0.5, 0.5,-0.5},
+        {0.0f, 0.0f, 0.0f},
+        {0.0f, 0.0f, 1.0f}
+    });
+
+    result.m_indices = {0,1,2,
+                        0,2,3,
+                        1,5,6,
+                        1,6,2,
+                        4,5,6,
+                        4,6,7,
+                        0,3,7,
+                        0,7,4,
+                        0,1,5,
+                        0,5,4,
+                        3,2,6,
+                        3,6,7};
+
+    return result;
 }
 
 Mesh Mesh::makeTetrahedron()
