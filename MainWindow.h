@@ -12,6 +12,7 @@
 #include "MainOpenGLWidget.h"
 #include "SubdivisionController.h"
 #include "CustomSchemeHandler.h"
+#include "customschemewindow.h"
 
 class QAction;
 class QActionGroup;
@@ -68,6 +69,9 @@ private:
     QAction* openObjFileAction;
 
     MainOpenGLWidget* openglWidget;
+
+    CustomSchemeWindow* customSchemeWindow;
+
 };
 
 #endif // MAINWINDOW_H

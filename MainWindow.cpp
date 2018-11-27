@@ -50,6 +50,9 @@ void MainWindow::onTriggered_CreateCustomScheme()
 {
     // TODO: implement integration of SubdivisionController, CustomSchemeHandler and creation UI
     CustomSchemeHandler::getInstance().debug();
+
+    customSchemeWindow = new CustomSchemeWindow(this);
+    customSchemeWindow->show();
 }
 
 void MainWindow::onTriggered_CubeObject()
