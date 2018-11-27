@@ -10,6 +10,7 @@
 #include "ui_mainwindow.h"
 
 #include "MainOpenGLWidget.h"
+#include "SubdivisionController.h"
 #include "CustomSchemeHandler.h"
 
 class QAction;

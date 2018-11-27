@@ -26,16 +26,29 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-    CustomScheme.cpp \
-    CustomSchemeHandler.cpp \
+    MainWindow.cpp \
     MainOpenGLWidget.cpp \
-    MainWindow.cpp
+    SubdivisionController.cpp \
+    LoopSubdivisionStrategy.cpp \
+    ButterflySubdivisionStrategy.cpp \
+    CatmullClarkSubdivisionStrategy.cpp \
+    KobbeltSubdivisionStrategy.cpp \
+    CustomSchemeSubdivisionStrategy.cpp \
+    CustomScheme.cpp \
+    CustomSchemeHandler.cpp
 
 HEADERS += \
     CustomScheme.h \
     CustomSchemeHandler.h \
     MainOpenGLWidget.h \
-    MainWindow.h
+    MainWindow.h \
+    SubdivisionController.h \
+    SubdivisionStrategy.h \
+    LoopSubdivisionStrategy.h \
+    ButterflySubdivisionStrategy.h \
+    CatmullClarkSubdivisionStrategy.h \
+    KobbeltSubdivisionStrategy.h \
+    CustomSchemeSubdivisionStrategy.h
 
 FORMS += \
     MainWindow.ui

@@ -11,6 +11,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     openglWidget = new MainOpenGLWidget(this);
     setCentralWidget(openglWidget);
+
+    Mesh baseMesh;
+    SubdivisionController::getInstance().setBaseMesh(baseMesh);
 }
 
 MainWindow::~MainWindow()
@@ -20,26 +23,32 @@ MainWindow::~MainWindow()
 
 void MainWindow::onTriggered_LoopSubdiv()
 {
- //Assimp::Importer importer;
+    SubdivisionController& sc = SubdivisionController::getInstance();
+    sc.switchTo(SubdivisionScheme::Loop);
 }
 
 void MainWindow::onTriggered_ButterflySubdiv()
 {
-
+    SubdivisionController& sc = SubdivisionController::getInstance();
+    sc.switchTo(SubdivisionScheme::Butterfly);
 }
 
 void MainWindow::onTriggered_CatmullClarkSubdiv()
 {
+    SubdivisionController& sc = SubdivisionController::getInstance();
+    sc.switchTo(SubdivisionScheme::CatmullClark);
 
 }
 
 void MainWindow::onTriggered_KobbeltSubdiv()
 {
-
+    SubdivisionController& sc = SubdivisionController::getInstance();
+    sc.switchTo(SubdivisionScheme::Kobbelt);
 }
 
 void MainWindow::onTriggered_CreateCustomScheme()
 {
+    // TODO: implement integration of SubdivisionController, CustomSchemeHandler and creation UI
     CustomSchemeHandler::getInstance().debug();
 }
 
