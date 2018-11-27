@@ -36,5 +36,4 @@ FORMS += \
         mainwindow.ui
 
 INCLUDEPATH  += $$PWD/3rdparty/assimp/include
-
 LIBS += -L$$PWD/3rdparty/assimp/lib/ -lassimp

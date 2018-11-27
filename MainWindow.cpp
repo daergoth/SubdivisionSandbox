@@ -67,7 +67,7 @@ void MainWindow::onTriggered_CreateCustomScheme()
 
 void MainWindow::onTriggered_CubeObject()
 {
-    openglWidget->drawCubeObject();
+
 }
 
 void MainWindow::onTriggered_TetrahedronObject()
