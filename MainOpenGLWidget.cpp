@@ -11,6 +11,8 @@ MainOpenGLWidget::MainOpenGLWidget(QWidget *parent) : QOpenGLWidget(parent)
     //m_mesh = Mesh::makeTriangle();
     m_mesh = Mesh::makeCube();
 
+    m_mesh = Mesh(m_mesh.convertToSurfaceMesh());
+
     m_eye = QVector3D(0,0,2);
     m_forward = QVector3D(0.0f,0.0f,-1.0f);
 
@@ -138,8 +140,8 @@ void MainOpenGLWidget::mouseMoveEvent(QMouseEvent *event)
     // Rotate the camera
     if ((event->buttons() & Qt::LeftButton) != 0)
     {
-        static const float X_SCALE = 1.0f / 100.0f * qDegreesToRadians(180.0f);
-        static const float Y_SCALE = 1.0f / 100.0f * qDegreesToRadians(180.0f);
+        static const float X_SCALE = 1.0f / 50.0f * qDegreesToRadians(180.0f);
+        static const float Y_SCALE = 1.0f / 50.0f * qDegreesToRadians(180.0f);
 
         float scale = qMax(1.0f, (1.0f + m_eye.length()) / 1000.0f);
 
@@ -156,7 +158,7 @@ void MainOpenGLWidget::mouseMoveEvent(QMouseEvent *event)
     // Move the camera
     else if ((event->buttons() & Qt::RightButton) != 0)
     {
-        float scale = qMax(0.05f, (1.0f + m_eye.length()) / 800.0f);
+        float scale = qMax(0.01f, (1.0f + m_eye.length()) / 3200.0f);
         m_eye += dx * scale * right;
         m_eye += dy * scale * up;
 

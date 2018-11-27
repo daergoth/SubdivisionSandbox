@@ -3,7 +3,15 @@
 
 #include "QVector3D"
 #include "QVector"
+#include <CGAL/Simple_cartesian.h>
+#include <CGAL/Surface_mesh.h>
+#include <QTextStream>
+#include <QDebug>
 
+typedef CGAL::Simple_cartesian<double> K;
+typedef CGAL::Surface_mesh<K::Point_3> SurfaceMesh;
+typedef SurfaceMesh::Vertex_index vertex_descriptor;
+typedef SurfaceMesh::Face_index face_descriptor;
 
 /**
  * @brief Mesh osztály, amely csúcsok és indexek formájában ábrázol egy háromszögelt mesht.
@@ -36,11 +44,15 @@ public:
      */
     Mesh(QVector<Vertex>const& p_vertices, QVector<int>const& p_indices);
 
+    Mesh(SurfaceMesh surface_mesh);
+
     static Mesh makeTriangle();
     static Mesh makeCube();
     static Mesh makeTetrahedron();
 
     void generateIndices();
+
+    SurfaceMesh convertToSurfaceMesh();
 
     QVector<Vertex> m_vertices;
     QVector<int> m_indices;
