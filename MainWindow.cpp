@@ -1,5 +1,4 @@
 #include "MainWindow.h"
-#include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -50,6 +49,7 @@ void MainWindow::onTriggered_KobbeltSubdiv()
 void MainWindow::onTriggered_CreateCustomScheme()
 {
     // TODO: implement integration of SubdivisionController, CustomSchemeHandler and creation UI
+    CustomSchemeHandler::getInstance().debug();
 }
 
 void MainWindow::onTriggered_CubeObject()
@@ -69,8 +69,39 @@ void MainWindow::onTriggered_OpenObjFile()
 
 void MainWindow::on_actionOpen_scheme_triggered()
 {
+    QString filename = QFileDialog::getOpenFileName(this,
+            tr("Open Subdivision Scheme"), "",
+            tr("Subdivision Scheme (*.sbs);;All Files (*)"));
+    if (!filename.isEmpty()) {
+        CustomSchemeHandler& csh = CustomSchemeHandler::getInstance();
+        CustomScheme openedScheme = csh.openCustomScheme(filename);
+        csh.setCurrentCustomScheme(openedScheme);
+    }
+}
+
+void MainWindow::on_actionSave_scheme_triggered()
+{
+    CustomSchemeHandler& csh = CustomSchemeHandler::getInstance();
+    std::shared_ptr<CustomScheme> current = csh.getCurrentCustomScheme();
+
+    if (current) {
+        QString filename = QFileDialog::getSaveFileName(this,
+                tr("Save Subdivision Scheme"), "",
+                tr("Subdivision Scheme (*.sbs);;All Files (*)"));
+        if (!filename.isEmpty()) {
+            csh.saveCustomScheme(filename, current);
+        }
+    } else {
+        QMessageBox::information(this, tr("Nothing to save"),
+                        tr("There is no active custom scheme to save, open one or create a new one first!"));
+    }
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
 
 }
+
 
 void MainWindow::createActions()
 {

@@ -1,5 +1,4 @@
 #include "MainOpenGLWidget.h"
-#include "QOpenGLFunctions_3_2_Core"
 
 
 MainOpenGLWidget::MainOpenGLWidget(QWidget *parent) : QOpenGLWidget(parent)
