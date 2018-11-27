@@ -1,4 +1,4 @@
-#include "customscheme.h"
+#include "CustomScheme.h"
 
 // OddWeight
 void to_json(json& j, const OddWeight& ow) {

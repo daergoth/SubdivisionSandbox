@@ -26,19 +26,19 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-    MainWindow.cpp \
-    mainopenglwidget.cpp \
-    customschemehandler.cpp \
-    customscheme.cpp
+    CustomScheme.cpp \
+    CustomSchemeHandler.cpp \
+    MainOpenGLWidget.cpp \
+    MainWindow.cpp
 
 HEADERS += \
+    CustomScheme.h \
+    CustomSchemeHandler.h \
     MainOpenGLWidget.h \
-    MainWindow.h \
-    customschemehandler.h \
-    customscheme.h
+    MainWindow.h
 
 FORMS += \
-        mainwindow.ui
+    MainWindow.ui
 
 #INCLUDEPATH  += $$PWD/3rdparty/assimp/include
 #LIBS += -L$$PWD/3rdparty/assimp/lib/ -lassimp
