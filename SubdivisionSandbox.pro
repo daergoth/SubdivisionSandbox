@@ -26,11 +26,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
     MainWindow.cpp \
-    mainopenglwidget.cpp
+    mainopenglwidget.cpp \
+    SubdivisionController.cpp \
+    LoopSubdivisionStrategy.cpp \
+    ButterflySubdivisionStrategy.cpp \
+    CatmullClarkSubdivisionStrategy.cpp \
+    KobbeltSubdivisionStrategy.cpp \
+    CustomSchemeSubdivisionStrategy.cpp
 
 HEADERS += \
     MainOpenGLWidget.h \
-    MainWindow.h
+    MainWindow.h \
+    SubdivisionController.h \
+    SubdivisionStrategy.h \
+    LoopSubdivisionStrategy.h \
+    ButterflySubdivisionStrategy.h \
+    CatmullClarkSubdivisionStrategy.h \
+    KobbeltSubdivisionStrategy.h \
+    CustomSchemeSubdivisionStrategy.h
 
 FORMS += \
         mainwindow.ui

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "MainOpenGLWidget.h"
+#include "SubdivisionController.h"
 
 #include <QMainWindow>
 
