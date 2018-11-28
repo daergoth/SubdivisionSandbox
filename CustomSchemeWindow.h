@@ -4,12 +4,13 @@
 #include <memory>
 
 #include <QMainWindow>
-#include <QMenu>
-#include <QMenuBar>
 #include <QAction>
 #include <QActionGroup>
 #include <QLineEdit>
 #include <QLabel>
+#include <QGroupBox>
+#include <QRadioButton>
+#include <QPushButton>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QVBoxLayout>
@@ -18,7 +19,6 @@
 
 class QAction;
 class QActionGroup;
-class QMenu;
 
 class CustomSchemeWindow : public QMainWindow
 {
@@ -35,15 +35,13 @@ private slots:
     void onTriggered_Quad();
     void onTriggered_FirstNeighbours();
     void onTriggered_SecondNeighbours();
+    void onTriggered_okButton();
+    void onTriggered_cancelButton();
+    std::vector<QHBoxLayout*>* getVectorOfLineEdits();
 
 private:
 
     void createActions();
-    void createMenus();
-
-    QMenu* schemetypeMenu;
-    QMenu* shapeMenu;
-    QMenu* neighbourMenu;
 
     QActionGroup * schemeTypesGroup;
     QAction* approxAction;
@@ -58,6 +56,21 @@ private:
     QAction* secondNeighbourAction;
 
     QVBoxLayout* sidebarVBox;
+
+    QGroupBox* groupBoxTypes;
+    QGroupBox* groupBoxShapes;
+    QGroupBox* groupBoxNeighbours;
+    QRadioButton* approxRB;
+    QRadioButton* interpolRB;
+    QRadioButton* triRB;
+    QRadioButton* quadRB;
+    QRadioButton* firstnRB;
+    QRadioButton* secondnRB;
+
+    QPushButton* okButton;
+    QPushButton* cancelButton;
+
+    std::vector<QLineEdit> lineEdits;
 };
 
 #endif // CUSTOMSCHEMEWINDOW_H
