@@ -37,7 +37,9 @@ private slots:
     void onTriggered_SecondNeighbours();
     void onTriggered_okButton();
     void onTriggered_cancelButton();
-    std::vector<QHBoxLayout*>* getVectorOfLineEdits();
+    void updateWeightsLayout();
+    int getNumberOfWeights();
+    std::vector<QHBoxLayout*> getVectorOfLineEdits();
 
 private:
 
@@ -56,6 +58,9 @@ private:
     QAction* secondNeighbourAction;
 
     QVBoxLayout* sidebarVBox;
+    QVBoxLayout* vBoxWeights;
+    QWidget* container;
+    QLabel* labelWeightsTitle;
 
     QGroupBox* groupBoxTypes;
     QGroupBox* groupBoxShapes;

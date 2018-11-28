@@ -11,8 +11,15 @@ CustomSchemeWindow::CustomSchemeWindow(QWidget *parent) :
 
     QLabel* labelLeft = new QLabel("Drawing of the fixed mesh");
     labelLeft->setFixedWidth(500);
+    labelLeft->setFixedHeight(this->height());
+    int labelWidth = 200;
+    labelWeightsTitle = new QLabel("Set the weights:");
+    labelWeightsTitle->setFixedWidth(labelWidth);
+
     sidebarVBox = new QVBoxLayout();
-    QLabel* label = new QLabel("Set the weights:");
+
+    vBoxWeights = new QVBoxLayout();
+    container = new QWidget();
 
     groupBoxTypes = new QGroupBox(tr("Subdivision Type"));
     groupBoxShapes = new QGroupBox(tr("Mesh Type"));
@@ -32,12 +39,11 @@ CustomSchemeWindow::CustomSchemeWindow(QWidget *parent) :
     QObject::connect(firstnRB,SIGNAL(clicked(bool)),this,SLOT(onTriggered_FirstNeighbours()));
     QObject::connect(secondnRB,SIGNAL(clicked(bool)),this,SLOT(onTriggered_SecondNeighbours()));
 
-
-    approxRB->setChecked(false);
+    approxRB->setChecked(true);
     interpolRB->setChecked(false);
-    triRB->setChecked(false);
+    triRB->setChecked(true);
     quadRB->setChecked(false);
-    firstnRB->setChecked(false);
+    firstnRB->setChecked(true);
     secondnRB->setChecked(false);
 
     QVBoxLayout *vboxTypes = new QVBoxLayout;
@@ -71,22 +77,17 @@ CustomSchemeWindow::CustomSchemeWindow(QWidget *parent) :
     sidebarVBox->addWidget(groupBoxTypes);
     sidebarVBox->addWidget(groupBoxShapes);
     sidebarVBox->addWidget(groupBoxNeighbours);
-    sidebarVBox->addWidget(label);
 
-    std::vector<QHBoxLayout*>* hboxLineEdits = getVectorOfLineEdits();
-    for(auto &hbox: *hboxLineEdits){
-        sidebarVBox->addLayout(hbox);
-    }
-    //sidebarVBox->addLayout(firstNeighboursHBox);
+    updateWeightsLayout();
+
+    sidebarVBox->addLayout(vBoxWeights);
     sidebarVBox->addStretch(1);
     sidebarVBox->addLayout(hboxButtons);
 
     QHBoxLayout *mainlayout = new QHBoxLayout(this);
     mainlayout->addWidget(labelLeft);
     mainlayout->addLayout(sidebarVBox);
-    labelLeft->setFixedHeight(this->height());
-    int labelWidth = 200;
-    label->setFixedWidth(labelWidth);
+
 
     widget->setLayout(mainlayout);
 }
@@ -98,32 +99,32 @@ CustomSchemeWindow::~CustomSchemeWindow()
 
 void CustomSchemeWindow::onTriggered_Approx()
 {
-
+    updateWeightsLayout();
 }
 
 void CustomSchemeWindow::onTriggered_Interp()
 {
-
+    updateWeightsLayout();
 }
 
 void CustomSchemeWindow::onTriggered_Tri()
 {
-
+    updateWeightsLayout();
 }
 
 void CustomSchemeWindow::onTriggered_Quad()
 {
-
+    updateWeightsLayout();
 }
 
 void CustomSchemeWindow::onTriggered_FirstNeighbours()
 {
-
+    updateWeightsLayout();
 }
 
 void CustomSchemeWindow::onTriggered_SecondNeighbours()
 {
-
+    updateWeightsLayout();
 }
 
 void CustomSchemeWindow::onTriggered_okButton()
@@ -136,16 +137,40 @@ void CustomSchemeWindow::onTriggered_cancelButton()
     this->hide();
 }
 
-std::vector<QHBoxLayout*>* CustomSchemeWindow::getVectorOfLineEdits()
+void CustomSchemeWindow::updateWeightsLayout()
 {
-    std::vector<QHBoxLayout*>* hboxVector = new std::vector<QHBoxLayout*>();
-    int numberOfWeights = (firstnRB->isChecked())?4:8;
+    if(container != 0)
+    {
+        vBoxWeights->removeWidget(container);
+        container->hide();
+        container->deleteLater();
+    }
+
+    container = new QWidget();
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget(labelWeightsTitle);
+
+    std::vector<QHBoxLayout*> hboxLineEdits = getVectorOfLineEdits();
+    for(QHBoxLayout* hbox : hboxLineEdits){
+        layout->addLayout(hbox);
+    }
+
+    container->setLayout(layout);
+    vBoxWeights->addWidget(container);
+}
+
+std::vector<QHBoxLayout*> CustomSchemeWindow::getVectorOfLineEdits()
+{
+    std::vector<QHBoxLayout*> hboxVector;
+    int numberOfWeights = getNumberOfWeights();
+
     for(int i = 0; i< numberOfWeights;i++){
         QHBoxLayout* hbox = new QHBoxLayout();
 
         std::string labelstr = "Weight "+std::to_string(i);
-        QString* labeltxt = new QString( QString::fromStdString(labelstr));
-        QLabel* label = new QLabel(*labeltxt);
+        QString labeltxt = QString::fromStdString(labelstr);
+        QLabel* label = new QLabel(labeltxt);
         label->setFixedWidth(150);
 
         QLineEdit* lineEdit = new QLineEdit();
@@ -155,10 +180,19 @@ std::vector<QHBoxLayout*>* CustomSchemeWindow::getVectorOfLineEdits()
         hbox->addWidget(lineEdit);
         hbox->addStretch(1);
 
-        hboxVector->push_back(hbox);
+        hboxVector.push_back(hbox);
     }
 
     return hboxVector;
+}
+
+int CustomSchemeWindow::getNumberOfWeights()
+{
+    //tri  1 = 2-1 = 1
+    //tri  2 = 3-1 = 2
+    //quad 1 = 2-1 + 1-1 = 1
+    //quad 2 = 2-1 + 3-1 = 3
+    return (firstnRB->isChecked())?1:((triRB->isChecked())?2:3);
 }
 
 void CustomSchemeWindow::createActions()
@@ -170,7 +204,6 @@ void CustomSchemeWindow::createActions()
     interpolAction = new QAction(tr("Interpolating"), this);
     interpolAction->setCheckable(true);
     connect(interpolAction, &QAction::triggered, this, &CustomSchemeWindow::onTriggered_Interp);
-
 
     triAction = new QAction(tr("Triangle Mesh"), this);
     triAction->setCheckable(true);
