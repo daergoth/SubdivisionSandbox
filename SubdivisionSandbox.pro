@@ -36,7 +36,8 @@ SOURCES += \
     KobbeltSubdivisionStrategy.cpp \
     CustomSchemeSubdivisionStrategy.cpp \
     CustomScheme.cpp \
-    CustomSchemeHandler.cpp
+    CustomSchemeHandler.cpp \
+    CustomSchemeWindow.cpp
 
 HEADERS += \
     CustomScheme.h \
@@ -50,10 +51,12 @@ HEADERS += \
     ButterflySubdivisionStrategy.h \
     CatmullClarkSubdivisionStrategy.h \
     KobbeltSubdivisionStrategy.h \
-    CustomSchemeSubdivisionStrategy.h
+    CustomSchemeSubdivisionStrategy.h \
+    CustomSchemeWindow.h
 
 FORMS += \
-    MainWindow.ui
+    MainWindow.ui \
+    CustomSchemeWindow.ui
 
 #INCLUDEPATH  += $$PWD/3rdparty/assimp/include
 #LIBS += -L$$PWD/3rdparty/assimp/lib/ -lassimp
