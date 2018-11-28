@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "MainOpenGLWidget.h"
+#include <memory>
 
 #include <QMainWindow>
 #include <QLabel>
@@ -12,6 +12,13 @@
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
+#include <QMessageBox>
+
+#include "ui_mainwindow.h"
+
+#include "MainOpenGLWidget.h"
+#include "SubdivisionController.h"
+#include "CustomSchemeHandler.h"
 
 class QAction;
 class QActionGroup;
@@ -41,6 +48,10 @@ private slots:
     void onTriggered_OpenObjFile();
 
     void on_actionOpen_scheme_triggered();
+
+    void on_actionSave_scheme_triggered();
+
+    void on_actionAbout_triggered();
 
 private:
     Ui::MainWindow *ui;
