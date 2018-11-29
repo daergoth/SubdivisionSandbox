@@ -27,7 +27,7 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     MainWindow.cpp \
-    mesh.cpp \
+    Mesh.cpp \
     MainOpenGLWidget.cpp \
     SubdivisionController.cpp \
     LoopSubdivisionStrategy.cpp \
@@ -36,25 +36,27 @@ SOURCES += \
     KobbeltSubdivisionStrategy.cpp \
     CustomSchemeSubdivisionStrategy.cpp \
     CustomScheme.cpp \
-    CustomSchemeHandler.cpp
+    CustomSchemeHandler.cpp \
+    CustomSchemeWindow.cpp
 
 HEADERS += \
     CustomScheme.h \
     CustomSchemeHandler.h \
     MainOpenGLWidget.h \
     MainWindow.h \
-    mesh.h \
-    MainWindow.h \
+    Mesh.h \
     SubdivisionController.h \
     SubdivisionStrategy.h \
     LoopSubdivisionStrategy.h \
     ButterflySubdivisionStrategy.h \
     CatmullClarkSubdivisionStrategy.h \
     KobbeltSubdivisionStrategy.h \
-    CustomSchemeSubdivisionStrategy.h
+    CustomSchemeSubdivisionStrategy.h \
+    CustomSchemeWindow.h
 
 FORMS += \
-    MainWindow.ui
+    MainWindow.ui \
+    CustomSchemeWindow.ui
 
 #INCLUDEPATH  += $$PWD/3rdparty/assimp/include
 #LIBS += -L$$PWD/3rdparty/assimp/lib/ -lassimp
@@ -68,21 +70,25 @@ else:unix: LIBS += -L$$PWD/3rdparty/assimp/lib/ -lassimp
 INCLUDEPATH += $$PWD/3rdparty/assimp/include
 DEPENDPATH += $$PWD/3rdparty/assimp/include
 
-# nlohmann/json
-INCLUDEPATH += $$PWD/3rdparty/json/include
-DEPENDPATH += $$PWD/3rdparty/json/include
-
+# Boost
 INCLUDEPATH  += $$PWD/3rdparty/boost/include
 
+# GMP
 INCLUDEPATH  += $$PWD/3rdparty/gmp/include/
 LIBS += -L$$PWD/3rdparty/gmp/lib/ -llibgmp-10
 
+# MPFR
 INCLUDEPATH  += $$PWD/3rdparty/mpfr/include/
 LIBS += -L$$PWD/3rdparty/mpfr/lib/ -llibmpfr-4
 
+# CGAL
 INCLUDEPATH  += $$PWD/3rdparty/CGAL/include
 CONFIG(debug, debug|release): LIBS += -L$$PWD/3rdparty/CGAL/lib/ -lCGAL_Core-vc140-mt-gd-4.10 -lCGAL-vc140-mt-gd-4.10
 CONFIG(release, debug|release): LIBS += -L$$PWD/3rdparty/CGAL/lib/ -lCGAL_Core-vc140-mt-4.10 -lCGAL-vc140-mt-4.10
+
+# nlohmann/json
+INCLUDEPATH += $$PWD/3rdparty/json/include
+DEPENDPATH += $$PWD/3rdparty/json/include
 
 RESOURCES += \
     resources.qrc

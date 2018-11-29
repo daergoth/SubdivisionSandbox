@@ -6,11 +6,24 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QWidget *widget = new QWidget;
+    setCentralWidget(widget);
+
     createActions();
     createMenus();
 
     openglWidget = new MainOpenGLWidget(this);
-    setCentralWidget(openglWidget);
+
+    label = new QLabel();
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->addWidget(label);
+    layout->addWidget(openglWidget);
+    label->setFixedHeight(this->height());
+    int labelWidth = 200;
+    label->setFixedWidth(labelWidth);
+    openglWidget->setFixedWidth(this->width()-labelWidth);
+    openglWidget->setFixedHeight(this->height());
+    widget->setLayout(layout);
 
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.setBaseMesh(Mesh::makeCube());
@@ -22,26 +35,39 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::setLabelSubdivision(){
+    label->setText("Loop Subdivision\nUse \"+\" key to perform subdivision\n and \"-\" key to revert it!");
+    label->setFont(QFont("Purisa", 10));
+}
+
 void MainWindow::onTriggered_LoopSubdiv()
 {
+    setLabelSubdivision();
+
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::Loop);
 }
 
 void MainWindow::onTriggered_ButterflySubdiv()
 {
+    setLabelSubdivision();
+
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::Butterfly);
 }
 
 void MainWindow::onTriggered_CatmullClarkSubdiv()
 {
+    setLabelSubdivision();
+
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::CatmullClark);
 }
 
 void MainWindow::onTriggered_KobbeltSubdiv()
 {
+    setLabelSubdivision();
+
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::Kobbelt);
 }
@@ -50,6 +76,9 @@ void MainWindow::onTriggered_CreateCustomScheme()
 {
     // TODO: implement integration of SubdivisionController, CustomSchemeHandler and creation UI
     CustomSchemeHandler::getInstance().debug();
+
+    customSchemeWindow = new CustomSchemeWindow(this);
+    customSchemeWindow->show();
 }
 
 void MainWindow::onTriggered_CubeObject()
@@ -68,6 +97,22 @@ void MainWindow::onTriggered_TetrahedronObject()
 
 void MainWindow::onTriggered_OpenObjFile()
 {
+    // show file chooser dialog
+    QString qfileName = QFileDialog::getOpenFileName(this, tr("Open Obj"), "/home", tr("*.obj"));
+    //printf(qfileName.toUtf8().constData());
+    std::string fileName = qfileName.toUtf8().constData();
+    /* Assimp::Importer importer;
+       const aiScene* scene = importer
+                .ReadFile(fileName.c_str(),
+                          aiProcess_Triangulate |
+                          aiProcess_GenSmoothNormals |
+                          aiProcess_FlipUVs);
+         if(!scene){
+            std::cout << "Mesh load failed!: " << fileName << std::endl;
+            assert(0 == 0);
+        }
+                */
+
     openglWidget->update();
 }
 

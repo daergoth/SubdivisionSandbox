@@ -1,7 +1,7 @@
 #ifndef SUBDIVISIONSTRATEGY_H
 #define SUBDIVISIONSTRATEGY_H
 
-#include <mesh.h>
+#include "Mesh.h"
 
 #include <vector>
 #include <CGAL/Subdivision_method_3.h>

@@ -7,7 +7,7 @@
 
 #include <QFile>
 #include <QTextStream>
-#include "nlohmann/json.hpp"
+#include <nlohmann/json.hpp>
 
 #include "CustomScheme.h"
 
