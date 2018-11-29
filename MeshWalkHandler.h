@@ -94,11 +94,11 @@ public:
     MeshWalkHandler(MeshWalkHandler const&) = delete;
     void operator=(MeshWalkHandler const&) = delete;
 
-    Walk walk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, int neighbour_level, SubdivisionType type, OddsType odds_type);
-    LoopLikeWalk loopLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, int neighbour_level);
-    ButterflyLikeWalk butterflyLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, int neighbour_level);
-    CatmullClarkLikeWalk catmullClarkLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, int neighbour_level, OddsType odds_type);
-    KobbeltLikeWalk kobbeltLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, int neighbour_level, OddsType odds_type);
+    Walk walk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, int neighbour_level, SubdivisionType subdivision_type, OddsType odds_type, MeshType mesh_type);
+    LoopLikeWalk loopLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge);
+    ButterflyLikeWalk butterflyLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge);
+    CatmullClarkLikeWalk catmullClarkLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, OddsType odds_type);
+    KobbeltLikeWalk kobbeltLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, OddsType odds_type);
 
 private:
     MeshWalkHandler() {}

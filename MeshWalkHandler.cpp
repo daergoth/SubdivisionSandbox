@@ -1,23 +1,75 @@
 #include "MeshWalkHandler.h"
 
-MeshWalkHandler::Walk MeshWalkHandler::walk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, int neighbour_level, SubdivisionType type, OddsType odds_type) {
-    throw std::exception("Unimplemented!");
+MeshWalkHandler::Walk MeshWalkHandler::walk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, int neighbour_level, SubdivisionType subdivision_type, OddsType odds_type, MeshType mesh_type) {
+    std::array<K::Point_3, 16> odds;
+    std::vector<K::Point_3> evens;
+    switch (mesh_type) {
+    case Triangular:
+
+        switch (neighbour_level) {
+        case 1:
+            odds = triOddVerticesOneNeighbour(sm, halfedge);
+            break;
+        case 2:
+            odds = triOddVerticesTwoNeighbour(sm, halfedge);
+            break;
+        default:
+            throw std::exception("Unsupported neighbour level: " + neighbour_level);
+            break;
+        }
+
+        if (subdivision_type == Approximating) {
+            evens = triEvenVertices(sm, halfedge);
+        }
+
+        break;
+    case Quadrilateral:
+
+        switch (neighbour_level) {
+        case 1:
+            odds = quadOddVerticesOneNeighbour(sm, halfedge, odds_type);
+            break;
+        case 2:
+            odds = quadOddVerticesTwoNeighbour(sm, halfedge, odds_type);
+            break;
+        default:
+            throw std::exception("Unsupported neighbour level: " + neighbour_level);
+            break;
+        }
+
+        if (subdivision_type == Approximating) {
+            evens = quadEvenVertices(sm, halfedge);
+        }
+
+        break;
+    default:
+        throw std::exception("Unsupported MeshType: " + mesh_type);
+        break;
+    }
+
+    return Walk(odds, evens, odds.size(), evens.size(), mesh_type, odds_type, subdivision_type);
 }
 
-MeshWalkHandler::LoopLikeWalk MeshWalkHandler::loopLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, int neighbour_level) {
-    throw std::exception("Unimplemented!");
+MeshWalkHandler::LoopLikeWalk MeshWalkHandler::loopLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge) {
+    std::array<K::Point_3, 16> odds = triOddVerticesOneNeighbour(sm, halfedge);
+    std::vector<K::Point_3> evens = triEvenVertices(sm, halfedge);
+    return LoopLikeWalk(odds, evens);
 }
 
-MeshWalkHandler::ButterflyLikeWalk MeshWalkHandler::butterflyLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, int neighbour_level) {
-    throw std::exception("Unimplemented!");
+MeshWalkHandler::ButterflyLikeWalk MeshWalkHandler::butterflyLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge) {
+    std::array<K::Point_3, 16> odds = triOddVerticesTwoNeighbour(sm, halfedge);
+    return ButterflyLikeWalk(odds);
 }
 
-MeshWalkHandler::CatmullClarkLikeWalk MeshWalkHandler::catmullClarkLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, int neighbour_level, OddsType odds_type) {
-    throw std::exception("Unimplemented!");
+MeshWalkHandler::CatmullClarkLikeWalk MeshWalkHandler::catmullClarkLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, OddsType odds_type) {
+    std::array<K::Point_3, 16> odds = quadOddVerticesOneNeighbour(sm, halfedge, odds_type);
+    std::vector<K::Point_3> evens = quadEvenVertices(sm, halfedge);
+    return CatmullClarkLikeWalk(odds, evens, odds_type);
 }
 
-MeshWalkHandler::KobbeltLikeWalk MeshWalkHandler::kobbeltLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, int neighbour_level, OddsType odds_type) {
-    throw std::exception("Unimplemented!");
+MeshWalkHandler::KobbeltLikeWalk MeshWalkHandler::kobbeltLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, OddsType odds_type) {
+    std::array<K::Point_3, 16> odds = quadOddVerticesTwoNeighbour(sm, halfedge, odds_type);
+    return KobbeltLikeWalk(odds, odds_type);
 }
 
 std::array<K::Point_3, 16> MeshWalkHandler::triOddVerticesOneNeighbour(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge) {
