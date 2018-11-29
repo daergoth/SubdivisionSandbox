@@ -5,13 +5,15 @@
 #include <QOpenGLFunctions>
 #include <QSurfaceFormat>
 #include <QOpenGLShaderProgram>
-#include "QOpenGLFunctions_3_2_Core"
+#include <QOpenGLFunctions_3_2_Core>
 #include <QMatrix4x4>
 #include <QDebug>
 #include <QFileInfo>
 #include <mesh.h>
 #include <QMouseEvent>
 #include <QtMath>
+
+#include <SubdivisionController.h>
 
 class MainOpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -20,13 +22,11 @@ public:
     QMatrix4x4 m_projection;
     MainOpenGLWidget(QWidget *parent);
 
-    Mesh const& getMesh() const;
-    void setMesh(Mesh const& p_mesh);
+    void update();
 
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
 protected:
-    void update();
     void initializeGL() override;
     void resizeGL(int w, int h) override;
     void paintGL() override;
@@ -34,8 +34,6 @@ protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-
-    Mesh m_mesh;
 
     GLuint m_posAttr;
     GLuint m_colAttr;

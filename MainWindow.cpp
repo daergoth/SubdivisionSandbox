@@ -1,5 +1,4 @@
 #include "MainWindow.h"
-#include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -12,6 +11,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     openglWidget = new MainOpenGLWidget(this);
     setCentralWidget(openglWidget);
+
+    SubdivisionController& sc = SubdivisionController::getInstance();
+    sc.setBaseMesh(Mesh::makeCube());
+    sc.switchTo(SubdivisionScheme::Loop);
 }
 
 MainWindow::~MainWindow()
@@ -21,48 +24,88 @@ MainWindow::~MainWindow()
 
 void MainWindow::onTriggered_LoopSubdiv()
 {
- //Assimp::Importer importer;
+    SubdivisionController& sc = SubdivisionController::getInstance();
+    sc.switchTo(SubdivisionScheme::Loop);
 }
 
 void MainWindow::onTriggered_ButterflySubdiv()
 {
-
+    SubdivisionController& sc = SubdivisionController::getInstance();
+    sc.switchTo(SubdivisionScheme::Butterfly);
 }
 
 void MainWindow::onTriggered_CatmullClarkSubdiv()
 {
-
+    SubdivisionController& sc = SubdivisionController::getInstance();
+    sc.switchTo(SubdivisionScheme::CatmullClark);
 }
 
 void MainWindow::onTriggered_KobbeltSubdiv()
 {
-
+    SubdivisionController& sc = SubdivisionController::getInstance();
+    sc.switchTo(SubdivisionScheme::Kobbelt);
 }
 
 void MainWindow::onTriggered_CreateCustomScheme()
 {
-
+    // TODO: implement integration of SubdivisionController, CustomSchemeHandler and creation UI
+    CustomSchemeHandler::getInstance().debug();
 }
 
 void MainWindow::onTriggered_CubeObject()
 {
-
+    SubdivisionController& sc = SubdivisionController::getInstance();
+    sc.setBaseMesh(Mesh::makeCube());
+    openglWidget->update();
 }
 
 void MainWindow::onTriggered_TetrahedronObject()
 {
-
+    SubdivisionController& sc = SubdivisionController::getInstance();
+    sc.setBaseMesh(Mesh::makeTetrahedron());
+    openglWidget->update();
 }
 
 void MainWindow::onTriggered_OpenObjFile()
 {
-
+    openglWidget->update();
 }
 
 void MainWindow::on_actionOpen_scheme_triggered()
 {
+    QString filename = QFileDialog::getOpenFileName(this,
+            tr("Open Subdivision Scheme"), "",
+            tr("Subdivision Scheme (*.sbs);;All Files (*)"));
+    if (!filename.isEmpty()) {
+        CustomSchemeHandler& csh = CustomSchemeHandler::getInstance();
+        CustomScheme openedScheme = csh.openCustomScheme(filename);
+        csh.setCurrentCustomScheme(openedScheme);
+    }
+}
+
+void MainWindow::on_actionSave_scheme_triggered()
+{
+    CustomSchemeHandler& csh = CustomSchemeHandler::getInstance();
+    std::shared_ptr<CustomScheme> current = csh.getCurrentCustomScheme();
+
+    if (current) {
+        QString filename = QFileDialog::getSaveFileName(this,
+                tr("Save Subdivision Scheme"), "",
+                tr("Subdivision Scheme (*.sbs);;All Files (*)"));
+        if (!filename.isEmpty()) {
+            csh.saveCustomScheme(filename, current);
+        }
+    } else {
+        QMessageBox::information(this, tr("Nothing to save"),
+                        tr("There is no active custom scheme to save, open one or create a new one first!"));
+    }
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
 
 }
+
 
 void MainWindow::createActions()
 {
