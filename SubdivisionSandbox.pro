@@ -37,7 +37,8 @@ SOURCES += \
     CustomSchemeSubdivisionStrategy.cpp \
     CustomScheme.cpp \
     CustomSchemeHandler.cpp \
-    MeshWalkHandler.cpp
+    MeshWalkHandler.cpp \
+    CustomSchemeWindow.cpp
 
 HEADERS += \
     CustomScheme.h \
@@ -52,10 +53,12 @@ HEADERS += \
     CatmullClarkSubdivisionStrategy.h \
     KobbeltSubdivisionStrategy.h \
     CustomSchemeSubdivisionStrategy.h \
-    MeshWalkHandler.h
+    MeshWalkHandler.h \
+    CustomSchemeWindow.h
 
 FORMS += \
-    MainWindow.ui
+    MainWindow.ui \
+    CustomSchemeWindow.ui
 
 #INCLUDEPATH  += $$PWD/3rdparty/assimp/include
 #LIBS += -L$$PWD/3rdparty/assimp/lib/ -lassimp
