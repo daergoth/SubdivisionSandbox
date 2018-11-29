@@ -5,6 +5,6 @@ LoopSubdivisionStrategy::LoopSubdivisionStrategy()
 
 }
 
-Mesh LoopSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
+SurfaceMesh LoopSubdivisionStrategy::doSubdivision(SurfaceMesh evenMesh) {
     return evenMesh;
 }

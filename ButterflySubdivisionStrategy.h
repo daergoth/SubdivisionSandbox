@@ -8,7 +8,7 @@ class ButterflySubdivisionStrategy : public SubdivisionStrategy
 public:
     ButterflySubdivisionStrategy();
 
-    Mesh doSubdivision(Mesh evenMesh);
+    SurfaceMesh doSubdivision(SurfaceMesh evenMesh);
 };
 
 #endif // BUTTERFLYSUBDIVISIONSTRATEGY_H

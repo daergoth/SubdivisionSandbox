@@ -58,7 +58,7 @@ void CustomSchemeHandler::debug() {
     odds.push_back(OddWeight(1, 0.25));
 
     Weights weights(odds, even);
-    CustomScheme s(MeshType::Triangular, RefinementType::Approximating, 1, weights);
+    CustomScheme s(CustomSchemeMeshType::Tri, CustomSchemeRefinementType::Approx, 1, weights);
 
     json j = s;
 

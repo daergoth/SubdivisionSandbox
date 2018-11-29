@@ -5,6 +5,6 @@ CustomSchemeSubdivisionStrategy::CustomSchemeSubdivisionStrategy()
 
 }
 
-Mesh CustomSchemeSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
+SurfaceMesh CustomSchemeSubdivisionStrategy::doSubdivision(SurfaceMesh evenMesh) {
     return evenMesh;
 }

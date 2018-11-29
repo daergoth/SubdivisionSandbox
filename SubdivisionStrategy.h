@@ -3,9 +3,11 @@
 
 #include "Mesh.h"
 
+enum SubdivisionType {Approximating, Interpolating};
+
 class SubdivisionStrategy {
 public:
-    virtual Mesh doSubdivision(Mesh evenMesh) = 0;
+    virtual SurfaceMesh doSubdivision(SurfaceMesh evenMesh) = 0;
 
 };
 

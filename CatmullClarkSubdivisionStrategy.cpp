@@ -5,6 +5,6 @@ CatmullClarkSubdivisionStrategy::CatmullClarkSubdivisionStrategy()
 
 }
 
-Mesh CatmullClarkSubdivisionStrategy::doSubdivision(Mesh evenMesh){
+SurfaceMesh CatmullClarkSubdivisionStrategy::doSubdivision(SurfaceMesh evenMesh){
     return evenMesh;
 }

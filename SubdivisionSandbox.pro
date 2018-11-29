@@ -36,7 +36,8 @@ SOURCES += \
     KobbeltSubdivisionStrategy.cpp \
     CustomSchemeSubdivisionStrategy.cpp \
     CustomScheme.cpp \
-    CustomSchemeHandler.cpp
+    CustomSchemeHandler.cpp \
+    MeshWalkHandler.cpp
 
 HEADERS += \
     CustomScheme.h \
@@ -50,7 +51,8 @@ HEADERS += \
     ButterflySubdivisionStrategy.h \
     CatmullClarkSubdivisionStrategy.h \
     KobbeltSubdivisionStrategy.h \
-    CustomSchemeSubdivisionStrategy.h
+    CustomSchemeSubdivisionStrategy.h \
+    MeshWalkHandler.h
 
 FORMS += \
     MainWindow.ui

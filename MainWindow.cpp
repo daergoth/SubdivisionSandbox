@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     openglWidget = new MainOpenGLWidget(this);
     setCentralWidget(openglWidget);
 
-    Mesh baseMesh;
+    SurfaceMesh baseMesh;
     SubdivisionController::getInstance().setBaseMesh(baseMesh);
 }
 

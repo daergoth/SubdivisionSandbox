@@ -8,7 +8,7 @@ class LoopSubdivisionStrategy : public SubdivisionStrategy
 public:
     LoopSubdivisionStrategy();
 
-    Mesh doSubdivision(Mesh evenMesh);
+    SurfaceMesh doSubdivision(SurfaceMesh evenMesh);
 };
 
 #endif // LOOPSUBDIVISIONSTRATEGY_H

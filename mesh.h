@@ -13,6 +13,8 @@ typedef CGAL::Surface_mesh<K::Point_3> SurfaceMesh;
 typedef SurfaceMesh::Vertex_index vertex_descriptor;
 typedef SurfaceMesh::Face_index face_descriptor;
 
+enum MeshType {Triangular, Quadrilateral};
+
 /**
  * @brief Mesh osztály, amely csúcsok és indexek formájában ábrázol egy háromszögelt mesht.
  */

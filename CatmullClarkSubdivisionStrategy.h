@@ -8,7 +8,7 @@ class CatmullClarkSubdivisionStrategy : public SubdivisionStrategy
 public:
     CatmullClarkSubdivisionStrategy();
 
-    Mesh doSubdivision(Mesh evenMesh);
+    SurfaceMesh doSubdivision(SurfaceMesh evenMesh);
 };
 
 #endif // CATMULLCLARKSUBDIVISIONSTRATEGY_H

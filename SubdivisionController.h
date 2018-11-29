@@ -32,8 +32,8 @@ public:
     void doSubdivision();
     void doBackwardStep();
 
-    Mesh getCurrentMesh();
-    void setBaseMesh(Mesh baseMesh);
+    SurfaceMesh getCurrentMesh();
+    void setBaseMesh(SurfaceMesh baseMesh);
 
 private:
     SubdivisionController();
@@ -42,7 +42,7 @@ private:
     std::map<SubdivisionScheme, SubdivisionStrategy*> strategyMap;
 
     int currentMeshIndex = 0;
-    std::vector<Mesh> meshHistory;
+    std::vector<SurfaceMesh> meshHistory;
 };
 
 #endif // SUBDIVISIONCONTROLLER_H
