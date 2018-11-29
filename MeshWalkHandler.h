@@ -109,8 +109,13 @@ private:
 
     std::array<K::Point_3, 16> quadOddVerticesOneNeighbour(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, OddsType odds_type);
     std::array<K::Point_3, 16> quadOddVerticesTwoNeighbour(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, OddsType odds_type);
+
     inline std::array<K::Point_3, 16> quadFaceOddTwo(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge);
+    inline SurfaceMesh::Halfedge_index quadFaceOddTwoCornerHelper(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies);
+    inline SurfaceMesh::Halfedge_index quadFaceOddTwoSideHelper(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies);
+
     inline std::array<K::Point_3, 16> quadEdgeOddTwo(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge);
+    inline SurfaceMesh::Halfedge_index quadEdgeOddTwoStraightHelper(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge);
 
     std::vector<K::Point_3> triEvenVertices(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge);
     std::vector<K::Point_3> quadEvenVertices(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge);

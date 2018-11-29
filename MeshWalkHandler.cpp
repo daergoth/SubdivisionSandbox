@@ -110,11 +110,72 @@ std::array<K::Point_3, 16> MeshWalkHandler::quadOddVerticesTwoNeighbour(SurfaceM
 }
 
 inline std::array<K::Point_3, 16> MeshWalkHandler::quadFaceOddTwo(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge) {
-    throw std::exception("Unimplemented!");
+    std::array<K::Point_3, 16> vertices;
+
+    SurfaceMesh::Halfedge_index& c = halfedge;
+
+    c = sm.next(c);
+    c = sm.opposite(c);
+    c = sm.next(c);
+
+    c = quadFaceOddTwoSideHelper(sm, c, vertices, std::pair<int, int>(7, 6));
+    c = quadFaceOddTwoCornerHelper(sm, c, vertices, std::pair<int,int>(3, 2));
+    c = quadFaceOddTwoSideHelper(sm, c, vertices, std::pair<int, int>(1, 5));
+    c = quadFaceOddTwoCornerHelper(sm, c, vertices, std::pair<int, int>(0, 4));
+    c = quadFaceOddTwoSideHelper(sm, c, vertices, std::pair<int, int>(8, 9));
+    c = quadFaceOddTwoCornerHelper(sm, c, vertices, std::pair<int, int>(12, 13));
+    c = quadFaceOddTwoSideHelper(sm, c, vertices, std::pair<int, int>(14, 10));
+    c = quadFaceOddTwoCornerHelper(sm, c, vertices, std::pair<int, int>(15, 11));
+
+    return vertices;
+}
+
+inline SurfaceMesh::Halfedge_index MeshWalkHandler::quadFaceOddTwoCornerHelper(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies) {
+    halfedge = sm.next(halfedge);
+    vertices[indicies.first] = sm.point(sm.target(halfedge));
+    halfedge = sm.next(halfedge);
+    vertices[indicies.second] = sm.point(sm.target(halfedge));
+    halfedge = sm.next(halfedge);
+    halfedge = sm.opposite(halfedge);
+    return halfedge;
+}
+
+inline SurfaceMesh::Halfedge_index MeshWalkHandler::quadFaceOddTwoSideHelper(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies) {
+    halfedge = sm.next(halfedge);
+    vertices[indicies.first] = sm.point(sm.target(halfedge));
+    halfedge = sm.next(halfedge);
+    vertices[indicies.second] = sm.point(sm.target(halfedge));
+    halfedge = sm.opposite(halfedge);
+    return halfedge;
 }
 
 inline std::array<K::Point_3, 16> MeshWalkHandler::quadEdgeOddTwo(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge) {
-    throw std::exception("Unimplemented!");
+    std::array<K::Point_3, 16> vertices;
+
+    SurfaceMesh::Halfedge_index& c = halfedge;
+
+    vertices[1] = sm.point(sm.source(c));
+    vertices[2] = sm.point(sm.target(c));
+
+    c = quadEdgeOddTwoStraightHelper(sm, c);
+
+    vertices[3] = sm.point(sm.target(c));
+
+    c = sm.opposite(c);
+    c = quadEdgeOddTwoStraightHelper(sm, c);
+    c = quadEdgeOddTwoStraightHelper(sm, c);
+
+    vertices[0] = sm.point(sm.target(c));
+
+    return vertices;
+}
+
+inline SurfaceMesh::Halfedge_index MeshWalkHandler::quadEdgeOddTwoStraightHelper(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge) {
+    halfedge = sm.next(halfedge);
+    halfedge = sm.opposite(halfedge);
+    halfedge = sm.next(halfedge);
+
+    return halfedge;
 }
 
 
