@@ -1,6 +1,5 @@
 #include "MainWindow.h"
 
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -16,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent) :
     openglWidget = new MainOpenGLWidget(this);
 
     label = new QLabel();
-
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->addWidget(label);
     layout->addWidget(openglWidget);
@@ -25,12 +23,11 @@ MainWindow::MainWindow(QWidget *parent) :
     label->setFixedWidth(labelWidth);
     openglWidget->setFixedWidth(this->width()-labelWidth);
     openglWidget->setFixedHeight(this->height());
-
     widget->setLayout(layout);
 
-    Mesh baseMesh;
-    SubdivisionController::getInstance().setBaseMesh(baseMesh);
-
+    SubdivisionController& sc = SubdivisionController::getInstance();
+    sc.setBaseMesh(Mesh::makeCube());
+    sc.switchTo(SubdivisionScheme::Loop);
 }
 
 MainWindow::~MainWindow()
@@ -86,36 +83,37 @@ void MainWindow::onTriggered_CreateCustomScheme()
 
 void MainWindow::onTriggered_CubeObject()
 {
-
+    SubdivisionController& sc = SubdivisionController::getInstance();
+    sc.setBaseMesh(Mesh::makeCube());
+    openglWidget->update();
 }
 
 void MainWindow::onTriggered_TetrahedronObject()
 {
-
+    SubdivisionController& sc = SubdivisionController::getInstance();
+    sc.setBaseMesh(Mesh::makeTetrahedron());
+    openglWidget->update();
 }
 
 void MainWindow::onTriggered_OpenObjFile()
 {
-
-    printf("Obj\n");
-
     // show file chooser dialog
     QString qfileName = QFileDialog::getOpenFileName(this, tr("Open Obj"), "/home", tr("*.obj"));
     //printf(qfileName.toUtf8().constData());
     std::string fileName = qfileName.toUtf8().constData();
-   /* Assimp::Importer importer;
+    /* Assimp::Importer importer;
+       const aiScene* scene = importer
+                .ReadFile(fileName.c_str(),
+                          aiProcess_Triangulate |
+                          aiProcess_GenSmoothNormals |
+                          aiProcess_FlipUVs);
+         if(!scene){
+            std::cout << "Mesh load failed!: " << fileName << std::endl;
+            assert(0 == 0);
+        }
+                */
 
-    const aiScene* scene = importer
-            .ReadFile(fileName.c_str(),
-                      aiProcess_Triangulate |
-                      aiProcess_GenSmoothNormals |
-                      aiProcess_FlipUVs);
-
-    if(!scene){
-        std::cout << "Mesh load failed!: " << fileName << std::endl;
-        assert(0 == 0);
-    }
-            */
+    openglWidget->update();
 }
 
 void MainWindow::on_actionOpen_scheme_triggered()

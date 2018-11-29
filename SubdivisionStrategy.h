@@ -3,6 +3,11 @@
 
 #include "Mesh.h"
 
+#include <vector>
+#include <CGAL/Subdivision_method_3.h>
+#include <CGAL/Surface_mesh.h>
+
+
 class SubdivisionStrategy {
 public:
     virtual Mesh doSubdivision(Mesh evenMesh) = 0;

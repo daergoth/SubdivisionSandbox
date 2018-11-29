@@ -47,4 +47,5 @@ void SubdivisionController::setBaseMesh(Mesh baseMesh) {
     } else {
         meshHistory.push_back(baseMesh);
     }
+    currentMeshIndex = 0;
 }
