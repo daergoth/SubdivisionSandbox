@@ -36,6 +36,8 @@ public:
     SurfaceMesh getCurrentMesh();
     void setBaseMesh(SurfaceMesh baseMesh);
 
+    bool canDoBackwardStep();
+
 private:
     SubdivisionController();
 

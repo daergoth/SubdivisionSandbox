@@ -4,8 +4,12 @@
 #include <memory>
 
 #include <QMainWindow>
+#include <QLabel>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QMovie>
 
 #include "ui_mainwindow.h"
 
@@ -46,8 +50,14 @@ private slots:
 
     void on_actionAbout_triggered();
 
+    void revertSubdivision();
+
+    void doSubdivision();
+
 private:
     Ui::MainWindow *ui;
+
+    void setLabelSubdivision(QString name);
 
     void createActions();
     void createMenus();
@@ -68,6 +78,15 @@ private:
     QAction* openObjFileAction;
 
     MainOpenGLWidget* openglWidget;
+
+    CustomSchemeWindow* customSchemeWindow;
+
+    QVBoxLayout* vBoxSubdivControls;
+    QLabel* label;
+    QPushButton *subdivisionButton;
+    QPushButton *revertButton;
+    QLabel *spinnerLabel;
+    QMovie *spinnerMovie;
 };
 
 #endif // MAINWINDOW_H

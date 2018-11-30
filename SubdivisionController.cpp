@@ -58,7 +58,7 @@ void SubdivisionController::doSubdivision() {
 }
 
 void SubdivisionController::doBackwardStep() {
-    currentMeshIndex = --currentMeshIndex >= 0 ? --currentMeshIndex : 0;
+    currentMeshIndex = currentMeshIndex > 0 ? --currentMeshIndex : 0;
 }
 
 SurfaceMesh SubdivisionController::getCurrentMesh() {
@@ -72,4 +72,8 @@ void SubdivisionController::setBaseMesh(SurfaceMesh baseMesh) {
         meshHistory.push_back(baseMesh);
     }
     currentMeshIndex = 0;
+}
+
+bool SubdivisionController::canDoBackwardStep() {
+ return currentMeshIndex > 0;
 }
