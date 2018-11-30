@@ -46,7 +46,7 @@ std::shared_ptr<CustomScheme> CustomSchemeHandler::getCurrentCustomScheme() {
 }
 
 void CustomSchemeHandler::setCurrentCustomScheme(CustomScheme custom_scheme) {
-
+    delete this->current_scheme.get();
     this->current_scheme = std::make_shared<CustomScheme>(custom_scheme);
 }
 
@@ -58,6 +58,7 @@ void CustomSchemeHandler::debug() {
     odds.push_back(OddWeight(1, 0.25));
 
     Weights weights(odds, even);
+
     CustomScheme s(CustomSchemeMeshType::Tri, CustomSchemeRefinementType::Approx, 1, weights);
 
     json j = s;

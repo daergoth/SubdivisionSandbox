@@ -81,7 +81,7 @@ std::array<K::Point_3, 16> MeshWalkHandler::triOddVerticesOneNeighbour(Polyhedro
     vertices[1] = c->prev()->vertex()->point();
     c = c->next();
     vertices[0] = c->vertex()->point();
-    c = c->prec()->opposite()->next();
+    c = c->prev()->opposite()->next();
     vertices[3] = c->vertex()->point();
 
     return vertices;

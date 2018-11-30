@@ -1,10 +1,9 @@
 #include "CustomSchemeSubdivisionStrategy.h"
 
-CustomSchemeSubdivisionStrategy::CustomSchemeSubdivisionStrategy()
-{
-
+SurfaceMesh CustomSchemeSubdivisionStrategy::doSubdivision(SurfaceMesh evenMesh) {
+    return evenMesh;
 }
 
-Mesh CustomSchemeSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
-    return evenMesh;
+void CustomSchemeSubdivisionStrategy::setCustomScheme(CustomScheme custom_scheme) {
+    this->custom_scheme = custom_scheme;
 }

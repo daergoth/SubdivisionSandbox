@@ -4,14 +4,7 @@
 #include <memory>
 
 #include <QMainWindow>
-#include <QLabel>
-#include <QHBoxLayout>
 #include <QFileDialog>
-#include <fstream>
-#include <iostream>
-#include <assimp/Importer.hpp>      // C++ importer interface
-#include <assimp/scene.h>           // Output data structure
-#include <assimp/postprocess.h>     // Post processing flags
 #include <QMessageBox>
 
 #include "ui_mainwindow.h"
@@ -19,7 +12,6 @@
 #include "MainOpenGLWidget.h"
 #include "SubdivisionController.h"
 #include "CustomSchemeHandler.h"
-#include "customschemewindow.h"
 
 class QAction;
 class QActionGroup;
@@ -57,8 +49,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-    void setLabelSubdivision();
-
     void createActions();
     void createMenus();
 
@@ -78,11 +68,6 @@ private:
     QAction* openObjFileAction;
 
     MainOpenGLWidget* openglWidget;
-
-    CustomSchemeWindow* customSchemeWindow;
-
-    QLabel* label;
-
 };
 
 #endif // MAINWINDOW_H

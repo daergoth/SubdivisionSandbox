@@ -5,6 +5,6 @@ ButterflySubdivisionStrategy::ButterflySubdivisionStrategy()
 
 }
 
-Mesh ButterflySubdivisionStrategy::doSubdivision(Mesh evenMesh) {
+SurfaceMesh ButterflySubdivisionStrategy::doSubdivision(SurfaceMesh evenMesh) {
     return evenMesh;
 }

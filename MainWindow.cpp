@@ -6,13 +6,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QWidget *widget = new QWidget;
-    setCentralWidget(widget);
-
     createActions();
     createMenus();
 
     openglWidget = new MainOpenGLWidget(this);
+    setCentralWidget(openglWidget);
 
     label = new QLabel();
     QHBoxLayout *layout = new QHBoxLayout(this);
@@ -35,39 +33,27 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::setLabelSubdivision(){
-    label->setText("Loop Subdivision\nUse \"+\" key to perform subdivision\n and \"-\" key to revert it!");
-    label->setFont(QFont("Purisa", 10));
-}
-
 void MainWindow::onTriggered_LoopSubdiv()
 {
-    setLabelSubdivision();
-
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::Loop);
 }
 
 void MainWindow::onTriggered_ButterflySubdiv()
 {
-    setLabelSubdivision();
-
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::Butterfly);
 }
 
 void MainWindow::onTriggered_CatmullClarkSubdiv()
 {
-    setLabelSubdivision();
-
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::CatmullClark);
+
 }
 
 void MainWindow::onTriggered_KobbeltSubdiv()
 {
-    setLabelSubdivision();
-
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::Kobbelt);
 }
@@ -76,9 +62,6 @@ void MainWindow::onTriggered_CreateCustomScheme()
 {
     // TODO: implement integration of SubdivisionController, CustomSchemeHandler and creation UI
     CustomSchemeHandler::getInstance().debug();
-
-    customSchemeWindow = new CustomSchemeWindow(this);
-    customSchemeWindow->show();
 }
 
 void MainWindow::onTriggered_CubeObject()
