@@ -9,11 +9,11 @@
 #include <QMatrix4x4>
 #include <QDebug>
 #include <QFileInfo>
-#include <mesh.h>
 #include <QMouseEvent>
 #include <QtMath>
 
-#include <SubdivisionController.h>
+#include "Mesh.h"
+#include "SubdivisionController.h"
 
 class MainOpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {

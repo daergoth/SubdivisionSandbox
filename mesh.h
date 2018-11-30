@@ -15,6 +15,8 @@ typedef CGAL::Simple_cartesian<double>                                    K;
 typedef CGAL::Polyhedron_3<K>                                             Polyhedron;
 //typedef CGAL::Surface_mesh<K::Point_3>    PolygonMesh;
 
+enum MeshType {Triangular, Quadrilateral};
+
 /**
  * @brief Mesh osztály, amely csúcsok és indexek formájában ábrázol egy háromszögelt mesht.
  */
