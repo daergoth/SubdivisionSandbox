@@ -1,6 +1,6 @@
 #include "MeshWalkHandler.h"
 
-MeshWalkHandler::Walk MeshWalkHandler::walk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, int neighbour_level, SubdivisionType subdivision_type, OddsType odds_type, MeshType mesh_type) {
+MeshWalkHandler::Walk MeshWalkHandler::walk(Polyhedron::Halfedge_iterator& halfedge, int neighbour_level, SubdivisionType subdivision_type, OddsType odds_type, MeshType mesh_type) {
     std::array<K::Point_3, 16> odds;
     std::vector<K::Point_3> evens;
     switch (mesh_type) {
@@ -8,10 +8,10 @@ MeshWalkHandler::Walk MeshWalkHandler::walk(SurfaceMesh& sm, SurfaceMesh::Halfed
 
         switch (neighbour_level) {
         case 1:
-            odds = triOddVerticesOneNeighbour(sm, halfedge);
+            odds = triOddVerticesOneNeighbour(halfedge);
             break;
         case 2:
-            odds = triOddVerticesTwoNeighbour(sm, halfedge);
+            odds = triOddVerticesTwoNeighbour(halfedge);
             break;
         default:
             throw std::exception("Unsupported neighbour level: " + neighbour_level);
@@ -19,7 +19,7 @@ MeshWalkHandler::Walk MeshWalkHandler::walk(SurfaceMesh& sm, SurfaceMesh::Halfed
         }
 
         if (subdivision_type == Approximating) {
-            evens = triEvenVertices(sm, halfedge);
+            evens = triEvenVertices(halfedge);
         }
 
         break;
@@ -27,10 +27,10 @@ MeshWalkHandler::Walk MeshWalkHandler::walk(SurfaceMesh& sm, SurfaceMesh::Halfed
 
         switch (neighbour_level) {
         case 1:
-            odds = quadOddVerticesOneNeighbour(sm, halfedge, odds_type);
+            odds = quadOddVerticesOneNeighbour(halfedge, odds_type);
             break;
         case 2:
-            odds = quadOddVerticesTwoNeighbour(sm, halfedge, odds_type);
+            odds = quadOddVerticesTwoNeighbour(halfedge, odds_type);
             break;
         default:
             throw std::exception("Unsupported neighbour level: " + neighbour_level);
@@ -38,7 +38,7 @@ MeshWalkHandler::Walk MeshWalkHandler::walk(SurfaceMesh& sm, SurfaceMesh::Halfed
         }
 
         if (subdivision_type == Approximating) {
-            evens = quadEvenVertices(sm, halfedge);
+            evens = quadEvenVertices(halfedge);
         }
 
         break;
@@ -50,216 +50,195 @@ MeshWalkHandler::Walk MeshWalkHandler::walk(SurfaceMesh& sm, SurfaceMesh::Halfed
     return Walk(odds, evens, odds.size(), evens.size(), mesh_type, odds_type, subdivision_type);
 }
 
-MeshWalkHandler::LoopLikeWalk MeshWalkHandler::loopLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge) {
-    std::array<K::Point_3, 16> odds = triOddVerticesOneNeighbour(sm, halfedge);
-    std::vector<K::Point_3> evens = triEvenVertices(sm, halfedge);
+MeshWalkHandler::LoopLikeWalk MeshWalkHandler::loopLikeWalk(Polyhedron::Halfedge_iterator& halfedge) {
+    std::array<K::Point_3, 16> odds = triOddVerticesOneNeighbour(halfedge);
+    std::vector<K::Point_3> evens = triEvenVertices(halfedge);
     return LoopLikeWalk(odds, evens);
 }
 
-MeshWalkHandler::ButterflyLikeWalk MeshWalkHandler::butterflyLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge) {
-    std::array<K::Point_3, 16> odds = triOddVerticesTwoNeighbour(sm, halfedge);
+MeshWalkHandler::ButterflyLikeWalk MeshWalkHandler::butterflyLikeWalk(Polyhedron::Halfedge_iterator& halfedge) {
+    std::array<K::Point_3, 16> odds = triOddVerticesTwoNeighbour(halfedge);
     return ButterflyLikeWalk(odds);
 }
 
-MeshWalkHandler::CatmullClarkLikeWalk MeshWalkHandler::catmullClarkLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, OddsType odds_type) {
-    std::array<K::Point_3, 16> odds = quadOddVerticesOneNeighbour(sm, halfedge, odds_type);
-    std::vector<K::Point_3> evens = quadEvenVertices(sm, halfedge);
+MeshWalkHandler::CatmullClarkLikeWalk MeshWalkHandler::catmullClarkLikeWalk(Polyhedron::Halfedge_iterator& halfedge, OddsType odds_type) {
+    std::array<K::Point_3, 16> odds = quadOddVerticesOneNeighbour(halfedge, odds_type);
+    std::vector<K::Point_3> evens = quadEvenVertices(halfedge);
     return CatmullClarkLikeWalk(odds, evens, odds_type);
 }
 
-MeshWalkHandler::KobbeltLikeWalk MeshWalkHandler::kobbeltLikeWalk(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, OddsType odds_type) {
-    std::array<K::Point_3, 16> odds = quadOddVerticesTwoNeighbour(sm, halfedge, odds_type);
+MeshWalkHandler::KobbeltLikeWalk MeshWalkHandler::kobbeltLikeWalk(Polyhedron::Halfedge_iterator& halfedge, OddsType odds_type) {
+    std::array<K::Point_3, 16> odds = quadOddVerticesTwoNeighbour(halfedge, odds_type);
     return KobbeltLikeWalk(odds, odds_type);
 }
 
-std::array<K::Point_3, 16> MeshWalkHandler::triOddVerticesOneNeighbour(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge) {
+std::array<K::Point_3, 16> MeshWalkHandler::triOddVerticesOneNeighbour(Polyhedron::Halfedge_iterator& halfedge) {
     std::array<K::Point_3, 16> vertices;
 
-    SurfaceMesh::Halfedge_index& c = halfedge;
+    Polyhedron::Halfedge_iterator& c = halfedge;
 
-    vertices[2] = sm.point(sm.target(c));
-    vertices[1] = sm.point(sm.source(c));
-    c = sm.next(c);
-    vertices[0] = sm.point(sm.target(c));
-    c = sm.prev(c);
-    c = sm.opposite(c);
-    c = sm.next(c);
-    vertices[3] = sm.point(sm.target(c));
+    vertices[2] = c->vertex()->point();
+    vertices[1] = c->prev()->vertex()->point();
+    c = c->next();
+    vertices[0] = c->vertex()->point();
+    c = c->prec()->opposite()->next();
+    vertices[3] = c->vertex()->point();
 
     return vertices;
 }
 
-std::array<K::Point_3, 16> MeshWalkHandler::triOddVerticesTwoNeighbour(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge) {
+std::array<K::Point_3, 16> MeshWalkHandler::triOddVerticesTwoNeighbour(Polyhedron::Halfedge_iterator& halfedge) {
     std::array<K::Point_3, 16> vertices;
 
-    SurfaceMesh::Halfedge_index& c = halfedge;
+    Polyhedron::Halfedge_iterator& c = halfedge;
 
-    vertices[4] = sm.point(sm.target(c));
+    vertices[4] = c->vertex()->point();
 
-    c = sm.next(c);
-    c = secondNeighbourTriHelper(vertices, 2, sm, c);
-    vertices[1] = sm.point(sm.target(c));
-    c = sm.next(c);
-    c = secondNeighbourTriHelper(vertices, 0, sm, c);
-    vertices[3] = sm.point(sm.target(c));
+    c = c->next();
+    c = secondNeighbourTriHelper(vertices, 2, c);
+    vertices[1] = c->vertex()->point();
+    c = c->next();
+    c = secondNeighbourTriHelper(vertices, 0, c);
+    vertices[3] = c->vertex()->point();
 
-    c = sm.next(c);
-    c = sm.opposite(c);
+    c = c->next()->opposite()->next();
 
-    c = sm.next(c);
-    c = secondNeighbourTriHelper(vertices, 5, sm, c);
-    vertices[6] = sm.point(sm.target(c));
-    c = sm.next(c);
-    c = secondNeighbourTriHelper(vertices, 7, sm, c);
+    c = secondNeighbourTriHelper(vertices, 5, c);
+    vertices[6] = c->vertex()->point();
+    c = c->next();
+    c = secondNeighbourTriHelper(vertices, 7, c);
 
     return vertices;
 }
 
-inline SurfaceMesh::Halfedge_index MeshWalkHandler::secondNeighbourTriHelper(std::array<K::Point_3, 16>& vertices, int index, SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge) {
-    halfedge = sm.opposite(halfedge);
-    halfedge = sm.next(halfedge);
-    vertices[index] = sm.point(sm.target(halfedge));
-    halfedge = sm.prev(halfedge);
-    return sm.opposite(halfedge);
+inline Polyhedron::Halfedge_iterator MeshWalkHandler::secondNeighbourTriHelper(std::array<K::Point_3, 16>& vertices, int index, Polyhedron::Halfedge_iterator& halfedge) {
+    halfedge = halfedge->opposite()->next();
+    vertices[index] = halfedge->vertex()->point();
+    return halfedge->prev()->opposite();
 }
 
-std::array<K::Point_3, 16> MeshWalkHandler::quadOddVerticesOneNeighbour(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, OddsType odds_type) {
+std::array<K::Point_3, 16> MeshWalkHandler::quadOddVerticesOneNeighbour(Polyhedron::Halfedge_iterator& halfedge, OddsType odds_type) {
     std::array<K::Point_3, 16> vertices;
 
-    SurfaceMesh::Halfedge_index& c = halfedge;
+    Polyhedron::Halfedge_iterator& c = halfedge;
 
-    vertices[3] = sm.point(sm.target(c));
-    c = sm.next(c);
-    vertices[1] = sm.point(sm.target(c));
-    c = sm.next(c);
-    vertices[0] = sm.point(sm.target(c));
-    c = sm.next(c);
-    vertices[2] = sm.point(sm.target(c));
+    vertices[3] = c->vertex()->point();
+    c = c->next();
+    vertices[1] = c->vertex()->point();
+    c = c->next();
+    vertices[0] = c->vertex()->point();
+    c = c->next();
+    vertices[2] = c->vertex()->point();
 
     if (odds_type == Edge) {
-        c = sm.next(c);
-        c = sm.opposite(c);
-        c = sm.next(c);
-        vertices[4] = sm.point(sm.target(c));
-        c = sm.next(c);
-        vertices[5] = sm.point(sm.target(c));
+        c = c->next()->opposite()->next();
+        vertices[4] = c->vertex()->point();
+        c = c->next();
+        vertices[5] = c->vertex()->point();
     }
 
     return vertices;
 }
 
-std::array<K::Point_3, 16> MeshWalkHandler::quadOddVerticesTwoNeighbour(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, OddsType odds_type) {
+std::array<K::Point_3, 16> MeshWalkHandler::quadOddVerticesTwoNeighbour(Polyhedron::Halfedge_iterator& halfedge, OddsType odds_type) {
     switch (odds_type) {
     case Face:
-        return quadFaceOddTwo(sm, halfedge);
+        return quadFaceOddTwo(halfedge);
         break;
     case Edge:
-        return quadEdgeOddTwo(sm, halfedge);
+        return quadEdgeOddTwo(halfedge);
         break;
     default:
         throw std::exception("Unknown OddsType: " + odds_type);
     }
 }
 
-inline std::array<K::Point_3, 16> MeshWalkHandler::quadFaceOddTwo(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge) {
+inline std::array<K::Point_3, 16> MeshWalkHandler::quadFaceOddTwo(Polyhedron::Halfedge_iterator& halfedge) {
     std::array<K::Point_3, 16> vertices;
 
-    SurfaceMesh::Halfedge_index& c = halfedge;
+    Polyhedron::Halfedge_iterator& c = halfedge;
 
-    c = sm.next(c);
-    c = sm.opposite(c);
-    c = sm.next(c);
+    c = c->next()->opposite()->next();
 
-    c = quadFaceOddTwoSideHelper(sm, c, vertices, std::pair<int, int>(7, 6));
-    c = quadFaceOddTwoCornerHelper(sm, c, vertices, std::pair<int,int>(3, 2));
-    c = quadFaceOddTwoSideHelper(sm, c, vertices, std::pair<int, int>(1, 5));
-    c = quadFaceOddTwoCornerHelper(sm, c, vertices, std::pair<int, int>(0, 4));
-    c = quadFaceOddTwoSideHelper(sm, c, vertices, std::pair<int, int>(8, 9));
-    c = quadFaceOddTwoCornerHelper(sm, c, vertices, std::pair<int, int>(12, 13));
-    c = quadFaceOddTwoSideHelper(sm, c, vertices, std::pair<int, int>(14, 10));
-    c = quadFaceOddTwoCornerHelper(sm, c, vertices, std::pair<int, int>(15, 11));
+    c = quadFaceOddTwoSideHelper(c, vertices, std::pair<int, int>(7, 6));
+    c = quadFaceOddTwoCornerHelper(c, vertices, std::pair<int,int>(3, 2));
+    c = quadFaceOddTwoSideHelper(c, vertices, std::pair<int, int>(1, 5));
+    c = quadFaceOddTwoCornerHelper(c, vertices, std::pair<int, int>(0, 4));
+    c = quadFaceOddTwoSideHelper(c, vertices, std::pair<int, int>(8, 9));
+    c = quadFaceOddTwoCornerHelper(c, vertices, std::pair<int, int>(12, 13));
+    c = quadFaceOddTwoSideHelper(c, vertices, std::pair<int, int>(14, 10));
+    c = quadFaceOddTwoCornerHelper(c, vertices, std::pair<int, int>(15, 11));
 
     return vertices;
 }
 
-inline SurfaceMesh::Halfedge_index MeshWalkHandler::quadFaceOddTwoCornerHelper(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies) {
-    halfedge = sm.next(halfedge);
-    vertices[indicies.first] = sm.point(sm.target(halfedge));
-    halfedge = sm.next(halfedge);
-    vertices[indicies.second] = sm.point(sm.target(halfedge));
-    halfedge = sm.next(halfedge);
-    halfedge = sm.opposite(halfedge);
-    return halfedge;
+inline Polyhedron::Halfedge_iterator MeshWalkHandler::quadFaceOddTwoCornerHelper(Polyhedron::Halfedge_iterator& halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies) {
+    halfedge = halfedge->next();
+    vertices[indicies.first] = halfedge->vertex()->point();
+    halfedge = halfedge->next();
+    vertices[indicies.second] = halfedge->vertex()->point();
+    return halfedge->next()->opposite();
 }
 
-inline SurfaceMesh::Halfedge_index MeshWalkHandler::quadFaceOddTwoSideHelper(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies) {
-    halfedge = sm.next(halfedge);
-    vertices[indicies.first] = sm.point(sm.target(halfedge));
-    halfedge = sm.next(halfedge);
-    vertices[indicies.second] = sm.point(sm.target(halfedge));
-    halfedge = sm.opposite(halfedge);
-    return halfedge;
+inline Polyhedron::Halfedge_iterator MeshWalkHandler::quadFaceOddTwoSideHelper(Polyhedron::Halfedge_iterator& halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies) {
+    halfedge = halfedge->next();
+    vertices[indicies.first] = halfedge->vertex()->point();
+    halfedge = halfedge->next();
+    vertices[indicies.second] = halfedge->vertex()->point();
+    return halfedge->opposite();
 }
 
-inline std::array<K::Point_3, 16> MeshWalkHandler::quadEdgeOddTwo(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge) {
+inline std::array<K::Point_3, 16> MeshWalkHandler::quadEdgeOddTwo(Polyhedron::Halfedge_iterator& halfedge) {
     std::array<K::Point_3, 16> vertices;
 
-    SurfaceMesh::Halfedge_index& c = halfedge;
+    Polyhedron::Halfedge_iterator& c = halfedge;
 
-    vertices[1] = sm.point(sm.source(c));
-    vertices[2] = sm.point(sm.target(c));
+    vertices[1] = c->prev()->vertex()->point();
+    vertices[2] = c->vertex()->point();
 
-    c = quadEdgeOddTwoStraightHelper(sm, c);
+    c = quadEdgeOddTwoStraightHelper(c);
 
-    vertices[3] = sm.point(sm.target(c));
+    vertices[3] = c->vertex()->point();
 
-    c = sm.opposite(c);
-    c = quadEdgeOddTwoStraightHelper(sm, c);
-    c = quadEdgeOddTwoStraightHelper(sm, c);
+    c = c->opposite();
+    c = quadEdgeOddTwoStraightHelper(c);
+    c = quadEdgeOddTwoStraightHelper(c);
 
-    vertices[0] = sm.point(sm.target(c));
+    vertices[0] = c->vertex()->point();
 
     return vertices;
 }
 
-inline SurfaceMesh::Halfedge_index MeshWalkHandler::quadEdgeOddTwoStraightHelper(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge) {
-    halfedge = sm.next(halfedge);
-    halfedge = sm.opposite(halfedge);
-    halfedge = sm.next(halfedge);
-
-    return halfedge;
+inline Polyhedron::Halfedge_iterator MeshWalkHandler::quadEdgeOddTwoStraightHelper(Polyhedron::Halfedge_iterator& halfedge) {
+    return halfedge->next()->opposite()->next();
 }
 
 
-std::vector<K::Point_3> MeshWalkHandler::triEvenVertices(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge) {
+std::vector<K::Point_3> MeshWalkHandler::triEvenVertices(Polyhedron::Halfedge_iterator& halfedge) {
     std::vector<K::Point_3> vertices;
 
-    SurfaceMesh::Halfedge_index& c = halfedge;
-    vertices.push_back(sm.point(sm.source(c)));
+    Polyhedron::Halfedge_iterator& c = halfedge;
+    vertices.push_back(c->prev()->vertex()->point());
 
     do {
-        vertices.push_back(sm.point(sm.target(c)));
-        c = sm.next(c);
-        c = sm.next(c);
-        c = sm.opposite(c);
+        vertices.push_back(c->vertex()->point());
+        c = c->next()->next()->opposite();
     } while(c != halfedge);
 
     return vertices;
 }
 
-std::vector<K::Point_3> MeshWalkHandler::quadEvenVertices(SurfaceMesh& sm, SurfaceMesh::Halfedge_index& halfedge) {
+std::vector<K::Point_3> MeshWalkHandler::quadEvenVertices(Polyhedron::Halfedge_iterator& halfedge) {
     std::vector<K::Point_3> vertices;
 
-    SurfaceMesh::Halfedge_index& c = halfedge;
-    vertices.push_back(sm.point(sm.source(c)));
+    Polyhedron::Halfedge_iterator& c = halfedge;
+    vertices.push_back(c->prev()->vertex()->point());
 
     do {
-        vertices.push_back(sm.point(sm.target(c)));
-        c = sm.next(c);
-        vertices.push_back(sm.point(sm.target(c)));
-        c = sm.next(c);
-        c = sm.next(c);
-        c = sm.opposite(c);
+        vertices.push_back(c->vertex()->point());
+        c = c->next();
+        vertices.push_back(c->vertex()->point());
+        c = c->next()->next()->opposite();
     } while(c != halfedge);
 
     return vertices;
