@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     widget->setLayout(layout);
 
     SubdivisionController& sc = SubdivisionController::getInstance();
-    sc.setBaseMesh(Mesh::makeCube());
+    sc.setBaseMesh(Mesh::makeCube(true));
     sc.switchTo(SubdivisionScheme::Loop);
 }
 
@@ -46,6 +46,9 @@ void MainWindow::onTriggered_LoopSubdiv()
 
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::Loop);
+    //sc.doSubdivision();
+    //sc.doSubdivision();
+    openglWidget->update();
 }
 
 void MainWindow::onTriggered_ButterflySubdiv()
@@ -54,6 +57,7 @@ void MainWindow::onTriggered_ButterflySubdiv()
 
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::Butterfly);
+    openglWidget->update();
 }
 
 void MainWindow::onTriggered_CatmullClarkSubdiv()
@@ -62,6 +66,8 @@ void MainWindow::onTriggered_CatmullClarkSubdiv()
 
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::CatmullClark);
+    sc.doSubdivision();
+    openglWidget->update();
 }
 
 void MainWindow::onTriggered_KobbeltSubdiv()
@@ -70,6 +76,7 @@ void MainWindow::onTriggered_KobbeltSubdiv()
 
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::Kobbelt);
+    openglWidget->update();
 }
 
 void MainWindow::onTriggered_CreateCustomScheme()
@@ -84,7 +91,7 @@ void MainWindow::onTriggered_CreateCustomScheme()
 void MainWindow::onTriggered_CubeObject()
 {
     SubdivisionController& sc = SubdivisionController::getInstance();
-    sc.setBaseMesh(Mesh::makeCube());
+    sc.setBaseMesh(Mesh::makeCube(true));
     openglWidget->update();
 }
 
@@ -150,7 +157,6 @@ void MainWindow::on_actionAbout_triggered()
 {
 
 }
-
 
 void MainWindow::createActions()
 {
