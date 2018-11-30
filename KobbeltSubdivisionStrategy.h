@@ -8,7 +8,7 @@ class KobbeltSubdivisionStrategy : public SubdivisionStrategy
 public:
     KobbeltSubdivisionStrategy();
 
-    SurfaceMesh doSubdivision(SurfaceMesh evenMesh);
+    Mesh doSubdivision(Mesh evenMesh);
 };
 
 #endif // KOBBELTSUBDIVISIONSTRATEGY_H

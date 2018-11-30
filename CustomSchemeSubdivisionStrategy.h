@@ -8,7 +8,7 @@ class CustomSchemeSubdivisionStrategy : public SubdivisionStrategy
 public:
     CustomSchemeSubdivisionStrategy();
 
-    SurfaceMesh doSubdivision(SurfaceMesh evenMesh);
+    Mesh doSubdivision(Mesh evenMesh);
 };
 
 #endif // CUSTOMSCHEMESUBDIVISIONSTRATEGY_H

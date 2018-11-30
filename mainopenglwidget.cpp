@@ -6,12 +6,9 @@
 
 MainOpenGLWidget::MainOpenGLWidget(QWidget *parent) : QOpenGLWidget(parent)
 {
-    setFormat(QSurfaceFormat::defaultFormat());
-
-    //m_mesh = Mesh::makeTriangle();
-    m_mesh = Mesh::makeCube();
-
-    m_mesh = Mesh(m_mesh.convertToSurfaceMesh());
+    QSurfaceFormat format = QSurfaceFormat::defaultFormat();
+    format.setSamples(4);
+    setFormat(format);
 
     m_eye = QVector3D(0,0,2);
     m_forward = QVector3D(0.0f,0.0f,-1.0f);
@@ -22,16 +19,6 @@ MainOpenGLWidget::MainOpenGLWidget(QWidget *parent) : QOpenGLWidget(parent)
     m_height = height();
 
     update();
-}
-
-Mesh const& MainOpenGLWidget::getMesh() const
-{
-    return m_mesh;
-}
-
-void MainOpenGLWidget::setMesh(Mesh const& p_mesh)
-{
-    m_mesh = p_mesh;
 }
 
 void MainOpenGLWidget::update()
@@ -78,16 +65,18 @@ void MainOpenGLWidget::paintGL()
 {
     // Draw the scene:
     QOpenGLFunctions_3_2_Core *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
+
+    Mesh const& mesh = SubdivisionController::getInstance().getCurrentMesh();
+
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     makeCurrent();
 
     m_program -> bind();
-    m_program -> setUniformValue(m_matrixUniform, m_projection*m_view);
+    m_program -> setUniformValue(m_matrixUniform, m_projection * m_view);
 
-    glVertexAttribPointer(m_posAttr, 3, GL_FLOAT, GL_FALSE, 9*sizeof(float), (float*)(m_mesh.m_vertices.data()));
-    glVertexAttribPointer(m_normalAttr, 3, GL_FLOAT, GL_FALSE, 9*sizeof(float), (float*)(m_mesh.m_vertices.data())+3);
-    glVertexAttribPointer(m_colAttr, 3, GL_FLOAT, GL_FALSE, 9*sizeof(float), (float*)(m_mesh.m_vertices.data())+6);
-
+    glVertexAttribPointer(m_posAttr, 3, GL_FLOAT, GL_FALSE, 9*sizeof(float), (float*)(mesh.m_vertices.data()));
+    glVertexAttribPointer(m_normalAttr, 3, GL_FLOAT, GL_FALSE, 9*sizeof(float), (float*)(mesh.m_vertices.data())+3);
+    glVertexAttribPointer(m_colAttr, 3, GL_FLOAT, GL_FALSE, 9*sizeof(float), (float*)(mesh.m_vertices.data())+6);
 
     glEnableVertexAttribArray(m_posAttr);
     glEnableVertexAttribArray(m_colAttr);
@@ -95,16 +84,16 @@ void MainOpenGLWidget::paintGL()
     glEnable(GL_DEPTH_TEST);
 
     m_program->setUniformValue(m_tintUniform, 1.0f,1.0f,1.0f,1.0f);
-    glDrawElements(GL_TRIANGLES, m_mesh.m_indices.size(), GL_UNSIGNED_INT, m_mesh.m_indices.data());
+    glDrawElements(GL_TRIANGLES, mesh.m_indices.size(), GL_UNSIGNED_INT, mesh.m_indices.data());
 
     m_program->setUniformValue(m_tintUniform, 0.0f,0.0f,0.0f,1.0f);
-    glLineWidth(5.0f);
+    glLineWidth(3.0f);
     f->glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glEnable(GL_POLYGON_OFFSET_LINE);
-    glPolygonOffset(-1.0f,0.0f);
-    glDrawElements(GL_TRIANGLES, m_mesh.m_indices.size(), GL_UNSIGNED_INT, m_mesh.m_indices.data());
+    glEnable(GL_POLYGON_OFFSET_FILL);
+    glPolygonOffset(0.0f, -2.0f);
+    glDrawElements(GL_TRIANGLES, mesh.m_indices.size(), GL_UNSIGNED_INT, mesh.m_indices.data());
     f->glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glDisable(GL_POLYGON_OFFSET_LINE);
+    glDisable(GL_POLYGON_OFFSET_FILL);
 
     glDisableVertexAttribArray(m_posAttr);
     glDisableVertexAttribArray(m_normalAttr);

@@ -5,6 +5,6 @@ KobbeltSubdivisionStrategy::KobbeltSubdivisionStrategy()
 
 }
 
-SurfaceMesh KobbeltSubdivisionStrategy::doSubdivision(SurfaceMesh evenMesh) {
+Mesh KobbeltSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
     return evenMesh;
 }

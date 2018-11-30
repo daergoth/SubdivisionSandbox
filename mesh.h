@@ -5,13 +5,15 @@
 #include "QVector"
 #include <CGAL/Simple_cartesian.h>
 #include <CGAL/Surface_mesh.h>
+#include <CGAL/boost/graph/graph_traits_Surface_mesh.h>
+#include <CGAL/Polyhedron_3.h>
+#include <CGAL/Polyhedron_incremental_builder_3.h>
 #include <QTextStream>
 #include <QDebug>
 
-typedef CGAL::Simple_cartesian<double> K;
-typedef CGAL::Surface_mesh<K::Point_3> SurfaceMesh;
-typedef SurfaceMesh::Vertex_index vertex_descriptor;
-typedef SurfaceMesh::Face_index face_descriptor;
+typedef CGAL::Simple_cartesian<double>                                    K;
+typedef CGAL::Polyhedron_3<K>                                             Polyhedron;
+//typedef CGAL::Surface_mesh<K::Point_3>    PolygonMesh;
 
 enum MeshType {Triangular, Quadrilateral};
 
@@ -46,7 +48,7 @@ public:
      */
     Mesh(QVector<Vertex>const& p_vertices, QVector<int>const& p_indices);
 
-    Mesh(SurfaceMesh surface_mesh);
+    Mesh(Polyhedron surface_mesh);
 
     static Mesh makeTriangle();
     static Mesh makeCube();
@@ -54,7 +56,7 @@ public:
 
     void generateIndices();
 
-    SurfaceMesh convertToSurfaceMesh();
+    Polyhedron convertToSurfaceMesh();
 
     QVector<Vertex> m_vertices;
     QVector<int> m_indices;
