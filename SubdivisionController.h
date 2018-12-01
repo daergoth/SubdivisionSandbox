@@ -12,6 +12,7 @@
 #include "KobbeltSubdivisionStrategy.h"
 #include "CustomSchemeSubdivisionStrategy.h"
 #include "CustomSchemeHandler.h"
+#include "mesh.h"
 
 enum SubdivisionScheme {Loop, Butterfly, CatmullClark, Kobbelt, Custom};
 
@@ -33,8 +34,8 @@ public:
     void doSubdivision();
     void doBackwardStep();
 
-    SurfaceMesh getCurrentMesh();
-    void setBaseMesh(SurfaceMesh baseMesh);
+    Mesh getCurrentMesh();
+    void setBaseMesh(Mesh baseMesh);
 
     bool canDoBackwardStep();
 
@@ -45,7 +46,7 @@ private:
     std::map<SubdivisionScheme, SubdivisionStrategy*> strategyMap;
 
     int currentMeshIndex = 0;
-    std::vector<SurfaceMesh> meshHistory;
+    std::vector<Mesh> meshHistory;
 };
 
 #endif // SUBDIVISIONCONTROLLER_H

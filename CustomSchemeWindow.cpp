@@ -129,6 +129,21 @@ void CustomSchemeWindow::onTriggered_SecondNeighbours()
 
 void CustomSchemeWindow::onTriggered_okButton()
 {
+
+    CustomSchemeRefinementType refinement_type = schemeTypesGroup->checkedAction()->data();
+    CustomSchemeMeshType mesh_type = shapeGroup->checkedAction()->data();
+    int neighbour_level = neighbourGroup->checkedAction()->data();
+
+    CustomScheme custom_scheme;
+    custom_scheme.refinement_type = refinement_type;
+    custom_scheme.mesh_type = mesh_type;
+    custom_scheme.neighbour_level = neighbour_level;
+
+    // TODO: set weights
+
+    CustomSchemeHandler& csh = CustomSchemeHandler::getInstance();
+    csh.setCurrentCustomScheme(custom_scheme);
+
     this->hide();
 }
 
@@ -199,26 +214,32 @@ void CustomSchemeWindow::createActions()
 {
     approxAction = new QAction(tr("Approximating"), this);
     approxAction->setCheckable(true);
+    approxAction->setData(CustomSchemeRefinementType::Approx);
     connect(approxAction, &QAction::triggered, this, &CustomSchemeWindow::onTriggered_Approx);
 
     interpolAction = new QAction(tr("Interpolating"), this);
     interpolAction->setCheckable(true);
+    interpolAction->setData(CustomSchemeRefinementType::Interp);
     connect(interpolAction, &QAction::triggered, this, &CustomSchemeWindow::onTriggered_Interp);
 
     triAction = new QAction(tr("Triangle Mesh"), this);
     triAction->setCheckable(true);
+    triAction->setData(CustomSchemeMeshType::Tri);
     connect(triAction, &QAction::triggered, this, &CustomSchemeWindow::onTriggered_Tri);
 
     quadAction = new QAction(tr("Quad Mesh"), this);
     quadAction->setCheckable(true);
+    quadAction->setData(CustomSchemeMeshType::Quad);
     connect(quadAction, &QAction::triggered, this, &CustomSchemeWindow::onTriggered_Quad);
 
     firstNeighbourAction = new QAction(tr("First Neighbours"), this);
     firstNeighbourAction->setCheckable(true);
+    firstNeighbourAction->setData(1);
     connect(firstNeighbourAction, &QAction::triggered, this, &CustomSchemeWindow::onTriggered_FirstNeighbours);
 
     secondNeighbourAction = new QAction(tr("Second Neighbours"), this);
     secondNeighbourAction->setCheckable(true);
+    secondNeighbourAction->setData(2);
     connect(secondNeighbourAction, &QAction::triggered, this, &CustomSchemeWindow::onTriggered_SecondNeighbours);
 
     schemeTypesGroup = new QActionGroup(this);

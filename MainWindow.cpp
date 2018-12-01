@@ -6,10 +6,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QWidget *widget = new QWidget;
+    setCentralWidget(widget);
+
     createActions();
     createMenus();
-
-    openglWidget = new MainOpenGLWidget(this);
 
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
 
@@ -105,7 +106,9 @@ void MainWindow::onTriggered_KobbeltSubdiv()
 void MainWindow::onTriggered_CreateCustomScheme()
 {
     // TODO: implement integration of SubdivisionController, CustomSchemeHandler and creation UI
-    CustomSchemeHandler::getInstance().debug();
+
+    customSchemeWindow = new CustomSchemeWindow(this);
+    customSchemeWindow->show();
 }
 
 void MainWindow::onTriggered_CubeObject()
@@ -175,13 +178,7 @@ void MainWindow::on_actionSave_scheme_triggered()
 
 void MainWindow::on_actionAbout_triggered()
 {
-    SubdivisionController& sc = SubdivisionController::getInstance();
-    Mesh m = sc.getCurrentMesh();
-    Polyhedron p = m.convertToSurfaceMesh();
 
-    for (Polyhedron::Halfedge_iterator it = p.halfedges_begin(); it != p.halfedges_end(); ++it) {
-        std::cout << it->vertex()->point() << std::endl;
-    }
 }
 
 

@@ -11,7 +11,7 @@ enum SubdivisionType {Approximating, Interpolating};
 
 class SubdivisionStrategy {
 public:
-    virtual SurfaceMesh doSubdivision(SurfaceMesh evenMesh) = 0;
+    virtual Mesh doSubdivision(Mesh evenMesh) = 0;
 
 };
 

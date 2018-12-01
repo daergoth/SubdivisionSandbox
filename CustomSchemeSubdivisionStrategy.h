@@ -10,7 +10,7 @@ public:
     CustomSchemeSubdivisionStrategy(CustomScheme custom_scheme):
         custom_scheme(custom_scheme) {}
 
-    SurfaceMesh doSubdivision(SurfaceMesh evenMesh);
+    Mesh doSubdivision(Mesh evenMesh);
 
     void setCustomScheme(CustomScheme custom_scheme);
 

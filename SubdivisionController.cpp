@@ -37,7 +37,7 @@ void SubdivisionController::switchTo(SubdivisionScheme scheme) {
     }
 
     currentStrategy = strategyMap[scheme];
-    SurfaceMesh baseMesh = meshHistory[0];
+    Mesh baseMesh = meshHistory[0];
     meshHistory.clear();
     meshHistory.push_back(baseMesh);
     currentMeshIndex = 0;
@@ -48,7 +48,7 @@ void SubdivisionController::doSubdivision() {
         ++currentMeshIndex;
     } else {
         if (currentStrategy != nullptr) {
-            SurfaceMesh oddMesh = currentStrategy->doSubdivision(meshHistory.back());
+            Mesh oddMesh = currentStrategy->doSubdivision(meshHistory.back());
             meshHistory.push_back(oddMesh);
             ++currentMeshIndex;
         } else {
@@ -61,11 +61,11 @@ void SubdivisionController::doBackwardStep() {
     currentMeshIndex = currentMeshIndex > 0 ? --currentMeshIndex : 0;
 }
 
-SurfaceMesh SubdivisionController::getCurrentMesh() {
+Mesh SubdivisionController::getCurrentMesh() {
     return meshHistory[currentMeshIndex];
 }
 
-void SubdivisionController::setBaseMesh(SurfaceMesh baseMesh) {
+void SubdivisionController::setBaseMesh(Mesh baseMesh) {
     if (meshHistory.size() > 0) {
         meshHistory[0] = baseMesh;
     } else {

@@ -1,6 +1,9 @@
 #include "CustomSchemeSubdivisionStrategy.h"
 
-SurfaceMesh CustomSchemeSubdivisionStrategy::doSubdivision(SurfaceMesh evenMesh) {
+Mesh CustomSchemeSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
+
+
+
     return evenMesh;
 }
 

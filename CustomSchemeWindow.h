@@ -16,6 +16,7 @@
 #include <QVBoxLayout>
 
 #include "CustomSchemeHandler.h"
+#include "CustomScheme.h"
 
 class QAction;
 class QActionGroup;
