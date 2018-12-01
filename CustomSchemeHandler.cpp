@@ -49,29 +49,3 @@ void CustomSchemeHandler::setCurrentCustomScheme(CustomScheme custom_scheme) {
     delete this->current_scheme.get();
     this->current_scheme = std::make_shared<CustomScheme>(custom_scheme);
 }
-
-void CustomSchemeHandler::debug() {
-    EvenWeights even(0.15, 0.35);
-
-    std::vector<OddWeight> odds;
-    odds.push_back(OddWeight(0, 0.5));
-    odds.push_back(OddWeight(1, 0.25));
-
-    Weights weights(odds, even);
-
-    CustomScheme s("debug", CustomSchemeMeshType::Tri, CustomSchemeRefinementType::Approx, 1, weights);
-
-    json j = s;
-
-    std::cout << j.dump() << std::endl;
-
-    std::string s_string = j.dump();
-
-    json j2 = json::parse(s_string);
-
-    std::cout << (j == j2) << std::endl;
-
-    CustomScheme s2 = j2;
-
-    std::cout << s2 << std::endl;
-}

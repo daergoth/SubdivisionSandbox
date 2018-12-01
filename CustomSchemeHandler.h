@@ -32,8 +32,6 @@ public:
     std::shared_ptr<CustomScheme> getCurrentCustomScheme();
     void setCurrentCustomScheme(CustomScheme custom_scheme);
 
-    void debug();
-
 private:
     CustomSchemeHandler() {}
 

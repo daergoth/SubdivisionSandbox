@@ -2,15 +2,17 @@
 
 // OddWeight
 void to_json(json& j, const OddWeight& ow) {
-    j = json{{"level", ow.level}, {"value", ow.value}};
+    j = json{{"level", ow.level}, {"type", ow.type}, {"value", ow.value}};
 }
 void from_json(const json& j, OddWeight& ow) {
     j.at("level").get_to(ow.level);
+    j.at("type").get_to(ow.type);
     j.at("value").get_to(ow.value);
 }
 std::ostream& operator<<(std::ostream& os, const OddWeight& ow) {
     // write obj to stream
     os << "[level:" << ow.level
+       << ", type:" << std::to_string(ow.type)
        << ", value:" << std::to_string(ow.value) << "]";
     return os;
 }
@@ -18,7 +20,7 @@ std::ostream& operator<<(std::ostream& os, const OddWeight& ow) {
 
 // EvenWeights
 void to_json(json& j, const EvenWeights& ew) {
-    j = json{{"beta", ew.alfa}, {"gamma", ew.beta}};
+    j = json{{"alfa", ew.alfa}, {"beta", ew.beta}};
 }
 void from_json(const nlohmann::json& j, EvenWeights& ew) {
     j.at("alfa").get_to(ew.alfa);

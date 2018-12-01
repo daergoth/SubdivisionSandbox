@@ -9,12 +9,14 @@ using json = nlohmann::json;
 
 enum CustomSchemeMeshType {Tri, Quad};
 enum CustomSchemeRefinementType {Approx, Interp};
+enum CustomSchemeOddWeightType {Edge, Face};
 
 class OddWeight {
 public:
     OddWeight(){}
-    OddWeight(int level, double value): level(level), value(value){}
+    OddWeight(int level, CustomSchemeOddWeightType type, double value): level(level), type(type), value(value){}
     int level;
+    CustomSchemeOddWeightType type;
     double value;
 };
 void to_json(json& j, const OddWeight& ow);

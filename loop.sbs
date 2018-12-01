@@ -11,10 +11,12 @@
         "odd": [
             {
                 "level": 0,
+                "type": 0,
                 "value": 0.375
             },
             {
                 "level": 1,
+                "type": 0,
                 "value": 0.125
             }
         ]
