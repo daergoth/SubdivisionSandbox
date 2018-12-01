@@ -24,6 +24,7 @@
 #include "SubdivisionController.h"
 #include "CustomSchemeHandler.h"
 #include "customschemewindow.h"
+#include "AssimpReader.h"
 
 class QAction;
 class QActionGroup;

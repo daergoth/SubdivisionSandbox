@@ -39,7 +39,8 @@ SOURCES += \
     CustomScheme.cpp \
     CustomSchemeHandler.cpp \
     MeshWalkHandler.cpp \
-    CustomSchemeWindow.cpp
+    CustomSchemeWindow.cpp \
+    AssimpReader.cpp
 
 HEADERS += \
     CustomScheme.h \
@@ -55,7 +56,8 @@ HEADERS += \
     KobbeltSubdivisionStrategy.h \
     CustomSchemeSubdivisionStrategy.h \
     MeshWalkHandler.h \
-    CustomSchemeWindow.h
+    CustomSchemeWindow.h \
+    AssimpReader.h
 
 FORMS += \
     MainWindow.ui \
