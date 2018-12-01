@@ -264,10 +264,10 @@ Mesh Mesh::makeTetrahedron()
         {1.0f, 1.0f, 1.0f}
     });
 
-    result.m_indices = {0,2,1,
-                        0,3,2,
-                        1,2,3,
-                        0,1,3};
+    result.m_indicesOriginal = {0,2,1,
+                                0,3,2,
+                                1,2,3,
+                                0,1,3};
 
     return result;
 }

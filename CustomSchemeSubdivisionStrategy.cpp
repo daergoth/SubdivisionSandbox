@@ -45,7 +45,7 @@ Mesh CustomSchemeSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
         }
     }
 
-    return Mesh(vertices, face_indicies);
+    return Mesh(vertices, face_indicies, custom_scheme.mesh_type == CustomSchemeMeshType::Tri ? 3 : 4);
 }
 
 Mesh::Vertex CustomSchemeSubdivisionStrategy::calculateNewEdgeVert(Polyhedron::Halfedge_iterator halfedge) {
