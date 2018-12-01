@@ -7,8 +7,8 @@
 
 using json = nlohmann::json;
 
-enum MeshType {Triangular, Quadrilateral};
-enum RefinementType {Approximating, Interpolating};
+enum CustomSchemeMeshType {Tri, Quad};
+enum CustomSchemeRefinementType {Approx, Interp};
 
 class OddWeight {
 public:
@@ -49,14 +49,14 @@ class CustomScheme
 {
 public:  
     CustomScheme(){}
-    CustomScheme(MeshType mesh_type, RefinementType refinement_type, int neighbour_level, Weights weights):
+    CustomScheme(CustomSchemeMeshType mesh_type, CustomSchemeRefinementType refinement_type, int neighbour_level, Weights weights):
         mesh_type(mesh_type),
         refinement_type(refinement_type),
         neighbour_level(neighbour_level),
         weights(weights){}
 
-    MeshType mesh_type;
-    RefinementType refinement_type;
+    CustomSchemeMeshType mesh_type;
+    CustomSchemeRefinementType refinement_type;
     int neighbour_level;
     Weights weights;
 };

@@ -138,7 +138,7 @@ Mesh Mesh::makeCube(bool quads)
 {
     Mesh result;
 
-    result.m_vertices.push_back(
+   result.m_vertices.push_back(
     {
         {-0.5,-0.5, 0.5},
         {0.0f, 0.0f, 0.0f},
@@ -230,7 +230,37 @@ Mesh Mesh::makeCube(bool quads)
 Mesh Mesh::makeTetrahedron()
 {
     Mesh result;
-    //TODO: implement
+
+    result.m_vertices.push_back(
+    {
+        {-0.5,-0.5, 0.5},
+        {0.0f, 0.0f, 0.0f},
+        {1.0f, 1.0f, 1.0f}
+    });
+    result.m_vertices.push_back(
+    {
+        { 0.5, -0.5, 0.5},
+        {0.0f, 0.0f, 0.0f},
+        {1.0f, 1.0f, 1.0f}
+    });
+    result.m_vertices.push_back(
+    {
+        { 0.0, 0.5, 0.5},
+        {0.0f, 0.0f, 0.0f},
+        {1.0f, 1.0f, 1.0f}
+    });
+    result.m_vertices.push_back(
+    {
+        {0.0, 0.0,-0.5},
+        {0.0f, 0.0f, 0.0f},
+        {1.0f, 1.0f, 1.0f}
+    });
+
+    result.m_indices = {0,2,1,
+                        0,3,2,
+                        1,2,3,
+                        0,1,3};
+
     return result;
 }
 void Mesh::generateIndices(bool regenerate)

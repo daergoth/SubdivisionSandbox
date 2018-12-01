@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui opengl
+QT       += concurrent
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -37,6 +38,7 @@ SOURCES += \
     CustomSchemeSubdivisionStrategy.cpp \
     CustomScheme.cpp \
     CustomSchemeHandler.cpp \
+    MeshWalkHandler.cpp \
     CustomSchemeWindow.cpp
 
 HEADERS += \
@@ -52,6 +54,7 @@ HEADERS += \
     CatmullClarkSubdivisionStrategy.h \
     KobbeltSubdivisionStrategy.h \
     CustomSchemeSubdivisionStrategy.h \
+    MeshWalkHandler.h \
     CustomSchemeWindow.h
 
 FORMS += \
