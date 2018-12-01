@@ -59,7 +59,7 @@ void CustomSchemeHandler::debug() {
 
     Weights weights(odds, even);
 
-    CustomScheme s(CustomSchemeMeshType::Tri, CustomSchemeRefinementType::Approx, 1, weights);
+    CustomScheme s("debug", CustomSchemeMeshType::Tri, CustomSchemeRefinementType::Approx, 1, weights);
 
     json j = s;
 

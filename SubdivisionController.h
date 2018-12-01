@@ -14,6 +14,8 @@
 #include "CustomSchemeHandler.h"
 #include "mesh.h"
 
+#include "DebugHelper.h"
+
 enum SubdivisionScheme {Loop, Butterfly, CatmullClark, Kobbelt, Custom};
 
 class SubdivisionController

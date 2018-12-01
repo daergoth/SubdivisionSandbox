@@ -94,31 +94,31 @@ public:
     MeshWalkHandler(MeshWalkHandler const&) = delete;
     void operator=(MeshWalkHandler const&) = delete;
 
-    Walk walk(Polyhedron::Halfedge_iterator& halfedge, int neighbour_level, SubdivisionType subdivision_type, OddsType odds_type, MeshType mesh_type);
-    LoopLikeWalk loopLikeWalk(Polyhedron::Halfedge_iterator& halfedge);
-    ButterflyLikeWalk butterflyLikeWalk(Polyhedron::Halfedge_iterator& halfedge);
-    CatmullClarkLikeWalk catmullClarkLikeWalk(Polyhedron::Halfedge_iterator& halfedge, OddsType odds_type);
-    KobbeltLikeWalk kobbeltLikeWalk(Polyhedron::Halfedge_iterator& halfedge, OddsType odds_type);
+    Walk walk(Polyhedron::Halfedge_iterator halfedge, int neighbour_level, SubdivisionType subdivision_type, OddsType odds_type, MeshType mesh_type);
+    LoopLikeWalk loopLikeWalk(Polyhedron::Halfedge_iterator halfedge);
+    ButterflyLikeWalk butterflyLikeWalk(Polyhedron::Halfedge_iterator halfedge);
+    CatmullClarkLikeWalk catmullClarkLikeWalk(Polyhedron::Halfedge_iterator halfedge, OddsType odds_type);
+    KobbeltLikeWalk kobbeltLikeWalk(Polyhedron::Halfedge_iterator halfedge, OddsType odds_type);
 
 private:
     MeshWalkHandler() {}
 
-    std::array<K::Point_3, 16> triOddVerticesOneNeighbour(Polyhedron::Halfedge_iterator& halfedge);
-    std::array<K::Point_3, 16> triOddVerticesTwoNeighbour(Polyhedron::Halfedge_iterator& halfedge);
-    inline Polyhedron::Halfedge_iterator secondNeighbourTriHelper(std::array<K::Point_3, 16>& vertices, int index, Polyhedron::Halfedge_iterator& halfedge);
+    std::array<K::Point_3, 16> triOddVerticesOneNeighbour(Polyhedron::Halfedge_iterator halfedge);
+    std::array<K::Point_3, 16> triOddVerticesTwoNeighbour(Polyhedron::Halfedge_iterator halfedge);
+    inline Polyhedron::Halfedge_iterator secondNeighbourTriHelper(std::array<K::Point_3, 16>& vertices, int index, Polyhedron::Halfedge_iterator halfedge);
 
-    std::array<K::Point_3, 16> quadOddVerticesOneNeighbour(Polyhedron::Halfedge_iterator& halfedge, OddsType odds_type);
-    std::array<K::Point_3, 16> quadOddVerticesTwoNeighbour(Polyhedron::Halfedge_iterator& halfedge, OddsType odds_type);
+    std::array<K::Point_3, 16> quadOddVerticesOneNeighbour(Polyhedron::Halfedge_iterator halfedge, OddsType odds_type);
+    std::array<K::Point_3, 16> quadOddVerticesTwoNeighbour(Polyhedron::Halfedge_iterator halfedge, OddsType odds_type);
 
-    inline std::array<K::Point_3, 16> quadFaceOddTwo(Polyhedron::Halfedge_iterator& halfedge);
-    inline Polyhedron::Halfedge_iterator quadFaceOddTwoCornerHelper(Polyhedron::Halfedge_iterator& halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies);
-    inline Polyhedron::Halfedge_iterator quadFaceOddTwoSideHelper(Polyhedron::Halfedge_iterator& halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies);
+    inline std::array<K::Point_3, 16> quadFaceOddTwo(Polyhedron::Halfedge_iterator halfedge);
+    inline Polyhedron::Halfedge_iterator quadFaceOddTwoCornerHelper(Polyhedron::Halfedge_iterator halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies);
+    inline Polyhedron::Halfedge_iterator quadFaceOddTwoSideHelper(Polyhedron::Halfedge_iterator halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies);
 
-    inline std::array<K::Point_3, 16> quadEdgeOddTwo(Polyhedron::Halfedge_iterator& halfedge);
-    inline Polyhedron::Halfedge_iterator quadEdgeOddTwoStraightHelper(Polyhedron::Halfedge_iterator& halfedge);
+    inline std::array<K::Point_3, 16> quadEdgeOddTwo(Polyhedron::Halfedge_iterator halfedge);
+    inline Polyhedron::Halfedge_iterator quadEdgeOddTwoStraightHelper(Polyhedron::Halfedge_iterator halfedge);
 
-    std::vector<K::Point_3> triEvenVertices(Polyhedron::Halfedge_iterator& halfedge);
-    std::vector<K::Point_3> quadEvenVertices(Polyhedron::Halfedge_iterator& halfedge);
+    std::vector<K::Point_3> triEvenVertices(Polyhedron::Halfedge_iterator halfedge);
+    std::vector<K::Point_3> quadEvenVertices(Polyhedron::Halfedge_iterator halfedge);
 
 };
 

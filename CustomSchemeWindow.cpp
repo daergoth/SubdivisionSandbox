@@ -130,9 +130,9 @@ void CustomSchemeWindow::onTriggered_SecondNeighbours()
 void CustomSchemeWindow::onTriggered_okButton()
 {
 
-    CustomSchemeRefinementType refinement_type = schemeTypesGroup->checkedAction()->data();
-    CustomSchemeMeshType mesh_type = shapeGroup->checkedAction()->data();
-    int neighbour_level = neighbourGroup->checkedAction()->data();
+    CustomSchemeRefinementType refinement_type = static_cast<CustomSchemeRefinementType>(schemeTypesGroup->checkedAction()->data().toInt());
+    CustomSchemeMeshType mesh_type = static_cast<CustomSchemeMeshType>(shapeGroup->checkedAction()->data().toInt());
+    int neighbour_level = neighbourGroup->checkedAction()->data().toInt();
 
     CustomScheme custom_scheme;
     custom_scheme.refinement_type = refinement_type;

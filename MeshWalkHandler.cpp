@@ -1,6 +1,6 @@
 #include "MeshWalkHandler.h"
 
-MeshWalkHandler::Walk MeshWalkHandler::walk(Polyhedron::Halfedge_iterator& halfedge, int neighbour_level, SubdivisionType subdivision_type, OddsType odds_type, MeshType mesh_type) {
+MeshWalkHandler::Walk MeshWalkHandler::walk(Polyhedron::Halfedge_iterator halfedge, int neighbour_level, SubdivisionType subdivision_type, OddsType odds_type, MeshType mesh_type) {
     std::array<K::Point_3, 16> odds;
     std::vector<K::Point_3> evens;
     switch (mesh_type) {
@@ -50,32 +50,32 @@ MeshWalkHandler::Walk MeshWalkHandler::walk(Polyhedron::Halfedge_iterator& halfe
     return Walk(odds, evens, odds.size(), evens.size(), mesh_type, odds_type, subdivision_type);
 }
 
-MeshWalkHandler::LoopLikeWalk MeshWalkHandler::loopLikeWalk(Polyhedron::Halfedge_iterator& halfedge) {
+MeshWalkHandler::LoopLikeWalk MeshWalkHandler::loopLikeWalk(Polyhedron::Halfedge_iterator halfedge) {
     std::array<K::Point_3, 16> odds = triOddVerticesOneNeighbour(halfedge);
     std::vector<K::Point_3> evens = triEvenVertices(halfedge);
     return LoopLikeWalk(odds, evens);
 }
 
-MeshWalkHandler::ButterflyLikeWalk MeshWalkHandler::butterflyLikeWalk(Polyhedron::Halfedge_iterator& halfedge) {
+MeshWalkHandler::ButterflyLikeWalk MeshWalkHandler::butterflyLikeWalk(Polyhedron::Halfedge_iterator halfedge) {
     std::array<K::Point_3, 16> odds = triOddVerticesTwoNeighbour(halfedge);
     return ButterflyLikeWalk(odds);
 }
 
-MeshWalkHandler::CatmullClarkLikeWalk MeshWalkHandler::catmullClarkLikeWalk(Polyhedron::Halfedge_iterator& halfedge, OddsType odds_type) {
+MeshWalkHandler::CatmullClarkLikeWalk MeshWalkHandler::catmullClarkLikeWalk(Polyhedron::Halfedge_iterator halfedge, OddsType odds_type) {
     std::array<K::Point_3, 16> odds = quadOddVerticesOneNeighbour(halfedge, odds_type);
     std::vector<K::Point_3> evens = quadEvenVertices(halfedge);
     return CatmullClarkLikeWalk(odds, evens, odds_type);
 }
 
-MeshWalkHandler::KobbeltLikeWalk MeshWalkHandler::kobbeltLikeWalk(Polyhedron::Halfedge_iterator& halfedge, OddsType odds_type) {
+MeshWalkHandler::KobbeltLikeWalk MeshWalkHandler::kobbeltLikeWalk(Polyhedron::Halfedge_iterator halfedge, OddsType odds_type) {
     std::array<K::Point_3, 16> odds = quadOddVerticesTwoNeighbour(halfedge, odds_type);
     return KobbeltLikeWalk(odds, odds_type);
 }
 
-std::array<K::Point_3, 16> MeshWalkHandler::triOddVerticesOneNeighbour(Polyhedron::Halfedge_iterator& halfedge) {
+std::array<K::Point_3, 16> MeshWalkHandler::triOddVerticesOneNeighbour(Polyhedron::Halfedge_iterator halfedge) {
     std::array<K::Point_3, 16> vertices;
 
-    Polyhedron::Halfedge_iterator& c = halfedge;
+    Polyhedron::Halfedge_iterator c = halfedge;
 
     vertices[2] = c->vertex()->point();
     vertices[1] = c->prev()->vertex()->point();
@@ -87,10 +87,10 @@ std::array<K::Point_3, 16> MeshWalkHandler::triOddVerticesOneNeighbour(Polyhedro
     return vertices;
 }
 
-std::array<K::Point_3, 16> MeshWalkHandler::triOddVerticesTwoNeighbour(Polyhedron::Halfedge_iterator& halfedge) {
+std::array<K::Point_3, 16> MeshWalkHandler::triOddVerticesTwoNeighbour(Polyhedron::Halfedge_iterator halfedge) {
     std::array<K::Point_3, 16> vertices;
 
-    Polyhedron::Halfedge_iterator& c = halfedge;
+    Polyhedron::Halfedge_iterator c = halfedge;
 
     vertices[4] = c->vertex()->point();
 
@@ -111,16 +111,16 @@ std::array<K::Point_3, 16> MeshWalkHandler::triOddVerticesTwoNeighbour(Polyhedro
     return vertices;
 }
 
-inline Polyhedron::Halfedge_iterator MeshWalkHandler::secondNeighbourTriHelper(std::array<K::Point_3, 16>& vertices, int index, Polyhedron::Halfedge_iterator& halfedge) {
+inline Polyhedron::Halfedge_iterator MeshWalkHandler::secondNeighbourTriHelper(std::array<K::Point_3, 16>& vertices, int index, Polyhedron::Halfedge_iterator halfedge) {
     halfedge = halfedge->opposite()->next();
     vertices[index] = halfedge->vertex()->point();
     return halfedge->prev()->opposite();
 }
 
-std::array<K::Point_3, 16> MeshWalkHandler::quadOddVerticesOneNeighbour(Polyhedron::Halfedge_iterator& halfedge, OddsType odds_type) {
+std::array<K::Point_3, 16> MeshWalkHandler::quadOddVerticesOneNeighbour(Polyhedron::Halfedge_iterator halfedge, OddsType odds_type) {
     std::array<K::Point_3, 16> vertices;
 
-    Polyhedron::Halfedge_iterator& c = halfedge;
+    Polyhedron::Halfedge_iterator c = halfedge;
 
     vertices[3] = c->vertex()->point();
     c = c->next();
@@ -140,7 +140,7 @@ std::array<K::Point_3, 16> MeshWalkHandler::quadOddVerticesOneNeighbour(Polyhedr
     return vertices;
 }
 
-std::array<K::Point_3, 16> MeshWalkHandler::quadOddVerticesTwoNeighbour(Polyhedron::Halfedge_iterator& halfedge, OddsType odds_type) {
+std::array<K::Point_3, 16> MeshWalkHandler::quadOddVerticesTwoNeighbour(Polyhedron::Halfedge_iterator halfedge, OddsType odds_type) {
     switch (odds_type) {
     case Face:
         return quadFaceOddTwo(halfedge);
@@ -153,10 +153,10 @@ std::array<K::Point_3, 16> MeshWalkHandler::quadOddVerticesTwoNeighbour(Polyhedr
     }
 }
 
-inline std::array<K::Point_3, 16> MeshWalkHandler::quadFaceOddTwo(Polyhedron::Halfedge_iterator& halfedge) {
+inline std::array<K::Point_3, 16> MeshWalkHandler::quadFaceOddTwo(Polyhedron::Halfedge_iterator halfedge) {
     std::array<K::Point_3, 16> vertices;
 
-    Polyhedron::Halfedge_iterator& c = halfedge;
+    Polyhedron::Halfedge_iterator c = halfedge;
 
     c = c->next()->opposite()->next();
 
@@ -172,7 +172,7 @@ inline std::array<K::Point_3, 16> MeshWalkHandler::quadFaceOddTwo(Polyhedron::Ha
     return vertices;
 }
 
-inline Polyhedron::Halfedge_iterator MeshWalkHandler::quadFaceOddTwoCornerHelper(Polyhedron::Halfedge_iterator& halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies) {
+inline Polyhedron::Halfedge_iterator MeshWalkHandler::quadFaceOddTwoCornerHelper(Polyhedron::Halfedge_iterator halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies) {
     halfedge = halfedge->next();
     vertices[indicies.first] = halfedge->vertex()->point();
     halfedge = halfedge->next();
@@ -180,7 +180,7 @@ inline Polyhedron::Halfedge_iterator MeshWalkHandler::quadFaceOddTwoCornerHelper
     return halfedge->next()->opposite();
 }
 
-inline Polyhedron::Halfedge_iterator MeshWalkHandler::quadFaceOddTwoSideHelper(Polyhedron::Halfedge_iterator& halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies) {
+inline Polyhedron::Halfedge_iterator MeshWalkHandler::quadFaceOddTwoSideHelper(Polyhedron::Halfedge_iterator halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies) {
     halfedge = halfedge->next();
     vertices[indicies.first] = halfedge->vertex()->point();
     halfedge = halfedge->next();
@@ -188,10 +188,10 @@ inline Polyhedron::Halfedge_iterator MeshWalkHandler::quadFaceOddTwoSideHelper(P
     return halfedge->opposite();
 }
 
-inline std::array<K::Point_3, 16> MeshWalkHandler::quadEdgeOddTwo(Polyhedron::Halfedge_iterator& halfedge) {
+inline std::array<K::Point_3, 16> MeshWalkHandler::quadEdgeOddTwo(Polyhedron::Halfedge_iterator halfedge) {
     std::array<K::Point_3, 16> vertices;
 
-    Polyhedron::Halfedge_iterator& c = halfedge;
+    Polyhedron::Halfedge_iterator c = halfedge;
 
     vertices[1] = c->prev()->vertex()->point();
     vertices[2] = c->vertex()->point();
@@ -209,15 +209,15 @@ inline std::array<K::Point_3, 16> MeshWalkHandler::quadEdgeOddTwo(Polyhedron::Ha
     return vertices;
 }
 
-inline Polyhedron::Halfedge_iterator MeshWalkHandler::quadEdgeOddTwoStraightHelper(Polyhedron::Halfedge_iterator& halfedge) {
+inline Polyhedron::Halfedge_iterator MeshWalkHandler::quadEdgeOddTwoStraightHelper(Polyhedron::Halfedge_iterator halfedge) {
     return halfedge->next()->opposite()->next();
 }
 
 
-std::vector<K::Point_3> MeshWalkHandler::triEvenVertices(Polyhedron::Halfedge_iterator& halfedge) {
+std::vector<K::Point_3> MeshWalkHandler::triEvenVertices(Polyhedron::Halfedge_iterator halfedge) {
     std::vector<K::Point_3> vertices;
 
-    Polyhedron::Halfedge_iterator& c = halfedge;
+    Polyhedron::Halfedge_iterator c = halfedge;
     vertices.push_back(c->prev()->vertex()->point());
 
     do {
@@ -228,10 +228,10 @@ std::vector<K::Point_3> MeshWalkHandler::triEvenVertices(Polyhedron::Halfedge_it
     return vertices;
 }
 
-std::vector<K::Point_3> MeshWalkHandler::quadEvenVertices(Polyhedron::Halfedge_iterator& halfedge) {
+std::vector<K::Point_3> MeshWalkHandler::quadEvenVertices(Polyhedron::Halfedge_iterator halfedge) {
     std::vector<K::Point_3> vertices;
 
-    Polyhedron::Halfedge_iterator& c = halfedge;
+    Polyhedron::Halfedge_iterator c = halfedge;
     vertices.push_back(c->prev()->vertex()->point());
 
     do {

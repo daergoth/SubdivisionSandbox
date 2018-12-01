@@ -39,6 +39,7 @@ private slots:
     void onTriggered_ButterflySubdiv();
     void onTriggered_CatmullClarkSubdiv();
     void onTriggered_KobbeltSubdiv();
+    void onTriggered_CustomSchemeSubdiv();
     void onTriggered_CreateCustomScheme();
 
     void onTriggered_CubeObject();
@@ -71,6 +72,7 @@ private:
     QAction* butterflyAction;
     QAction* catmullclarkAction;
     QAction* kobbeltAction;
+    QAction* customSchemeAction;
     QAction* createCustomSchemeAction;
 
     QActionGroup * objectGroup;

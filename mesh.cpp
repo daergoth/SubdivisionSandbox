@@ -1,13 +1,21 @@
 #include "mesh.h"
 
-static K::Point_3 toKernelVector(QVector3D v)
+K::Point_3 Mesh::toKernelVector(QVector3D v)
 {
     return K::Point_3(v[0], v[1], v[2]);
 }
 
-static QVector3D toQVector(K::Point_3 v)
+QVector3D Mesh::toQVector(K::Point_3 v)
 {
     return QVector3D(v.x(), v.y(), v.z());
+}
+
+Mesh::Vertex Mesh::toVertex(K::Point_3 v) {
+    return {toQVector(v), QVector3D(), QVector3D(1, 1, 1)};
+}
+
+Mesh::Vertex Mesh::toVertex(QVector3D v) {
+    return {v, QVector3D(), QVector3D(1, 1, 1)};
 }
 
 template <class HDS>
@@ -28,7 +36,7 @@ public:
 
         for (int i = 0; i < m_mesh.m_vertices.size(); i++)
         {
-            resultBuilder.add_vertex(toKernelVector(m_mesh.m_vertices[i].m_position));
+            resultBuilder.add_vertex(Mesh::toKernelVector(m_mesh.m_vertices[i].m_position));
         }
 
         for (int i = 0; i < m_mesh.m_indices.size() / 3; i++)
