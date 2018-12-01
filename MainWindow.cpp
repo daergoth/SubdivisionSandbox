@@ -60,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setLabelSubdivision("Loop Subdivision");
 
     SubdivisionController& sc = SubdivisionController::getInstance();
-    sc.setBaseMesh(Mesh::makeCube());
+    sc.setBaseMesh(Mesh::makeCube(false));
     sc.switchTo(SubdivisionScheme::Loop);
 }
 
@@ -122,7 +122,7 @@ void MainWindow::onTriggered_CreateCustomScheme()
 void MainWindow::onTriggered_CubeObject()
 {
     SubdivisionController& sc = SubdivisionController::getInstance();
-    sc.setBaseMesh(Mesh::makeCube());
+    sc.setBaseMesh(Mesh::makeCube(true));
     openglWidget->update();
 }
 
@@ -149,7 +149,7 @@ void MainWindow::onTriggered_OpenObjFile()
             std::cout << "Mesh load failed!: " << fileName << std::endl;
             assert(0 == 0);
         }
-                */
+    */
 
     openglWidget->update();
 }
@@ -194,7 +194,6 @@ void MainWindow::on_actionAbout_triggered()
         std::cout << it->vertex()->point() << std::endl;
     }
 }
-
 
 void MainWindow::createActions()
 {
