@@ -24,9 +24,9 @@ std::ostream& operator<<(std::ostream& os, const OddWeight& ow);
 class EvenWeights {
 public:
     EvenWeights(){}
-    EvenWeights(double beta, double gamma): beta(beta), gamma(gamma){}
+    EvenWeights(double alfa, double beta): alfa(alfa), beta(beta){}
+    double alfa;
     double beta;
-    double gamma;
 };
 void to_json(json& j, const EvenWeights& ew);
 void from_json(const nlohmann::json& j, EvenWeights& ew);
@@ -49,12 +49,14 @@ class CustomScheme
 {
 public:  
     CustomScheme(){}
-    CustomScheme(CustomSchemeMeshType mesh_type, CustomSchemeRefinementType refinement_type, int neighbour_level, Weights weights):
+    CustomScheme(std::string name, CustomSchemeMeshType mesh_type, CustomSchemeRefinementType refinement_type, int neighbour_level, Weights weights):
+        name(name),
         mesh_type(mesh_type),
         refinement_type(refinement_type),
         neighbour_level(neighbour_level),
         weights(weights){}
 
+    std::string name;
     CustomSchemeMeshType mesh_type;
     CustomSchemeRefinementType refinement_type;
     int neighbour_level;

@@ -39,7 +39,9 @@ SOURCES += \
     CustomScheme.cpp \
     CustomSchemeHandler.cpp \
     MeshWalkHandler.cpp \
-    CustomSchemeWindow.cpp
+    CustomSchemeWindow.cpp \
+    WeightArrayGenerator.cpp \
+    DebugHelper.cpp
 
 HEADERS += \
     CustomScheme.h \
@@ -55,7 +57,9 @@ HEADERS += \
     KobbeltSubdivisionStrategy.h \
     CustomSchemeSubdivisionStrategy.h \
     MeshWalkHandler.h \
-    CustomSchemeWindow.h
+    CustomSchemeWindow.h \
+    WeightArrayGenerator.h \
+    DebugHelper.h
 
 FORMS += \
     MainWindow.ui \

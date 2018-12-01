@@ -32,6 +32,13 @@ public:
         QVector3D m_color;
     };
 
+    static K::Point_3 toKernelVector(QVector3D v);
+
+    static QVector3D toQVector(K::Point_3 v);
+
+    static Vertex toVertex(K::Point_3 v);
+    static Vertex toVertex(QVector3D v);
+
     /**
      * @brief Default üres konstruktor.
      */

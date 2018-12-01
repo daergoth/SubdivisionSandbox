@@ -98,6 +98,7 @@ void MainWindow::onTriggered_CatmullClarkSubdiv()
 
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::CatmullClark);
+
     openglWidget->update();
 }
 
@@ -110,10 +111,19 @@ void MainWindow::onTriggered_KobbeltSubdiv()
     openglWidget->update();
 }
 
+void MainWindow::onTriggered_CustomSchemeSubdiv()
+{
+    CustomSchemeHandler& csh = CustomSchemeHandler::getInstance();
+
+    setLabelSubdivision(tr(csh.getCurrentCustomScheme()->name.c_str()));
+
+    SubdivisionController& sc = SubdivisionController::getInstance();
+    sc.switchTo(SubdivisionScheme::Custom);
+}
+
 void MainWindow::onTriggered_CreateCustomScheme()
 {
     // TODO: implement integration of SubdivisionController, CustomSchemeHandler and creation UI
-    CustomSchemeHandler::getInstance().debug();
 
     customSchemeWindow = new CustomSchemeWindow(this);
     customSchemeWindow->show();
@@ -163,6 +173,7 @@ void MainWindow::on_actionOpen_scheme_triggered()
         CustomSchemeHandler& csh = CustomSchemeHandler::getInstance();
         CustomScheme openedScheme = csh.openCustomScheme(filename);
         csh.setCurrentCustomScheme(openedScheme);
+        schemesMenu->addAction(customSchemeAction);
     }
 }
 
@@ -186,13 +197,7 @@ void MainWindow::on_actionSave_scheme_triggered()
 
 void MainWindow::on_actionAbout_triggered()
 {
-    SubdivisionController& sc = SubdivisionController::getInstance();
-    Mesh m = sc.getCurrentMesh();
-    Polyhedron p = m.convertToSurfaceMesh();
 
-    for (Polyhedron::Halfedge_iterator it = p.halfedges_begin(); it != p.halfedges_end(); ++it) {
-        std::cout << it->vertex()->point() << std::endl;
-    }
 }
 
 void MainWindow::createActions()
@@ -213,6 +218,10 @@ void MainWindow::createActions()
     kobbeltAction->setCheckable(true);
     connect(kobbeltAction, &QAction::triggered, this, &MainWindow::onTriggered_KobbeltSubdiv);
 
+    customSchemeAction = new QAction(tr("Custom Scheme"), this);
+    customSchemeAction->setCheckable(true);
+    connect(customSchemeAction, &QAction::triggered, this, &MainWindow::onTriggered_CustomSchemeSubdiv);
+
     createCustomSchemeAction = new QAction(tr("Create custom scheme..."), this);
     connect(createCustomSchemeAction, &QAction::triggered, this, &MainWindow::onTriggered_CreateCustomScheme);
 
@@ -232,6 +241,7 @@ void MainWindow::createActions()
     subdivisionSchemesGroup->addAction(butterflyAction);
     subdivisionSchemesGroup->addAction(catmullclarkAction);
     subdivisionSchemesGroup->addAction(kobbeltAction);
+    subdivisionSchemesGroup->addAction(customSchemeAction);
     loopAction->setChecked(true);
 
     objectGroup = new QActionGroup(this);

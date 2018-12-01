@@ -5,7 +5,7 @@ SubdivisionController::SubdivisionController() {
     strategyMap[SubdivisionScheme::Butterfly] = new ButterflySubdivisionStrategy();
     strategyMap[SubdivisionScheme::CatmullClark] = new CatmullClarkSubdivisionStrategy();
     strategyMap[SubdivisionScheme::Kobbelt] = new KobbeltSubdivisionStrategy();
-    strategyMap[SubdivisionScheme::Custom] = new CustomSchemeSubdivisionStrategy();
+    strategyMap[SubdivisionScheme::Custom] = nullptr;
 }
 
 SubdivisionController::~SubdivisionController() {
@@ -16,6 +16,26 @@ SubdivisionController::~SubdivisionController() {
 
 void SubdivisionController::switchTo(SubdivisionScheme scheme) {
     std::cout << "Switching to scheme: " << scheme << std::endl;
+
+    if (scheme == SubdivisionScheme::Custom) {
+        CustomSchemeHandler& csh = CustomSchemeHandler::getInstance();
+        std::shared_ptr<CustomScheme> sptr_scheme = csh.getCurrentCustomScheme();
+
+        if (strategyMap[SubdivisionScheme::Custom] == nullptr) {
+            if (sptr_scheme) {
+                strategyMap[SubdivisionScheme::Custom] = new CustomSchemeSubdivisionStrategy(*sptr_scheme);
+            } else {
+                throw std::exception("Cannot switch to CustomScheme while there are no weights for it in CustomSchemeHandler!");
+            }
+        } else {
+            if (sptr_scheme) {
+                ((CustomSchemeSubdivisionStrategy*)strategyMap[SubdivisionScheme::Custom])->setCustomScheme(*sptr_scheme);
+            } else {
+                throw std::exception("Cannot switch to CustomScheme while there are no weights for it in CustomSchemeHandler!");
+            }
+        }
+    }
+
     currentStrategy = strategyMap[scheme];
     Mesh baseMesh = meshHistory[0];
     meshHistory.clear();
@@ -27,9 +47,27 @@ void SubdivisionController::doSubdivision() {
     if (currentMeshIndex < meshHistory.size() - 1) {
         ++currentMeshIndex;
     } else {
-        Mesh oddMesh = currentStrategy->doSubdivision(meshHistory.back());
-        meshHistory.push_back(oddMesh);
-        ++currentMeshIndex;
+        if (currentStrategy != nullptr) {
+
+            /*
+            std::cout << "Old mesh faceNum: " << (meshHistory[currentMeshIndex].m_indices.size() / 3) << std::endl;
+            std::cout << "Face indicies: " << meshHistory[currentMeshIndex].m_indices << std::endl;
+            std::cout << "Vertices:" << meshHistory[currentMeshIndex].m_vertices << std::endl;
+            */
+
+            Mesh oddMesh = currentStrategy->doSubdivision(meshHistory[currentMeshIndex]);
+            meshHistory.push_back(oddMesh);
+            ++currentMeshIndex;
+
+            /*
+            std::cout << "New mesh faceNum: " << (oddMesh.m_indices.size() / 3) << std::endl;
+            std::cout << "Face incides: " << oddMesh.m_indices << std::endl;
+            std::cout << "Vertices:" << oddMesh.m_vertices << std::endl;
+            */
+
+        } else {
+            throw std::exception("Invalid scheme switch (possibly custom scheme has no weights)!");
+        }
     }
 }
 

@@ -8,11 +8,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QFileDialog>
-#include <fstream>
-#include <iostream>
-#include <assimp/Importer.hpp>      // C++ importer interface
-#include <assimp/scene.h>           // Output data structure
-#include <assimp/postprocess.h>     // Post processing flags
 #include <QMessageBox>
 #include <QMovie>
 #include <qtconcurrentrun.h>
@@ -23,7 +18,7 @@
 #include "MainOpenGLWidget.h"
 #include "SubdivisionController.h"
 #include "CustomSchemeHandler.h"
-#include "customschemewindow.h"
+#include "CustomSchemeWindow.h"
 
 class QAction;
 class QActionGroup;
@@ -46,6 +41,7 @@ private slots:
     void onTriggered_ButterflySubdiv();
     void onTriggered_CatmullClarkSubdiv();
     void onTriggered_KobbeltSubdiv();
+    void onTriggered_CustomSchemeSubdiv();
     void onTriggered_CreateCustomScheme();
 
     void onTriggered_CubeObject();
@@ -78,6 +74,7 @@ private:
     QAction* butterflyAction;
     QAction* catmullclarkAction;
     QAction* kobbeltAction;
+    QAction* customSchemeAction;
     QAction* createCustomSchemeAction;
 
     QActionGroup * objectGroup;
