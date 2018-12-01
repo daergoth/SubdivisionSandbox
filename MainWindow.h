@@ -10,6 +10,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QMovie>
+#include <qtconcurrentrun.h>
+#include <QThread>
 
 #include "ui_mainwindow.h"
 

@@ -6,7 +6,7 @@ LoopSubdivisionStrategy::LoopSubdivisionStrategy()
 }
 
 Mesh LoopSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
-    Polyhedron initialMesh = evenMesh.convertToSurfaceMesh();
+    Polyhedron initialMesh = evenMesh.convertToSurfaceMesh(true);
 
     CGAL::Subdivision_method_3::Loop_subdivision(initialMesh, 1);
 

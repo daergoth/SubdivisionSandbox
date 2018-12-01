@@ -16,10 +16,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     vBoxSubdivControls = new QVBoxLayout();
 
+    int subdivControlsWidth = 200;
+
     label = new QLabel();
-    label->setFixedHeight(this->height()*0.3);
-    int labelWidth = 200;
-    label->setFixedWidth(labelWidth);
+    label->setFixedHeight(300);
+    label->setFixedWidth(subdivControlsWidth);
     label->setAlignment(Qt::AlignCenter);
 
     subdivisionButton = new QPushButton("Subdivision");
@@ -34,9 +35,11 @@ MainWindow::MainWindow(QWidget *parent) :
     hBoxButtons->addWidget(revertButton);
 
     spinnerLabel = new QLabel();
+    spinnerLabel->setFixedWidth(subdivControlsWidth);
+    spinnerLabel->setFixedHeight(subdivControlsWidth);
     spinnerMovie = new QMovie(":/spinner.gif");
+    spinnerMovie->setScaledSize(spinnerLabel->sizeHint());
     spinnerLabel->setMovie(spinnerMovie);
-    spinnerMovie->start();
     spinnerLabel->hide();
     spinnerLabel->setAlignment(Qt::AlignCenter);
 
@@ -46,17 +49,18 @@ MainWindow::MainWindow(QWidget *parent) :
     vBoxSubdivControls->addStretch(1);
 
     openglWidget = new MainOpenGLWidget(this);
-    openglWidget->setFixedWidth(this->width()-labelWidth);
+    openglWidget->setFixedWidth(this->width()-subdivControlsWidth);
     openglWidget->setFixedHeight(this->height());
 
     mainLayout->addLayout(vBoxSubdivControls);
     mainLayout->addWidget(openglWidget);
     widget->setLayout(mainLayout);
 
+    //Default: Loop Subdivision
     setLabelSubdivision("Loop Subdivision");
 
     SubdivisionController& sc = SubdivisionController::getInstance();
-    sc.setBaseMesh(Mesh::makeCube());
+    sc.setBaseMesh(Mesh::makeCube(false));
     sc.switchTo(SubdivisionScheme::Loop);
 }
 
@@ -76,6 +80,7 @@ void MainWindow::onTriggered_LoopSubdiv()
 
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::Loop);
+    openglWidget->update();
 }
 
 void MainWindow::onTriggered_ButterflySubdiv()
@@ -84,6 +89,7 @@ void MainWindow::onTriggered_ButterflySubdiv()
 
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::Butterfly);
+    openglWidget->update();
 }
 
 void MainWindow::onTriggered_CatmullClarkSubdiv()
@@ -93,6 +99,7 @@ void MainWindow::onTriggered_CatmullClarkSubdiv()
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::CatmullClark);
 
+    openglWidget->update();
 }
 
 void MainWindow::onTriggered_KobbeltSubdiv()
@@ -101,6 +108,7 @@ void MainWindow::onTriggered_KobbeltSubdiv()
 
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::Kobbelt);
+    openglWidget->update();
 }
 
 void MainWindow::onTriggered_CustomSchemeSubdiv()
@@ -124,7 +132,7 @@ void MainWindow::onTriggered_CreateCustomScheme()
 void MainWindow::onTriggered_CubeObject()
 {
     SubdivisionController& sc = SubdivisionController::getInstance();
-    sc.setBaseMesh(Mesh::makeCube());
+    sc.setBaseMesh(Mesh::makeCube(true));
     openglWidget->update();
 }
 
@@ -151,7 +159,7 @@ void MainWindow::onTriggered_OpenObjFile()
             std::cout << "Mesh load failed!: " << fileName << std::endl;
             assert(0 == 0);
         }
-                */
+    */
 
     openglWidget->update();
 }
@@ -191,7 +199,6 @@ void MainWindow::on_actionAbout_triggered()
 {
 
 }
-
 
 void MainWindow::createActions()
 {
@@ -262,18 +269,25 @@ void MainWindow::createMenus()
 
 void MainWindow::doSubdivision()
 {
-    spinnerMovie->start();
     spinnerLabel->show();
+    spinnerMovie->start();
+
+    subdivisionButton->setDisabled(true);
+    revertButton->setDisabled(true);
 
     SubdivisionController& sc = SubdivisionController::getInstance();
-    sc.doSubdivision();
-    openglWidget->update();
+    QFuture<void> f = QtConcurrent::run(&sc,&SubdivisionController::doSubdivision);
 
+    while(f.isRunning()){
+         QCoreApplication::processEvents();
+    }
+
+    subdivisionButton->setDisabled(false);
+    revertButton->setDisabled(false);
+
+    openglWidget->update();
     spinnerMovie->stop();
     spinnerLabel->hide();
-    printf("Subdivision done\n");
-
-    revertButton->setDisabled(false);
 }
 
 void MainWindow::revertSubdivision()
@@ -281,7 +295,6 @@ void MainWindow::revertSubdivision()
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.doBackwardStep();
     openglWidget->update();
-    printf("Revert done\n");
 
     revertButton->setDisabled(!sc.canDoBackwardStep());
 }
