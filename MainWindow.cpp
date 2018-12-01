@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     widget->setLayout(layout);
 
     SubdivisionController& sc = SubdivisionController::getInstance();
-    sc.setBaseMesh(Mesh::makeCube(true));
+    sc.setBaseMesh(Mesh::makeCube(false));
     sc.switchTo(SubdivisionScheme::Loop);
 }
 
@@ -57,6 +57,11 @@ void MainWindow::onTriggered_ButterflySubdiv()
 
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::Butterfly);
+    sc.doSubdivision();
+    //sc.doSubdivision();
+    //sc.doSubdivision();
+    //sc.doSubdivision();
+    //sc.doSubdivision();
     openglWidget->update();
 }
 
@@ -66,7 +71,7 @@ void MainWindow::onTriggered_CatmullClarkSubdiv()
 
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::CatmullClark);
-    sc.doSubdivision();
+    //sc.doSubdivision();
     openglWidget->update();
 }
 
@@ -76,6 +81,8 @@ void MainWindow::onTriggered_KobbeltSubdiv()
 
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::Kobbelt);
+    //sc.doSubdivision();
+    //sc.doSubdivision();
     openglWidget->update();
 }
 
@@ -118,7 +125,7 @@ void MainWindow::onTriggered_OpenObjFile()
             std::cout << "Mesh load failed!: " << fileName << std::endl;
             assert(0 == 0);
         }
-                */
+    */
 
     openglWidget->update();
 }
