@@ -7,7 +7,6 @@ Mesh CustomSchemeSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
     std::map<Polyhedron::Facet_iterator, Mesh::Vertex> new_face_vertices;
 
     // kiszámol új edge vertices
-
     for (Polyhedron::Halfedge_iterator it = old_mesh.halfedges_begin(); it != old_mesh.halfedges_end(); ++it) {
         if (new_edge_vertices.find(it) == new_edge_vertices.end()) {
             Mesh::Vertex new_edge_vert = calculateNewEdgeVert(it);
@@ -15,7 +14,6 @@ Mesh CustomSchemeSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
             new_edge_vertices[it->opposite()] = new_edge_vert;
         }
     }
-
 
     // kiszámol új face vertices, csak ha QUAD
     if (custom_scheme.mesh_type == CustomSchemeMeshType::Quad) {
@@ -43,7 +41,7 @@ Mesh CustomSchemeSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
         if (custom_scheme.mesh_type == CustomSchemeMeshType::Tri) {
             calculateFacesTri(vertices, face_indicies, new_edge_vertices, new_even_vertices, it, edge_map, even_map);
         } else {
-            calculateFacesQuad(vertices, face_indicies, new_edge_vertices, new_face_vertices, new_even_vertices, it);
+            calculateFacesQuad(vertices, face_indicies, new_edge_vertices, new_face_vertices, new_even_vertices, it, edge_map, even_map);
         }
     }
 
@@ -62,6 +60,15 @@ Mesh::Vertex CustomSchemeSubdivisionStrategy::calculateNewEdgeVert(Polyhedron::H
     // generate weight array
     WeightArrayGenerator& wag = WeightArrayGenerator::getInstance();
     std::array<float, 16> weights = wag.generateWeights(custom_scheme, MeshWalkHandler::OddsType::Edge);
+
+    /*
+    std::cout << "Odds_num: " << walk.n_odds << std::endl;
+    std::cout << "Weight array" << std::endl;
+    for(float f : weights) {
+        std::cout << f << std::endl;
+    }
+    std::cout << std::endl;
+    */
 
     // do multiply
     QVector3D result;
@@ -107,11 +114,14 @@ Mesh::Vertex CustomSchemeSubdivisionStrategy::calculateNewEvenVert(Polyhedron::V
     WeightArrayGenerator& wag = WeightArrayGenerator::getInstance();
     std::vector<float> weights = wag.generateEvenWeights(custom_scheme, walk.n_evens - 1);
 
-    std::cout << walk.n_evens << std::endl;
+    /*
+    std::cout << "Evens_num: " << walk.n_evens << std::endl;
+    std::cout << "Weight array" << std::endl;
     for(float f : weights) {
-        //std::cout << f << std::endl;
+        std::cout << f << std::endl;
     }
     std::cout << std::endl;
+    */
 
     // do multiply
     QVector3D result;
@@ -195,43 +205,70 @@ void CustomSchemeSubdivisionStrategy::calculateFacesQuad(QVector<Mesh::Vertex>& 
                                                          std::map<Polyhedron::Halfedge_iterator, Mesh::Vertex>& new_edge_vertices,
                                                          std::map<Polyhedron::Facet_iterator, Mesh::Vertex>& new_face_vertices,
                                                          std::map<Polyhedron::Vertex_iterator, Mesh::Vertex>& new_even_vertices,
-                                                         Polyhedron::Facet_iterator it) {
-    int start_index = vertices.size();
+                                                         Polyhedron::Facet_iterator it,
+                                                         std::map<Polyhedron::Halfedge_iterator, int>& edge_map,
+                                                         std::map<Polyhedron::Vertex_iterator, int>& even_map) {
+    std::vector<int> new_face_indices;
 
     Polyhedron::Halfedge_iterator c = it->halfedge();
     do {
-        vertices.push_back(new_edge_vertices[c]);
+        auto edge_map_it = edge_map.find(c);
+        if ( edge_map_it == edge_map.end()) {
+            int new_vert_index = vertices.size();
+            vertices.push_back(new_edge_vertices[c]);
 
-        Mesh::Vertex v =
-                custom_scheme.refinement_type == CustomSchemeRefinementType::Approx
-                ? new_even_vertices[c->vertex()]
-                : Mesh::toVertex(c->vertex()->point());
-        vertices.push_back(v);
+            edge_map[c] = new_vert_index;
+            edge_map[c->opposite()] = new_vert_index;
+
+            new_face_indices.push_back(new_vert_index);
+        } else {
+            new_face_indices.push_back(edge_map_it->second);
+        }
+
+        auto even_map_it = even_map.find(c->vertex());
+        if (even_map_it == even_map.end()) {
+            int new_even_index = vertices.size();
+
+            Mesh::Vertex v =
+                    custom_scheme.refinement_type == CustomSchemeRefinementType::Approx
+                    ? new_even_vertices[c->vertex()]
+                    : Mesh::toVertex(c->vertex()->point());
+
+            vertices.push_back(v);
+
+            even_map[c->vertex()] = new_even_index;
+
+            new_face_indices.push_back(new_even_index);
+        } else {
+            new_face_indices.push_back(even_map_it->second);
+        }
+
         c = c->next();
 
     } while(c != it->halfedge());
 
+    int new_face_vert_index = vertices.size();
     vertices.push_back(new_face_vertices[it]);
 
-    face_indicies.push_back(start_index);
-    face_indicies.push_back(start_index + 1);
-    face_indicies.push_back(start_index + 2);
-    face_indicies.push_back(start_index + 8);
+    face_indicies.push_back(new_face_indices[0]);
+    face_indicies.push_back(new_face_indices[1]);
+    face_indicies.push_back(new_face_indices[2]);
+    face_indicies.push_back(new_face_vert_index);
 
-    face_indicies.push_back(start_index + 8);
-    face_indicies.push_back(start_index + 2);
-    face_indicies.push_back(start_index + 3);
-    face_indicies.push_back(start_index + 4);
+    face_indicies.push_back(new_face_vert_index);
+    face_indicies.push_back(new_face_indices[2]);
+    face_indicies.push_back(new_face_indices[3]);
+    face_indicies.push_back(new_face_indices[4]);
 
-    face_indicies.push_back(start_index + 6);
-    face_indicies.push_back(start_index + 8);
-    face_indicies.push_back(start_index + 4);
-    face_indicies.push_back(start_index + 5);
+    face_indicies.push_back(new_face_indices[6]);
+    face_indicies.push_back(new_face_vert_index);
+    face_indicies.push_back(new_face_indices[4]);
+    face_indicies.push_back(new_face_indices[5]);
 
-    face_indicies.push_back(start_index + 7);
-    face_indicies.push_back(start_index);
-    face_indicies.push_back(start_index + 8);
-    face_indicies.push_back(start_index + 6);
+    face_indicies.push_back(new_face_indices[7]);
+    face_indicies.push_back(new_face_indices[0]);
+    face_indicies.push_back(new_face_vert_index);
+    face_indicies.push_back(new_face_indices[6]);
 }
 
 void CustomSchemeSubdivisionStrategy::setCustomScheme(CustomScheme custom_scheme) {

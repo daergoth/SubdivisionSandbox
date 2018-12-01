@@ -103,18 +103,18 @@ public:
 private:
     MeshWalkHandler() {}
 
-    std::array<K::Point_3, 16> triOddVerticesOneNeighbour(Polyhedron::Halfedge_iterator halfedge);
-    std::array<K::Point_3, 16> triOddVerticesTwoNeighbour(Polyhedron::Halfedge_iterator halfedge);
+    int triOddVerticesOneNeighbour(std::array<K::Point_3, 16>& vertices, Polyhedron::Halfedge_iterator halfedge);
+    int triOddVerticesTwoNeighbour(std::array<K::Point_3, 16>& vertices, Polyhedron::Halfedge_iterator halfedge);
     inline Polyhedron::Halfedge_iterator secondNeighbourTriHelper(std::array<K::Point_3, 16>& vertices, int index, Polyhedron::Halfedge_iterator halfedge);
 
-    std::array<K::Point_3, 16> quadOddVerticesOneNeighbour(Polyhedron::Halfedge_iterator halfedge, OddsType odds_type);
-    std::array<K::Point_3, 16> quadOddVerticesTwoNeighbour(Polyhedron::Halfedge_iterator halfedge, OddsType odds_type);
+    int quadOddVerticesOneNeighbour(std::array<K::Point_3, 16>& vertices, Polyhedron::Halfedge_iterator halfedge, OddsType odds_type);
+    int quadOddVerticesTwoNeighbour(std::array<K::Point_3, 16>& vertices, Polyhedron::Halfedge_iterator halfedge, OddsType odds_type);
 
-    inline std::array<K::Point_3, 16> quadFaceOddTwo(Polyhedron::Halfedge_iterator halfedge);
+    inline int quadFaceOddTwo(std::array<K::Point_3, 16>& vertices, Polyhedron::Halfedge_iterator halfedge);
     inline Polyhedron::Halfedge_iterator quadFaceOddTwoCornerHelper(Polyhedron::Halfedge_iterator halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies);
     inline Polyhedron::Halfedge_iterator quadFaceOddTwoSideHelper(Polyhedron::Halfedge_iterator halfedge, std::array<K::Point_3, 16>& vertices, std::pair<int, int> indicies);
 
-    inline std::array<K::Point_3, 16> quadEdgeOddTwo(Polyhedron::Halfedge_iterator halfedge);
+    inline int quadEdgeOddTwo(std::array<K::Point_3, 16>& vertices, Polyhedron::Halfedge_iterator halfedge);
     inline Polyhedron::Halfedge_iterator quadEdgeOddTwoStraightHelper(Polyhedron::Halfedge_iterator halfedge);
 
     std::vector<K::Point_3> triEvenVertices(Polyhedron::Halfedge_iterator halfedge);

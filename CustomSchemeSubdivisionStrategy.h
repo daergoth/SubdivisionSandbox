@@ -40,7 +40,9 @@ private:
             std::map<Polyhedron::Halfedge_iterator, Mesh::Vertex>& new_edge_vertices,
             std::map<Polyhedron::Facet_iterator, Mesh::Vertex>& new_face_vertices,
             std::map<Polyhedron::Vertex_iterator, Mesh::Vertex>& new_even_vertices,
-            Polyhedron::Facet_iterator it);
+            Polyhedron::Facet_iterator it,
+            std::map<Polyhedron::Halfedge_iterator, int>& edge_map,
+            std::map<Polyhedron::Vertex_iterator, int>& even_map);
 };
 
 #endif // CUSTOMSCHEMESUBDIVISIONSTRATEGY_H

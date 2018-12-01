@@ -48,13 +48,23 @@ void SubdivisionController::doSubdivision() {
         ++currentMeshIndex;
     } else {
         if (currentStrategy != nullptr) {
+
+            /*
             std::cout << "Old mesh faceNum: " << (meshHistory[currentMeshIndex].m_indices.size() / 3) << std::endl;
-                      //<< "Face indicies: " << meshHistory[currentMeshIndex].m_indices << std::endl;
+            std::cout << "Face indicies: " << meshHistory[currentMeshIndex].m_indices << std::endl;
+            std::cout << "Vertices:" << meshHistory[currentMeshIndex].m_vertices << std::endl;
+            */
+
             Mesh oddMesh = currentStrategy->doSubdivision(meshHistory[currentMeshIndex]);
             meshHistory.push_back(oddMesh);
             ++currentMeshIndex;
+
+            /*
             std::cout << "New mesh faceNum: " << (oddMesh.m_indices.size() / 3) << std::endl;
-                      //<< "Face incides: " << oddMesh.m_indices << std::endl;
+            std::cout << "Face incides: " << oddMesh.m_indices << std::endl;
+            std::cout << "Vertices:" << oddMesh.m_vertices << std::endl;
+            */
+
         } else {
             throw std::exception("Invalid scheme switch (possibly custom scheme has no weights)!");
         }

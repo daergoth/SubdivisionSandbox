@@ -1,0 +1,22 @@
+{
+    "name": "Custom Loop Subdivision",
+    "meshtype": 0,
+    "neighbourlevel": 1,
+    "refinementtype": 0,
+    "weights": {
+        "even": {
+            "alfa": 0.625,
+            "beta": 0
+        },
+        "odd": [
+            {
+                "level": 0,
+                "value": 0.375
+            },
+            {
+                "level": 1,
+                "value": 0.125
+            }
+        ]
+    }
+}
