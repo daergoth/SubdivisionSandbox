@@ -5,5 +5,11 @@
     </qresource>
     <qresource prefix="/">
         <file>spinner.gif</file>
+        <file>even_quad.png</file>
+        <file>even_tri.png</file>
+        <file>odd_quad_1.png</file>
+        <file>odd_quad_2.png</file>
+        <file>odd_tri_1.png</file>
+        <file>odd_tri_2.png</file>
     </qresource>
 </RCC>

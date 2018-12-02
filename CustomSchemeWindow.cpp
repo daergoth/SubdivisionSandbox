@@ -6,9 +6,14 @@ CustomSchemeWindow::CustomSchemeWindow(QWidget *parent) :
     this->setFixedSize(parent->size()*0.8);
     createActions();
 
-    QLabel* labelLeft = new QLabel("Drawing of the fixed mesh");
-    labelLeft->setFixedWidth(500);
-    labelLeft->setFixedHeight(this->height());
+    labelOddPng = new QLabel();
+    labelEvenPng = new QLabel();
+    labelOddPng->setAlignment(Qt::AlignCenter);
+    labelEvenPng->setAlignment(Qt::AlignCenter);
+
+    QVBoxLayout* vBoxPng = new QVBoxLayout();
+    vBoxPng->addWidget(labelOddPng);
+    vBoxPng->addWidget(labelEvenPng);
 
     sidebarVBox = new QVBoxLayout();
 
@@ -101,6 +106,7 @@ CustomSchemeWindow::CustomSchemeWindow(QWidget *parent) :
     sidebarVBox->addWidget(groupBoxShapes);
     sidebarVBox->addWidget(groupBoxNeighbours);
 
+    std::cout<<"WTF"<<std::endl;
     updateWeightsLayout();
 
     sidebarVBox->addLayout(vBoxWeights);
@@ -108,7 +114,7 @@ CustomSchemeWindow::CustomSchemeWindow(QWidget *parent) :
     sidebarVBox->addLayout(hboxButtons);
 
     QHBoxLayout *mainlayout = new QHBoxLayout(this);
-    mainlayout->addWidget(labelLeft);
+    mainlayout->addLayout(vBoxPng);
     mainlayout->addLayout(sidebarVBox);
 
 
@@ -228,17 +234,25 @@ void CustomSchemeWindow::updateWeightsLayout()
             if(firstnRB->isChecked()){
                 mapLineEditsDisabled[leOdd0] = false;
                 mapLineEditsDisabled[leEven0] = false;
+                updatePng(labelOddPng,":/odd_tri_1.png");
+                updatePng(labelEvenPng,":/even_tri.png");
             }else{
                 mapLineEditsDisabled[leOdd0] = false;
                 mapLineEditsDisabled[leOdd1] = false;
                 mapLineEditsDisabled[leEven0] = false;
+                updatePng(labelOddPng,":/odd_tri_2.png");
+                updatePng(labelEvenPng,":/even_tri.png");
             }
         }else{
             if(firstnRB->isChecked()){
                 mapLineEditsDisabled[leOdd0] = false;
+                updatePng(labelOddPng,":/odd_tri_1.png");
+                labelEvenPng->clear();
             }else{
                 mapLineEditsDisabled[leOdd0] = false;
                 mapLineEditsDisabled[leOdd1] = false;
+                updatePng(labelOddPng,":/odd_tri_2.png");
+                labelEvenPng->clear();
             }
         }
     }else{
@@ -247,20 +261,28 @@ void CustomSchemeWindow::updateWeightsLayout()
                 mapLineEditsDisabled[leOdd0] = false;
                 mapLineEditsDisabled[leEven0] = false;
                 mapLineEditsDisabled[leEven1] = false;
+                updatePng(labelOddPng,":/odd_quad_1.png");
+                updatePng(labelEvenPng,":/even_quad.png");
             }else{
                 mapLineEditsDisabled[leFace0] = false;
                 mapLineEditsDisabled[leFace1] = false;
                 mapLineEditsDisabled[leOdd0] = false;
                 mapLineEditsDisabled[leEven0] = false;
                 mapLineEditsDisabled[leEven1] = false;
+                updatePng(labelOddPng,":/odd_quad_2.png");
+                updatePng(labelEvenPng,":/even_quad.png");
             }
         }else{
             if(firstnRB->isChecked()){
                 mapLineEditsDisabled[leOdd0] = false;
+                updatePng(labelOddPng,":/odd_quad_1.png");
+                labelEvenPng->clear();
             }else{
                 mapLineEditsDisabled[leFace0] = false;
                 mapLineEditsDisabled[leFace1] = false;
                 mapLineEditsDisabled[leOdd0] = false;
+                updatePng(labelOddPng,":/odd_quad_2.png");
+                labelEvenPng->clear();
             }
         }
     }
@@ -274,6 +296,16 @@ void CustomSchemeWindow::updateLineEditsDisableSetting(){
             item.first->clear();
         }
     }
+}
+
+void CustomSchemeWindow::updatePng(QLabel* label, const QString png){
+    int height = 264;
+    int width = 296;
+    label->setFixedWidth(500);
+    label->setFixedHeight(height);
+    QPixmap mypix(png);
+    mypix = mypix.scaled(width, height);
+    label->setPixmap(mypix);
 }
 
 void CustomSchemeWindow::setWeightGroupBoxes(){
@@ -327,12 +359,28 @@ void CustomSchemeWindow::setWeightGroupBoxes(){
     leEven0->setFixedWidth(lineEditWith);
     leEven1->setFixedWidth(lineEditWith);
 
-    hboxFace0->addWidget(new QLabel("Weight 0:"));
-    hboxFace1->addWidget(new QLabel("Weight 1:"));
-    hboxOdd0->addWidget(new QLabel("Weight 0:"));
-    hboxOdd1->addWidget(new QLabel("Weight 1:"));
-    hboxEven0->addWidget(new QLabel("Weight 0:"));
-    hboxEven1->addWidget(new QLabel("Weight 1:"));
+    QLabel* lFace0 = new QLabel(" Weight 0 ");
+    QLabel* lFace1 = new QLabel(" Weight 1 ");
+    QLabel* lOdd0 = new QLabel(" Weight 0 ");
+    QLabel* lOdd1 = new QLabel(" Weight 1 ");
+    QLabel* lEven0 = new QLabel(" Weight 0 ");
+    QLabel* lEven1 = new QLabel(" Weight 1 ");
+
+    lFace0->setStyleSheet("QLabel { background-color : blue; color : white; }");
+    lFace1->setStyleSheet("QLabel { background-color : green; color : white; }");
+
+    lOdd0->setStyleSheet("QLabel { background-color : blue; color : white; }");
+    lOdd1->setStyleSheet("QLabel { background-color : green; color : white; }");
+
+    lEven0->setStyleSheet("QLabel { background-color : blue; color : white; }");
+    lEven1->setStyleSheet("QLabel { background-color : green; color : white; }");
+
+    hboxFace0->addWidget(lFace0);
+    hboxFace1->addWidget(lFace1);
+    hboxOdd0->addWidget(lOdd0);
+    hboxOdd1->addWidget(lOdd1);
+    hboxEven0->addWidget(lEven0);
+    hboxEven1->addWidget(lEven1);
 
     hboxFace0->addWidget(leFace0);
     hboxFace1->addWidget(leFace1);

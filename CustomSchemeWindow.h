@@ -48,16 +48,20 @@ private:
     void updateWeightsLayout();
     void updateLineEditsDisableSetting();
     void setWeightGroupBoxes();
+    void updatePng(QLabel* label, const QString png);
 
-    QActionGroup * schemeTypesGroup;
+    QLabel* labelOddPng;
+    QLabel* labelEvenPng;
+
+    QActionGroup* schemeTypesGroup;
     QAction* approxAction;
     QAction* interpolAction;
 
-    QActionGroup * shapeGroup;
+    QActionGroup* shapeGroup;
     QAction* triAction;
     QAction* quadAction;
 
-    QActionGroup * neighbourGroup;
+    QActionGroup* neighbourGroup;
     QAction* firstNeighbourAction;
     QAction* secondNeighbourAction;
 
