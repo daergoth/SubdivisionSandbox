@@ -73,6 +73,8 @@ public:
      */
     Polyhedron convertToSurfaceMesh(bool triangulate = false);
 
+    void joinIdenticalVertices(float epsilon = 0.01f);
+
     QVector<Vertex> m_vertices;
     QVector<int> m_indicesOriginal;
     QVector<int> m_indicesTriangulated;
