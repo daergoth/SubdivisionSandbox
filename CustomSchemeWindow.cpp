@@ -1,11 +1,8 @@
 #include "CustomSchemeWindow.h"
 
 CustomSchemeWindow::CustomSchemeWindow(QWidget *parent) :
-    QMainWindow(parent)
+    QDialog(parent)
 {
-    QWidget *widget = new QWidget;
-    setCentralWidget(widget);
-
     this->setFixedSize(parent->size()*0.8);
     createActions();
 
@@ -115,7 +112,7 @@ CustomSchemeWindow::CustomSchemeWindow(QWidget *parent) :
     mainlayout->addLayout(sidebarVBox);
 
 
-    widget->setLayout(mainlayout);
+    setLayout(mainlayout);
 }
 
 CustomSchemeWindow::~CustomSchemeWindow()
@@ -167,53 +164,54 @@ void CustomSchemeWindow::onTriggered_okButton()
 
     custom_scheme.name = leSchemeName->text().toStdString();
 
+    QLocale locale;
+    locale.setDefault(QLocale::Hungarian);
+    locale.setNumberOptions(QLocale::OmitGroupSeparator);
+
     std::vector<OddWeight> odds;
 
     if(!leFace0->text().isEmpty()){
-        OddWeight* odd = new OddWeight(0,CustomSchemeOddWeightType::Face,leFace0->text().toDouble());
-        odds.push_back(*odd);
+        OddWeight odd(0, CustomSchemeOddWeightType::Face, locale.toDouble(leFace0->text(), nullptr));
+        odds.push_back(odd);
     }
     if(!leFace1->text().isEmpty()){
-        OddWeight* odd = new OddWeight(1,CustomSchemeOddWeightType::Face,leFace1->text().toDouble());
-        odds.push_back(*odd);
+        OddWeight odd(1, CustomSchemeOddWeightType::Face, locale.toDouble(leFace1->text()));
+        odds.push_back(odd);
     }
     if(!leOdd0->text().isEmpty()){
-        OddWeight* odd = new OddWeight(0,CustomSchemeOddWeightType::Edge,leOdd0->text().toDouble());
-        odds.push_back(*odd);
+        OddWeight odd(0, CustomSchemeOddWeightType::Edge, locale.toDouble(leOdd0->text()));
+        odds.push_back(odd);
     }
     if(!leOdd1->text().isEmpty()){
-        OddWeight* odd = new OddWeight(1,CustomSchemeOddWeightType::Edge,leOdd1->text().toDouble());
-        odds.push_back(*odd);
+        OddWeight odd(1, CustomSchemeOddWeightType::Edge, locale.toDouble(leOdd1->text()));
+        odds.push_back(odd);
     }
 
     EvenWeights even{};
 
     if(!leEven0->text().isEmpty()){
-        even.alfa = leEven0->text().toDouble();
+        even.alfa = locale.toDouble(leEven0->text());
     }else{
         even.alfa = 0;
     }
 
     if(!leEven1->text().isEmpty()){
-        even.beta = leEven1->text().toDouble();
+        even.beta = locale.toDouble(leEven1->text());
     }else{
         even.beta = 0;
     }
 
-    custom_scheme.weights = {odds, even};
+    custom_scheme.weights = Weights{odds, even};
 
     CustomSchemeHandler& csh = CustomSchemeHandler::getInstance();
     csh.setCurrentCustomScheme(custom_scheme);
 
-    SubdivisionController& sc = SubdivisionController::getInstance();
-    sc.switchTo(SubdivisionScheme::Custom);
-
-    this->hide();
+    this->accept();
 }
 
 void CustomSchemeWindow::onTriggered_cancelButton()
 {
-    this->hide();
+    this->reject();
 }
 
 void CustomSchemeWindow::updateWeightsLayout()

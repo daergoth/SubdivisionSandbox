@@ -23,7 +23,7 @@
 class QAction;
 class QActionGroup;
 
-class CustomSchemeWindow : public QMainWindow
+class CustomSchemeWindow : public QDialog
 {
     Q_OBJECT
 
