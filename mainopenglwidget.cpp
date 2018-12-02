@@ -24,7 +24,7 @@ MainOpenGLWidget::MainOpenGLWidget(QWidget *parent) : QOpenGLWidget(parent)
 void MainOpenGLWidget::update()
 {
     m_projection.setToIdentity();
-    m_projection.perspective(60.0f, m_width / float(m_height), 0.01f, 100.0f);
+    m_projection.perspective(60.0f, m_width / float(m_height), 0.01f, 10000.0f);
     m_view.setToIdentity();
     m_view.lookAt(m_eye, m_eye+m_forward, QVector3D(0,1,0));
 
@@ -173,7 +173,7 @@ void MainOpenGLWidget::wheelEvent(QWheelEvent* event)
 {
     static const float s_zoomScale = 1.0f / 100.0f;
 
-    float scale = qMax(0.2f, (1.0f + m_eye.length()) / 100.0f);
+    float scale = qMax(0.2f, (1.0f + m_eye.length()) / 20.0f);
     m_eye += (s_zoomScale * event->delta()) * scale * m_forward;
 
     update();

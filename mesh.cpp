@@ -337,3 +337,48 @@ Polyhedron Mesh::convertToSurfaceMesh(bool triangulate)
     return resultMesh;
 }
 
+void Mesh::joinIdenticalVertices(float epsilon)
+{
+    QVector<Mesh::Vertex> uniqueVertices;
+    QMap<int, int> mapIndices;
+
+    for (int i = 0; i < m_vertices.size(); ++i)
+    {
+        if (std::count(m_indicesOriginal.begin(), m_indicesOriginal.end(), i) == 0)
+        {
+            continue;
+        }
+
+        int foundIndex = -1;
+        for (int j = 0; j < uniqueVertices.size(); ++j)
+        {
+            float dist = m_vertices[i].m_position.distanceToPoint(uniqueVertices[j].m_position);
+            if (dist <= epsilon)
+            {
+                foundIndex = j;
+                break;
+            }
+        }
+
+        if (foundIndex == -1)
+        {
+            uniqueVertices.push_back(m_vertices[i]);
+            mapIndices[i] = uniqueVertices.size() - 1;
+        }
+
+        else
+        {
+            mapIndices[i] = foundIndex;
+        }
+    }
+
+    auto newIndices = m_indicesOriginal;
+    for (int i = 0; i < m_indicesOriginal.size(); ++i)
+    {
+        newIndices[i] = mapIndices[m_indicesOriginal[i]];
+    }
+
+    m_indicesOriginal = newIndices;
+    m_vertices = uniqueVertices;
+}
+

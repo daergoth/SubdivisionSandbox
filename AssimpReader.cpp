@@ -39,9 +39,13 @@ Mesh AssimpReader::readObj(std::string fileName)
         aiFace f = aiMesh->mFaces[i];
         for(int  j = 0; j < f.mNumIndices; j++){
             unsigned int index = f.mIndices[j];
-            result.m_indices.push_back(index);
+            result.m_indicesOriginal.push_back(index);
         }
     }
+
+    result.m_numFaceVertices = 3;
+    result.joinIdenticalVertices();
+    result.generateIndices();
 
     return result;
 }
