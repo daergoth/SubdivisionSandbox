@@ -38,7 +38,7 @@ void to_json(json& j, const Weights& w) {
     j = json{{"odd", w.odd}, {"even", w.even}};
 }
 void from_json(const json& j, Weights& w) {
-    w.odd = j.at("odd");
+    //w.odd = j.at("odd");
     w.even = j.at("even");
 }
 std::ostream& operator<<(std::ostream& os, const Weights& w) {

@@ -60,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setLabelSubdivision("Loop Subdivision");
 
     SubdivisionController& sc = SubdivisionController::getInstance();
-    sc.setBaseMesh(Mesh::makeCube(false));
+    sc.setBaseMesh(Mesh::makeCube(true));
     sc.switchTo(SubdivisionScheme::Loop);
 }
 
