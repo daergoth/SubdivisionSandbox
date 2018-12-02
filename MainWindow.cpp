@@ -139,7 +139,9 @@ void MainWindow::onTriggered_CubeObject()
 void MainWindow::onTriggered_TetrahedronObject()
 {
     SubdivisionController& sc = SubdivisionController::getInstance();
-    sc.setBaseMesh(Mesh::makeTetrahedron());
+    Mesh tetrahedron = Mesh::makeTetrahedron();
+    tetrahedron.generateIndices(false);
+    sc.setBaseMesh(tetrahedron);
     openglWidget->update();
 }
 
