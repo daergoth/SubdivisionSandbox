@@ -126,7 +126,19 @@ void MainWindow::onTriggered_CreateCustomScheme()
     // TODO: implement integration of SubdivisionController, CustomSchemeHandler and creation UI
 
     customSchemeWindow = new CustomSchemeWindow(this);
-    customSchemeWindow->show();
+    int result = customSchemeWindow->exec();
+
+    std::cout << "CustomScheme Dialog Result: " << result << std::endl;
+
+    if (result == QDialog::Accepted) {
+        CustomSchemeHandler& csh = CustomSchemeHandler::getInstance();
+        CustomScheme scheme = *csh.getCurrentCustomScheme();
+
+        if (!customSchemeActionInserted) {
+            schemesMenu->insertAction(createCustomSchemeAction, customSchemeAction);
+        }
+        customSchemeAction->setText(tr(scheme.name.c_str()));
+    }
 }
 
 void MainWindow::onTriggered_CubeObject()
@@ -139,7 +151,9 @@ void MainWindow::onTriggered_CubeObject()
 void MainWindow::onTriggered_TetrahedronObject()
 {
     SubdivisionController& sc = SubdivisionController::getInstance();
-    sc.setBaseMesh(Mesh::makeTetrahedron());
+    Mesh tetrahedron = Mesh::makeTetrahedron();
+    tetrahedron.generateIndices(false);
+    sc.setBaseMesh(tetrahedron);
     openglWidget->update();
 }
 
@@ -167,7 +181,11 @@ void MainWindow::on_actionOpen_scheme_triggered()
         CustomSchemeHandler& csh = CustomSchemeHandler::getInstance();
         CustomScheme openedScheme = csh.openCustomScheme(filename);
         csh.setCurrentCustomScheme(openedScheme);
-        schemesMenu->addAction(customSchemeAction);
+        if (!customSchemeActionInserted) {
+            schemesMenu->insertAction(createCustomSchemeAction, customSchemeAction);
+        }
+
+        customSchemeAction->setText(tr(openedScheme.name.c_str()));
     }
 }
 

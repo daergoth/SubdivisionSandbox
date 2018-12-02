@@ -77,6 +77,7 @@ private:
     QAction* kobbeltAction;
     QAction* customSchemeAction;
     QAction* createCustomSchemeAction;
+    bool customSchemeActionInserted = false;
 
     QActionGroup * objectGroup;
     QAction* cubeObjectAction;

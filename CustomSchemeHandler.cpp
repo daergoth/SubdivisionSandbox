@@ -46,6 +46,7 @@ std::shared_ptr<CustomScheme> CustomSchemeHandler::getCurrentCustomScheme() {
 }
 
 void CustomSchemeHandler::setCurrentCustomScheme(CustomScheme custom_scheme) {
-    delete this->current_scheme.get();
+    current_scheme.reset();
+
     this->current_scheme = std::make_shared<CustomScheme>(custom_scheme);
 }

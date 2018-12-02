@@ -14,14 +14,16 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QVBoxLayout>
+#include <QDoubleValidator>
 
 #include "CustomSchemeHandler.h"
+#include "SubdivisionController.h"
 #include "CustomScheme.h"
 
 class QAction;
 class QActionGroup;
 
-class CustomSchemeWindow : public QMainWindow
+class CustomSchemeWindow : public QDialog
 {
     Q_OBJECT
 
@@ -38,30 +40,32 @@ private slots:
     void onTriggered_SecondNeighbours();
     void onTriggered_okButton();
     void onTriggered_cancelButton();
-    void updateWeightsLayout();
-    int getNumberOfWeights();
-    std::vector<QHBoxLayout*> getVectorOfLineEdits();
+    void onTextChange(const QString &text);
 
 private:
 
     void createActions();
+    void updateWeightsLayout();
+    void updateLineEditsDisableSetting();
+    void setWeightGroupBoxes();
+    void updatePng(QLabel* label, const QString png);
 
-    QActionGroup * schemeTypesGroup;
+    QLabel* labelOddPng;
+    QLabel* labelEvenPng;
+
+    QActionGroup* schemeTypesGroup;
     QAction* approxAction;
     QAction* interpolAction;
 
-    QActionGroup * shapeGroup;
+    QActionGroup* shapeGroup;
     QAction* triAction;
     QAction* quadAction;
 
-    QActionGroup * neighbourGroup;
+    QActionGroup* neighbourGroup;
     QAction* firstNeighbourAction;
     QAction* secondNeighbourAction;
 
     QVBoxLayout* sidebarVBox;
-    QVBoxLayout* vBoxWeights;
-    QWidget* container;
-    QLabel* labelWeightsTitle;
 
     QGroupBox* groupBoxTypes;
     QGroupBox* groupBoxShapes;
@@ -73,10 +77,28 @@ private:
     QRadioButton* firstnRB;
     QRadioButton* secondnRB;
 
+    QVBoxLayout* vBoxWeights;
+    QWidget* container;
+    QLabel* labelWeightsTitle;
+    QLineEdit* leSchemeName;
+
+    QGroupBox* groupBoxFaceWeights;
+    QGroupBox* groupBoxOddWeights;
+    QGroupBox* groupBoxEvenWeights;
+
+    std::map<QLineEdit*,bool> mapLineEditsDisabled;
+
+    QLineEdit* leFace0;
+    QLineEdit* leFace1;
+
+    QLineEdit* leOdd0;
+    QLineEdit* leOdd1;
+
+    QLineEdit* leEven0;
+    QLineEdit* leEven1;
+
     QPushButton* okButton;
     QPushButton* cancelButton;
-
-    std::vector<QLineEdit> lineEdits;
 };
 
 #endif // CUSTOMSCHEMEWINDOW_H
