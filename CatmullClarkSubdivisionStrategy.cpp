@@ -6,6 +6,11 @@ CatmullClarkSubdivisionStrategy::CatmullClarkSubdivisionStrategy()
 }
 
 Mesh CatmullClarkSubdivisionStrategy::doSubdivision(Mesh evenMesh){
-    //CGAL::Subdivision_method_3::CatmullClark_subdivision(evenMesh.convertToSurfaceMesh(), 2);
-    return evenMesh;
+    Polyhedron initialMesh = evenMesh.convertToSurfaceMesh(true);
+
+    CGAL::Subdivision_method_3::CatmullClark_subdivision(initialMesh, 1);
+
+    Mesh resultMesh = Mesh(initialMesh);
+
+    return resultMesh;
 }

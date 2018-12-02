@@ -71,6 +71,7 @@ void MainOpenGLWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     makeCurrent();
 
+    // Shader
     m_program -> bind();
     m_program -> setUniformValue(m_matrixUniform, m_projection * m_view);
 
@@ -81,19 +82,31 @@ void MainOpenGLWidget::paintGL()
     glEnableVertexAttribArray(m_posAttr);
     glEnableVertexAttribArray(m_colAttr);
 
+    // OGL állapot
     glEnable(GL_DEPTH_TEST);
 
+    // Kitöltött lapok
     m_program->setUniformValue(m_tintUniform, 1.0f,1.0f,1.0f,1.0f);
-    glDrawElements(GL_TRIANGLES, mesh.m_indices.size(), GL_UNSIGNED_INT, mesh.m_indices.data());
+    glEnable(GL_POLYGON_OFFSET_FILL);
+    glPolygonOffset(1.0f, 1.0f);
+    glDrawElements(GL_TRIANGLES, mesh.m_indicesTriangulated.size(), GL_UNSIGNED_INT, mesh.m_indicesTriangulated.data());
+    glDisable(GL_POLYGON_OFFSET_FILL);
 
+    // Körvonalak
+    m_program->setUniformValue(m_tintUniform, 0.0f,0.0f,0.0f,1.0f);
+    glLineWidth(2.0f);
+    glDrawElements(GL_LINES, mesh.m_indicesSilhouette.size(), GL_UNSIGNED_INT, mesh.m_indicesSilhouette.data());
+
+    /*
     m_program->setUniformValue(m_tintUniform, 0.0f,0.0f,0.0f,1.0f);
     glLineWidth(3.0f);
     f->glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glEnable(GL_POLYGON_OFFSET_FILL);
     glPolygonOffset(0.0f, -2.0f);
-    glDrawElements(GL_TRIANGLES, mesh.m_indices.size(), GL_UNSIGNED_INT, mesh.m_indices.data());
+    glDrawElements(GL_TRIANGLES, mesh.m_indicesTriangulated.size(), GL_UNSIGNED_INT, mesh.m_indicesTriangulated.data());
     f->glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glDisable(GL_POLYGON_OFFSET_FILL);
+    */
 
     glDisableVertexAttribArray(m_posAttr);
     glDisableVertexAttribArray(m_normalAttr);
@@ -129,8 +142,8 @@ void MainOpenGLWidget::mouseMoveEvent(QMouseEvent *event)
     // Rotate the camera
     if ((event->buttons() & Qt::LeftButton) != 0)
     {
-        static const float X_SCALE = 1.0f / 50.0f * qDegreesToRadians(180.0f);
-        static const float Y_SCALE = 1.0f / 50.0f * qDegreesToRadians(180.0f);
+        static const float X_SCALE = 1.0f / 30.0f * qDegreesToRadians(180.0f);
+        static const float Y_SCALE = 1.0f / 30.0f * qDegreesToRadians(180.0f);
 
         float scale = qMax(1.0f, (1.0f + m_eye.length()) / 1000.0f);
 
@@ -147,12 +160,23 @@ void MainOpenGLWidget::mouseMoveEvent(QMouseEvent *event)
     // Move the camera
     else if ((event->buttons() & Qt::RightButton) != 0)
     {
-        float scale = qMax(0.01f, (1.0f + m_eye.length()) / 3200.0f);
+        float scale = qMax(0.001f, (1.0f + m_eye.length()) / 1200.0f);
+
         m_eye += dx * scale * right;
         m_eye += dy * scale * up;
 
         update();
     }
+}
+
+void MainOpenGLWidget::wheelEvent(QWheelEvent* event)
+{
+    static const float s_zoomScale = 1.0f / 100.0f;
+
+    float scale = qMax(0.2f, (1.0f + m_eye.length()) / 100.0f);
+    m_eye += (s_zoomScale * event->delta()) * scale * m_forward;
+
+    update();
 }
 
 QSize MainOpenGLWidget::sizeHint() const

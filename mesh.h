@@ -13,7 +13,6 @@
 
 typedef CGAL::Simple_cartesian<double>                                    K;
 typedef CGAL::Polyhedron_3<K>                                             Polyhedron;
-//typedef CGAL::Surface_mesh<K::Point_3>    PolygonMesh;
 
 enum MeshType {Triangular, Quadrilateral};
 
@@ -33,33 +32,52 @@ public:
         QVector3D m_color;
     };
 
+    static K::Point_3 toKernelVector(QVector3D v);
+
+    static QVector3D toQVector(K::Point_3 v);
+
+    static Vertex toVertex(K::Point_3 v);
+    static Vertex toVertex(QVector3D v);
+
     /**
      * @brief Default üres konstruktor.
      */
-    Mesh();
+    Mesh(int p_numFaceVertices = 3);
 
     /**
      * @brief Implicit indexeket beállító konstruktor.
      */
-    Mesh(QVector<Vertex>const& p_vertices);
+    Mesh(QVector<Vertex>const& p_vertices, int p_numFaceVertices = 3);
 
     /**
      * @brief Csúcsokat és indexeket beállító konstruktor.
      */
-    Mesh(QVector<Vertex>const& p_vertices, QVector<int>const& p_indices);
+    Mesh(QVector<Vertex>const& p_vertices, QVector<int>const& p_indices, int p_numFaceVertices = 3);
 
+    /**
+     * @brief CGAL-ról Mesh-re konvertáló konstruktor.
+     */
     Mesh(Polyhedron surface_mesh);
 
     static Mesh makeTriangle();
-    static Mesh makeCube();
+    static Mesh makeCube(bool quads);
     static Mesh makeTetrahedron();
 
-    void generateIndices();
+    /**
+     * @brief Automatically generates indices for the vertices currently present in the mesh.
+     */
+    void generateIndices(bool regenerate = false);
 
-    Polyhedron convertToSurfaceMesh();
+    /**
+     * @brief Converts the mesh to a CGAL-compatible representation.
+     */
+    Polyhedron convertToSurfaceMesh(bool triangulate = false);
 
     QVector<Vertex> m_vertices;
-    QVector<int> m_indices;
+    QVector<int> m_indicesOriginal;
+    QVector<int> m_indicesTriangulated;
+    QVector<int> m_indicesSilhouette;
+    int m_numFaceVertices;
 };
 
 #endif // MESH_H

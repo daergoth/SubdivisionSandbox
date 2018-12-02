@@ -11,6 +11,10 @@
 #include "CatmullClarkSubdivisionStrategy.h"
 #include "KobbeltSubdivisionStrategy.h"
 #include "CustomSchemeSubdivisionStrategy.h"
+#include "CustomSchemeHandler.h"
+#include "mesh.h"
+
+#include "DebugHelper.h"
 
 enum SubdivisionScheme {Loop, Butterfly, CatmullClark, Kobbelt, Custom};
 

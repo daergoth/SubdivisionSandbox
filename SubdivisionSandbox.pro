@@ -40,7 +40,9 @@ SOURCES += \
     CustomSchemeHandler.cpp \
     MeshWalkHandler.cpp \
     CustomSchemeWindow.cpp \
-    AssimpReader.cpp
+    AssimpReader.cpp \
+    WeightArrayGenerator.cpp \
+    DebugHelper.cpp
 
 HEADERS += \
     CustomScheme.h \
@@ -57,7 +59,9 @@ HEADERS += \
     CustomSchemeSubdivisionStrategy.h \
     MeshWalkHandler.h \
     CustomSchemeWindow.h \
-    AssimpReader.h
+    AssimpReader.h \
+    WeightArrayGenerator.h \
+    DebugHelper.h
 
 FORMS += \
     MainWindow.ui \
