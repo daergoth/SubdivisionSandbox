@@ -80,11 +80,8 @@ Mesh SubdivisionController::getCurrentMesh() {
 }
 
 void SubdivisionController::setBaseMesh(Mesh baseMesh) {
-    if (meshHistory.size() > 0) {
-        meshHistory[0] = baseMesh;
-    } else {
-        meshHistory.push_back(baseMesh);
-    }
+    meshHistory.clear();
+    meshHistory.push_back(baseMesh);
     currentMeshIndex = 0;
 }
 

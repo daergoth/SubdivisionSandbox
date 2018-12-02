@@ -147,19 +147,13 @@ void MainWindow::onTriggered_OpenObjFile()
 {
     // show file chooser dialog
     QString qfileName = QFileDialog::getOpenFileName(this, tr("Open Obj"), "/home", tr("*.obj"));
-    //printf(qfileName.toUtf8().constData());
+
     std::string fileName = qfileName.toUtf8().constData();
-    /* Assimp::Importer importer;
-       const aiScene* scene = importer
-                .ReadFile(fileName.c_str(),
-                          aiProcess_Triangulate |
-                          aiProcess_GenSmoothNormals |
-                          aiProcess_FlipUVs);
-         if(!scene){
-            std::cout << "Mesh load failed!: " << fileName << std::endl;
-            assert(0 == 0);
-        }
-    */
+
+    Mesh mesh = AssimpReader::readObj(fileName);
+
+    SubdivisionController& sc = SubdivisionController::getInstance();
+    sc.setBaseMesh(mesh);
 
     openglWidget->update();
 }

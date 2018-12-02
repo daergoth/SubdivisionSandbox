@@ -18,6 +18,7 @@
 #include "MainOpenGLWidget.h"
 #include "SubdivisionController.h"
 #include "CustomSchemeHandler.h"
+#include "AssimpReader.h"
 #include "CustomSchemeWindow.h"
 
 class QAction;

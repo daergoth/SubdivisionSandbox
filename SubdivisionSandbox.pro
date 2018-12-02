@@ -40,6 +40,7 @@ SOURCES += \
     CustomSchemeHandler.cpp \
     MeshWalkHandler.cpp \
     CustomSchemeWindow.cpp \
+    AssimpReader.cpp \
     WeightArrayGenerator.cpp \
     DebugHelper.cpp
 
@@ -58,6 +59,7 @@ HEADERS += \
     CustomSchemeSubdivisionStrategy.h \
     MeshWalkHandler.h \
     CustomSchemeWindow.h \
+    AssimpReader.h \
     WeightArrayGenerator.h \
     DebugHelper.h
 
