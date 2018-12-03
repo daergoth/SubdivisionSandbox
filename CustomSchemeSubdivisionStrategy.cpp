@@ -84,6 +84,8 @@ Mesh::Vertex CustomSchemeSubdivisionStrategy::calculateNewEdgeVert(Polyhedron::H
         result += Mesh::toQVector(walk.atOdds(i)) * weights[i];
     }
 
+    //std::cout << Mesh::toKernelVector(result) << std::endl;
+
     return Mesh::toVertex(result);
 }
 
@@ -116,8 +118,7 @@ Mesh::Vertex CustomSchemeSubdivisionStrategy::calculateNewFaceVert(Polyhedron::F
         result += Mesh::toQVector(walk.atOdds(i)) * weights[i];
     }
 
-    auto p = (Mesh::toKernelVector(result));
-    std::cout << p << std::endl;
+    //std::cout << Mesh::toKernelVector(result) << std::endl;
 
     return Mesh::toVertex(result);
 }
@@ -150,6 +151,8 @@ Mesh::Vertex CustomSchemeSubdivisionStrategy::calculateNewEvenVert(Polyhedron::V
     for (int i = 0; i < walk.n_evens; ++i) {
         result += Mesh::toQVector(walk.atEvens(i)) * weights[i];
     }
+
+    //std::cout << Mesh::toKernelVector(result) << std::endl;
 
     return {result, QVector3D(), QVector3D(1, 1, 1)};
 }

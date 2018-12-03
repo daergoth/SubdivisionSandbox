@@ -106,7 +106,6 @@ CustomSchemeWindow::CustomSchemeWindow(QWidget *parent) :
     sidebarVBox->addWidget(groupBoxShapes);
     sidebarVBox->addWidget(groupBoxNeighbours);
 
-    std::cout<<"WTF"<<std::endl;
     updateWeightsLayout();
 
     sidebarVBox->addLayout(vBoxWeights);
