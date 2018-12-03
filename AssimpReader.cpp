@@ -10,7 +10,7 @@ Mesh AssimpReader::readObj(std::string fileName)
     Assimp::Importer importer;
     const aiScene* scene = importer
                 .ReadFile(fileName.c_str(),
-                          aiProcess_Triangulate|aiProcess_FixInfacingNormals);
+                          /*aiProcess_Triangulate|*/aiProcess_FixInfacingNormals);
     if(!scene){
         std::cout << "Mesh load failed!: " << fileName << std::endl;
         // TODO error dialog

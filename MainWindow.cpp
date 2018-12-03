@@ -119,6 +119,8 @@ void MainWindow::onTriggered_CustomSchemeSubdiv()
 
     SubdivisionController& sc = SubdivisionController::getInstance();
     sc.switchTo(SubdivisionScheme::Custom);
+
+    openglWidget->update();
 }
 
 void MainWindow::onTriggered_CreateCustomScheme()

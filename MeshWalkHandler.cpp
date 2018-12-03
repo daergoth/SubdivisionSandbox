@@ -158,8 +158,9 @@ int MeshWalkHandler::quadOddVerticesTwoNeighbour(std::array<K::Point_3, 16>& ver
 }
 
 inline int MeshWalkHandler::quadFaceOddTwo(std::array<K::Point_3, 16>& vertices, Polyhedron::Halfedge_iterator halfedge) {
-    Polyhedron::Halfedge_iterator c = halfedge;
+    Polyhedron::Halfedge_iterator edge = halfedge;
 
+    /*
     c = c->next()->opposite()->next();
 
     c = quadFaceOddTwoSideHelper(c, vertices, std::pair<int, int>(7, 6));
@@ -170,6 +171,51 @@ inline int MeshWalkHandler::quadFaceOddTwo(std::array<K::Point_3, 16>& vertices,
     c = quadFaceOddTwoCornerHelper(c, vertices, std::pair<int, int>(12, 13));
     c = quadFaceOddTwoSideHelper(c, vertices, std::pair<int, int>(14, 10));
     c = quadFaceOddTwoCornerHelper(c, vertices, std::pair<int, int>(15, 11));
+    */
+
+    Polyhedron::Point& p1 = edge->vertex()->point();
+    Polyhedron::Point& p2 = edge->next()->vertex()->point();
+    Polyhedron::Point& p3 = edge->next()->next()->vertex()->point();
+    Polyhedron::Point& p4 = edge->next()->next()->next()->vertex()->point();
+
+    Polyhedron::Point& p5 = edge->opposite()->next()->next()->next()->opposite()->next()->vertex()->point();
+    Polyhedron::Point& p6 = edge->next()->opposite()->next()->vertex()->point();
+    Polyhedron::Point& p7 = edge->next()->opposite()->next()->next()->vertex()->point();
+    Polyhedron::Point& p8 = edge->next()->next()->opposite()->next()->opposite()->next()->next()->vertex()->point();
+
+    Polyhedron::Point& p9 = edge->next()->next()->opposite()->next()->vertex()->point();
+    Polyhedron::Point& p10 = edge->next()->next()->opposite()->next()->next()->vertex()->point();
+    Polyhedron::Point& p11 = edge->next()->next()->next()->opposite()->next()->opposite()->next()->next()->vertex()->point();
+    Polyhedron::Point& p12 = edge->next()->next()->next()->opposite()->next()->vertex()->point();
+
+    Polyhedron::Point& p13 = edge->opposite()->next()->opposite()->next()->vertex()->point();
+    Polyhedron::Point& p14 = edge->opposite()->next()->opposite()->next()->next()->vertex()->point();
+    Polyhedron::Point& p15 = edge->opposite()->next()->vertex()->point();
+    Polyhedron::Point& p16 = edge->opposite()->next()->next()->vertex()->point();
+
+    // f: 1 2 3 4
+    // s: 5, 8, 11, 14
+    // t: 6 7 9 10 12 13 15 16
+
+    vertices[0] = p5;
+    vertices[1] = p6;
+    vertices[2] = p7;
+    vertices[3] = p8;
+
+    vertices[4] = p9;
+    vertices[5] = p1;
+    vertices[6] = p2;
+    vertices[7] = p10;
+
+    vertices[8] = p15;
+    vertices[9] = p3;
+    vertices[10] = p4;
+    vertices[11] = p16;
+
+    vertices[12] = p11;
+    vertices[13] = p12;
+    vertices[14] = p13;
+    vertices[15] = p14;
 
     return 16;
 }
@@ -193,15 +239,14 @@ inline Polyhedron::Halfedge_iterator MeshWalkHandler::quadFaceOddTwoSideHelper(P
 inline int MeshWalkHandler::quadEdgeOddTwo(std::array<K::Point_3, 16>& vertices, Polyhedron::Halfedge_iterator halfedge) {
     Polyhedron::Halfedge_iterator c = halfedge;
 
-    vertices[1] = c->prev()->vertex()->point();
+    vertices[1] = c->opposite()->vertex()->point();
     vertices[2] = c->vertex()->point();
 
-    c = quadEdgeOddTwoStraightHelper(c);
+    Polyhedron::Halfedge_iterator cTmp = quadEdgeOddTwoStraightHelper(c);
 
-    vertices[3] = c->vertex()->point();
+    vertices[3] = cTmp->vertex()->point();
 
     c = c->opposite();
-    c = quadEdgeOddTwoStraightHelper(c);
     c = quadEdgeOddTwoStraightHelper(c);
 
     vertices[0] = c->vertex()->point();

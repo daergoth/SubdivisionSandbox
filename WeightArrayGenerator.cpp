@@ -98,22 +98,20 @@ std::array<float, 16> WeightArrayGenerator::generateQuadWeights(CustomScheme cus
 }
 
 std::array<float, 16> WeightArrayGenerator::generateQuadOneWeights(CustomScheme custom_scheme, MeshWalkHandler::OddsType odds_type) {
+    float f, s;
+
     switch (odds_type) {
     case MeshWalkHandler::OddsType::Face:
         // Like CatmullClark face odd
-        for (OddWeight w : custom_scheme.weights.odd) {
-            if (w.level == 0 && w.type == CustomSchemeOddWeightType::Face) {
-                float f =  1 / 4;
-                return std::array<float, 16>{{f, f, f, f}};
-            }
-        }
+        f =  1.0 / 4.0;
+        return std::array<float, 16>{{f, f, f, f}};
         break;
     case MeshWalkHandler::OddsType::Edge:
         // Like CatmullClark edge odd
         for (OddWeight w : custom_scheme.weights.odd) {
             if (w.level == 0 && w.type == CustomSchemeOddWeightType::Edge) {
-                float f = w.value;
-                float s = (1.0 - 2.0 * f) / 4.0;
+                f = w.value;
+                s = (1.0 - 2.0 * f) / 4.0;
                 return std::array<float, 16>{{s, s, f, f, s, s}};
             }
         }

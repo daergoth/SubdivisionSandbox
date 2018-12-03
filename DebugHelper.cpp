@@ -39,14 +39,26 @@ std::ostream& operator<<(std::ostream& os, const QVector<Mesh::Vertex>& vertices
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const Polyhedron::Halfedge_iterator& he) {
+    os << "[" << he->opposite()->vertex() << " -> " << he->vertex() << "]";
+
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const std::map<Polyhedron::Halfedge_iterator, int>& edge_map) {
     // write obj to stream
     os << "[" << std::endl;
 
     for (auto p : edge_map) {
-        os << "(" << &(p.first) << ", " << p.second<< ")" << std::endl;
+        os << "(" << p.first << ", " << p.second<< ")" << std::endl;
     }
     os << "]" << std::endl;
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const Polyhedron::Vertex_iterator& v) {
+    Polyhedron::Point_3 p = v->point();
+    os << "(" << p.x() << ", " << p.y() << ", " << p.z()<< ")";
     return os;
 }
 
@@ -55,7 +67,7 @@ std::ostream& operator<<(std::ostream& os, const std::map<Polyhedron::Vertex_ite
     os << "[" << std::endl;
 
     for (auto p : even_map) {
-        os << "(" << &(p.first) << ", " << p.second<< ")" << std::endl;
+        os << "[" << (p.first) << ", " << p.second<< "]" << std::endl;
     }
     os << "]" << std::endl;
     return os;

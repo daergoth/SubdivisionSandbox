@@ -99,6 +99,8 @@ private:
 
     QPushButton* okButton;
     QPushButton* cancelButton;
+
+    CustomScheme custom_scheme;
 };
 
 #endif // CUSTOMSCHEMEWINDOW_H
