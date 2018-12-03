@@ -1,12 +1,14 @@
 #include "CustomSchemeSubdivisionStrategy.h"
 
 Mesh CustomSchemeSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
-    Polyhedron old_mesh = evenMesh.convertToSurfaceMesh();
+    bool doTriangulate = evenMesh.m_numFaceVertices == 4 && custom_scheme.mesh_type == CustomSchemeMeshType::Tri;
+    Polyhedron old_mesh = evenMesh.convertToSurfaceMesh(doTriangulate);
 
     std::map<Polyhedron::Halfedge_iterator, Mesh::Vertex> new_edge_vertices;
     std::map<Polyhedron::Facet_iterator, Mesh::Vertex> new_face_vertices;
 
     // kiszámol új edge vertices
+    std::cout << "Calculating edge vertices..." << std::endl;
     for (Polyhedron::Halfedge_iterator it = old_mesh.halfedges_begin(); it != old_mesh.halfedges_end(); ++it) {
         if (new_edge_vertices.find(it) == new_edge_vertices.end()) {
             Mesh::Vertex new_edge_vert = calculateNewEdgeVert(it);
@@ -17,6 +19,7 @@ Mesh CustomSchemeSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
 
     // kiszámol új face vertices, csak ha QUAD
     if (custom_scheme.mesh_type == CustomSchemeMeshType::Quad) {
+        std::cout << "Calculating face vertices..." << std::endl;
         for (Polyhedron::Facet_iterator it = old_mesh.facets_begin(); it != old_mesh.facets_end(); ++it) {
             Mesh::Vertex new_face_vert = calculateNewFaceVert(it);
             new_face_vertices[it] = new_face_vert;
@@ -26,6 +29,7 @@ Mesh CustomSchemeSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
     // frissít even vertices, csak ha APPROX
     std::map<Polyhedron::Vertex_iterator, Mesh::Vertex> new_even_vertices;
     if (custom_scheme.refinement_type == CustomSchemeRefinementType::Approx) {
+        std::cout << "Calculating even vertices..." << std::endl;
         for (Polyhedron::Vertex_iterator it = old_mesh.vertices_begin(); it != old_mesh.vertices_end(); ++it) {
             Mesh::Vertex new_even_vert = calculateNewEvenVert(it);
             new_even_vertices[it] = new_even_vert;
@@ -45,7 +49,7 @@ Mesh CustomSchemeSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
         }
     }
 
-    Mesh result(vertices, face_indicies, custom_scheme.mesh_type == CustomSchemeMeshType::Tri ? 3 : 4);
+    Mesh result(vertices, face_indicies, doTriangulate ? 3 : evenMesh.m_numFaceVertices);
     result.generateIndices(false);
 
     return result;
@@ -56,15 +60,16 @@ Mesh::Vertex CustomSchemeSubdivisionStrategy::calculateNewEdgeVert(Polyhedron::H
     MeshWalkHandler::Walk walk = mwh.walk(
                 halfedge,
                 custom_scheme.neighbour_level,
-                static_cast<SubdivisionType>(custom_scheme.refinement_type),
+                custom_scheme.refinement_type == CustomSchemeRefinementType::Approx ? SubdivisionType::Approximating : SubdivisionType::Interpolating,
                 MeshWalkHandler::OddsType::Edge,
-                static_cast<MeshType>(custom_scheme.mesh_type));
+                custom_scheme.mesh_type == CustomSchemeMeshType::Tri ? MeshType::Triangular : MeshType::Quadrilateral);
 
     // generate weight array
     WeightArrayGenerator& wag = WeightArrayGenerator::getInstance();
     std::array<float, 16> weights = wag.generateWeights(custom_scheme, MeshWalkHandler::OddsType::Edge);
 
     /*
+    std::cout << "EDGE" << std::endl;
     std::cout << "Odds_num: " << walk.n_odds << std::endl;
     std::cout << "Weight array" << std::endl;
     for(float f : weights) {
@@ -79,6 +84,8 @@ Mesh::Vertex CustomSchemeSubdivisionStrategy::calculateNewEdgeVert(Polyhedron::H
         result += Mesh::toQVector(walk.atOdds(i)) * weights[i];
     }
 
+    //std::cout << Mesh::toKernelVector(result) << std::endl;
+
     return Mesh::toVertex(result);
 }
 
@@ -87,19 +94,31 @@ Mesh::Vertex CustomSchemeSubdivisionStrategy::calculateNewFaceVert(Polyhedron::F
     MeshWalkHandler::Walk walk = mwh.walk(
                 facet->halfedge(),
                 custom_scheme.neighbour_level,
-                static_cast<SubdivisionType>(custom_scheme.refinement_type),
-                MeshWalkHandler::OddsType::Edge,
-                static_cast<MeshType>(custom_scheme.mesh_type));
+                custom_scheme.refinement_type == CustomSchemeRefinementType::Approx ? SubdivisionType::Approximating : SubdivisionType::Interpolating,
+                MeshWalkHandler::OddsType::Face,
+                MeshType::Quadrilateral);
 
     // generate weight array
     WeightArrayGenerator& wag = WeightArrayGenerator::getInstance();
     std::array<float, 16> weights = wag.generateWeights(custom_scheme, MeshWalkHandler::OddsType::Face);
+
+    /*
+    std::cout << "FACE" << std::endl;
+    std::cout << "Odds_num: " << walk.n_odds << std::endl;
+    std::cout << "Weight array" << std::endl;
+    for(float f : weights) {
+        std::cout << f << std::endl;
+    }
+    std::cout << std::endl;
+    */
 
     // do multiply
     QVector3D result;
     for (int i = 0; i < walk.n_odds; ++i) {
         result += Mesh::toQVector(walk.atOdds(i)) * weights[i];
     }
+
+    //std::cout << Mesh::toKernelVector(result) << std::endl;
 
     return Mesh::toVertex(result);
 }
@@ -111,13 +130,14 @@ Mesh::Vertex CustomSchemeSubdivisionStrategy::calculateNewEvenVert(Polyhedron::V
                 custom_scheme.neighbour_level,
                 SubdivisionType::Approximating,
                 MeshWalkHandler::OddsType::Edge,
-                static_cast<MeshType>(custom_scheme.mesh_type));
+                custom_scheme.mesh_type == CustomSchemeMeshType::Tri ? MeshType::Triangular : MeshType::Quadrilateral);
 
     // generate weight array
     WeightArrayGenerator& wag = WeightArrayGenerator::getInstance();
     std::vector<float> weights = wag.generateEvenWeights(custom_scheme, walk.n_evens - 1);
 
     /*
+    std::cout << "EVEN" << std::endl;
     std::cout << "Evens_num: " << walk.n_evens << std::endl;
     std::cout << "Weight array" << std::endl;
     for(float f : weights) {
@@ -132,7 +152,9 @@ Mesh::Vertex CustomSchemeSubdivisionStrategy::calculateNewEvenVert(Polyhedron::V
         result += Mesh::toQVector(walk.atEvens(i)) * weights[i];
     }
 
-    return Mesh::toVertex(result);
+    //std::cout << Mesh::toKernelVector(result) << std::endl;
+
+    return {result, QVector3D(), QVector3D(1, 1, 1)};
 }
 
 void CustomSchemeSubdivisionStrategy::calculateFacesTri(QVector<Mesh::Vertex>& vertices,
@@ -252,6 +274,9 @@ void CustomSchemeSubdivisionStrategy::calculateFacesQuad(QVector<Mesh::Vertex>& 
 
     int new_face_vert_index = vertices.size();
     vertices.push_back(new_face_vertices[it]);
+
+    //std::cout << "edge_map:" << std::endl << edge_map << std::endl;
+    //std::cout << "even_map:" << std::endl << even_map << std::endl;
 
     face_indicies.push_back(new_face_indices[0]);
     face_indicies.push_back(new_face_indices[1]);

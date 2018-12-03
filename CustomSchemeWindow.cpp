@@ -106,7 +106,6 @@ CustomSchemeWindow::CustomSchemeWindow(QWidget *parent) :
     sidebarVBox->addWidget(groupBoxShapes);
     sidebarVBox->addWidget(groupBoxNeighbours);
 
-    std::cout<<"WTF"<<std::endl;
     updateWeightsLayout();
 
     sidebarVBox->addLayout(vBoxWeights);
@@ -128,46 +127,42 @@ CustomSchemeWindow::~CustomSchemeWindow()
 
 void CustomSchemeWindow::onTriggered_Approx()
 {
+    custom_scheme.refinement_type = CustomSchemeRefinementType::Approx;
     updateWeightsLayout();
 }
 
 void CustomSchemeWindow::onTriggered_Interp()
 {
+    custom_scheme.refinement_type = CustomSchemeRefinementType::Interp;
     updateWeightsLayout();
 }
 
 void CustomSchemeWindow::onTriggered_Tri()
 {
+    custom_scheme.mesh_type = CustomSchemeMeshType::Tri;
     updateWeightsLayout();
 }
 
 void CustomSchemeWindow::onTriggered_Quad()
 {
+    custom_scheme.mesh_type = CustomSchemeMeshType::Quad;
     updateWeightsLayout();
 }
 
 void CustomSchemeWindow::onTriggered_FirstNeighbours()
 {
+    custom_scheme.neighbour_level = 1;
     updateWeightsLayout();
 }
 
 void CustomSchemeWindow::onTriggered_SecondNeighbours()
 {
+    custom_scheme.neighbour_level = 2;
     updateWeightsLayout();
 }
 
 void CustomSchemeWindow::onTriggered_okButton()
 {
-
-    CustomSchemeRefinementType refinement_type = static_cast<CustomSchemeRefinementType>(schemeTypesGroup->checkedAction()->data().toInt());
-    CustomSchemeMeshType mesh_type = static_cast<CustomSchemeMeshType>(shapeGroup->checkedAction()->data().toInt());
-    int neighbour_level = neighbourGroup->checkedAction()->data().toInt();
-
-    CustomScheme custom_scheme;
-    custom_scheme.refinement_type = refinement_type;
-    custom_scheme.mesh_type = mesh_type;
-    custom_scheme.neighbour_level = neighbour_level;
-
     custom_scheme.name = leSchemeName->text().toStdString();
 
     QLocale locale;
@@ -209,6 +204,7 @@ void CustomSchemeWindow::onTriggered_okButton()
 
     custom_scheme.weights = Weights{odds, even};
 
+    std::cout << "Created custom scheme: " << std::endl << custom_scheme << std::endl;
     CustomSchemeHandler& csh = CustomSchemeHandler::getInstance();
     csh.setCurrentCustomScheme(custom_scheme);
 
@@ -428,22 +424,22 @@ void CustomSchemeWindow::createActions()
 {
     approxAction = new QAction(tr("Approximating"), this);
     approxAction->setCheckable(true);
-    approxAction->setData(CustomSchemeRefinementType::Approx);
+    approxAction->setData(0);
     connect(approxAction, &QAction::triggered, this, &CustomSchemeWindow::onTriggered_Approx);
 
     interpolAction = new QAction(tr("Interpolating"), this);
     interpolAction->setCheckable(true);
-    interpolAction->setData(CustomSchemeRefinementType::Interp);
+    interpolAction->setData(1);
     connect(interpolAction, &QAction::triggered, this, &CustomSchemeWindow::onTriggered_Interp);
 
     triAction = new QAction(tr("Triangle Mesh"), this);
     triAction->setCheckable(true);
-    triAction->setData(CustomSchemeMeshType::Tri);
+    triAction->setData(0);
     connect(triAction, &QAction::triggered, this, &CustomSchemeWindow::onTriggered_Tri);
 
     quadAction = new QAction(tr("Quad Mesh"), this);
     quadAction->setCheckable(true);
-    quadAction->setData(CustomSchemeMeshType::Quad);
+    quadAction->setData(1);
     connect(quadAction, &QAction::triggered, this, &CustomSchemeWindow::onTriggered_Quad);
 
     firstNeighbourAction = new QAction(tr("First Neighbours"), this);
@@ -460,14 +456,18 @@ void CustomSchemeWindow::createActions()
     schemeTypesGroup->addAction(approxAction);
     schemeTypesGroup->addAction(interpolAction);
     approxAction->setChecked(true);
+    custom_scheme.refinement_type = CustomSchemeRefinementType::Approx;
 
     shapeGroup = new QActionGroup(this);
     shapeGroup->addAction(triAction);
     shapeGroup->addAction(quadAction);
     triAction->setChecked(true);
+    custom_scheme.mesh_type = CustomSchemeMeshType::Tri;
 
     neighbourGroup = new QActionGroup(this);
     neighbourGroup->addAction(firstNeighbourAction);
     neighbourGroup->addAction(secondNeighbourAction);
     firstNeighbourAction->setChecked(true);
+    custom_scheme.neighbour_level = 1;
+
 }
