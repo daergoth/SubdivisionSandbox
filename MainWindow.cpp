@@ -24,7 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
     label->setAlignment(Qt::AlignCenter);
 
     subdivisionButton = new QPushButton("Subdivision");
+    subdivisionButton->setFixedWidth(subdivControlsWidth/2-10);
     revertButton = new QPushButton("Revert");
+    revertButton->setFixedWidth(subdivControlsWidth/2-10);
     revertButton->setDisabled(true);
 
     QObject::connect(subdivisionButton,SIGNAL(clicked(bool)),this,SLOT(doSubdivision()));
@@ -49,8 +51,8 @@ MainWindow::MainWindow(QWidget *parent) :
     vBoxSubdivControls->addStretch(1);
 
     openglWidget = new MainOpenGLWidget(this);
-    openglWidget->setFixedWidth(this->width()-subdivControlsWidth);
-    openglWidget->setFixedHeight(this->height());
+    //openglWidget->setFixedWidth(this->width()-subdivControlsWidth);
+    //openglWidget->setFixedHeight(this->height());
 
     mainLayout->addLayout(vBoxSubdivControls);
     mainLayout->addWidget(openglWidget);
