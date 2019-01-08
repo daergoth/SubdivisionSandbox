@@ -127,8 +127,6 @@ void MainWindow::onTriggered_CustomSchemeSubdiv()
 
 void MainWindow::onTriggered_CreateCustomScheme()
 {
-    // TODO: implement integration of SubdivisionController, CustomSchemeHandler and creation UI
-
     customSchemeWindow = new CustomSchemeWindow(this);
     int result = customSchemeWindow->exec();
 
@@ -209,11 +207,6 @@ void MainWindow::on_actionSave_scheme_triggered()
         QMessageBox::information(this, tr("Nothing to save"),
                         tr("There is no active custom scheme to save, open one or create a new one first!"));
     }
-}
-
-void MainWindow::on_actionAbout_triggered()
-{
-
 }
 
 void MainWindow::createActions()

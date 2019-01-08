@@ -1,0 +1,1 @@
+{"meshtype":1,"name":"Custom Kobbelt","neighbourlevel":2,"refinementtype":1,"weights":{"even":{"alfa":0.0,"beta":0.0},"odd":[{"level":0,"type":1,"value":0.31640625},{"level":1,"type":1,"value":-0.03515625},{"level":0,"type":0,"value":0.5625}]}}

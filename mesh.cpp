@@ -84,14 +84,14 @@ Mesh::Mesh(QVector<Vertex>const& p_vertices, QVector<int>const& p_indices, int p
 
 Mesh::Mesh(Polyhedron polyhedron)
 {
-    // Csúcsok
+    // Vertices
     for (auto it = polyhedron.vertices_begin(); it != polyhedron.vertices_end(); ++it)
     {
         QVector3D vertex = toQVector(it->point());
         m_vertices.push_back({vertex, QVector3D(0.0f,0.0f,0.0f), QVector3D(1.0f,1.0f,1.0f)});
     }
 
-    // Eredeti indexek
+    // Original indices
     for (auto it = polyhedron.facets_begin(); it != polyhedron.facets_end(); ++it)
     {
         auto edge = it->facet_begin();
@@ -108,7 +108,7 @@ Mesh::Mesh(Polyhedron polyhedron)
         m_numFaceVertices = numVertices;
     }
 
-    // Háromszög és körvonal indexek
+    // Triangle and wireframe indices
     generateIndices();
 }
 
@@ -277,7 +277,7 @@ Mesh Mesh::makeTetrahedron()
 }
 void Mesh::generateIndices(bool regenerate)
 {
-    // Eredeti indexek generálása
+    // Generate original indicies
     if (m_indicesOriginal.empty() || regenerate)
     {
         m_indicesOriginal.resize(m_vertices.size());
@@ -288,7 +288,7 @@ void Mesh::generateIndices(bool regenerate)
         }
     }
 
-    // Háromszögelt indexek generálása
+    // Generate triangle indices
     if (m_numFaceVertices == 3)
     {
         m_indicesTriangulated = m_indicesOriginal;
@@ -310,7 +310,7 @@ void Mesh::generateIndices(bool regenerate)
         }
     }
 
-    // Körvonal indexek generálása
+    // Generate wireframe indicies
     m_indicesSilhouette.resize(m_indicesOriginal.size() * 2);
 
     for (int i = 0; i < m_indicesOriginal.size() / m_numFaceVertices; ++i)

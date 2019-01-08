@@ -1,0 +1,1 @@
+{"meshtype":0,"name":"Custom Butterfly","neighbourlevel":2,"refinementtype":1,"weights":{"even":{"alfa":0.0,"beta":0.0},"odd":[{"level":0,"type":0,"value":0.5},{"level":1,"type":0,"value":0.125}]}}

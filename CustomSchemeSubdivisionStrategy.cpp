@@ -7,7 +7,7 @@ Mesh CustomSchemeSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
     std::map<Polyhedron::Halfedge_iterator, Mesh::Vertex> new_edge_vertices;
     std::map<Polyhedron::Facet_iterator, Mesh::Vertex> new_face_vertices;
 
-    // kiszámol új edge vertices
+    // calculate new edge vertices
     std::cout << "Calculating edge vertices..." << std::endl;
     for (Polyhedron::Halfedge_iterator it = old_mesh.halfedges_begin(); it != old_mesh.halfedges_end(); ++it) {
         if (new_edge_vertices.find(it) == new_edge_vertices.end()) {
@@ -17,7 +17,7 @@ Mesh CustomSchemeSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
         }
     }
 
-    // kiszámol új face vertices, csak ha QUAD
+    // calculate new face vertices, only if QUAD
     if (custom_scheme.mesh_type == CustomSchemeMeshType::Quad) {
         std::cout << "Calculating face vertices..." << std::endl;
         for (Polyhedron::Facet_iterator it = old_mesh.facets_begin(); it != old_mesh.facets_end(); ++it) {
@@ -26,7 +26,7 @@ Mesh CustomSchemeSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
         }
     }
 
-    // frissít even vertices, csak ha APPROX
+    // update even vertices, only if APPROX
     std::map<Polyhedron::Vertex_iterator, Mesh::Vertex> new_even_vertices;
     if (custom_scheme.refinement_type == CustomSchemeRefinementType::Approx) {
         std::cout << "Calculating even vertices..." << std::endl;
@@ -36,7 +36,7 @@ Mesh CustomSchemeSubdivisionStrategy::doSubdivision(Mesh evenMesh) {
         }
     }
 
-    // felépít faces
+    // build faces
     QVector<Mesh::Vertex> vertices;
     QVector<int> face_indicies;
     std::map<Polyhedron::Halfedge_iterator, int> edge_map;

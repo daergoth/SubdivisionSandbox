@@ -82,17 +82,17 @@ void MainOpenGLWidget::paintGL()
     glEnableVertexAttribArray(m_posAttr);
     glEnableVertexAttribArray(m_colAttr);
 
-    // OGL állapot
+    // OGL state
     glEnable(GL_DEPTH_TEST);
 
-    // Kitöltött lapok
+    // Filled faces
     m_program->setUniformValue(m_tintUniform, 1.0f,1.0f,1.0f,1.0f);
     glEnable(GL_POLYGON_OFFSET_FILL);
     glPolygonOffset(1.0f, 1.0f);
     glDrawElements(GL_TRIANGLES, mesh.m_indicesTriangulated.size(), GL_UNSIGNED_INT, mesh.m_indicesTriangulated.data());
     glDisable(GL_POLYGON_OFFSET_FILL);
 
-    // Körvonalak
+    // Wireframe
     m_program->setUniformValue(m_tintUniform, 0.0f,0.0f,0.0f,1.0f);
     glLineWidth(2.0f);
     glDrawElements(GL_LINES, mesh.m_indicesSilhouette.size(), GL_UNSIGNED_INT, mesh.m_indicesSilhouette.data());
